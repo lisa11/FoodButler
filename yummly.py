@@ -39,3 +39,37 @@ params = {
 }
 
 results = yummly.search(**params)
+
+# return the first 10 results
+results = yummly.search('chicken marsala', maxResults=10)
+
+# return 2nd page of results
+results = yummly.search('pulled pork', maxResults=10, start=10)
+
+METADATA_KEYS = [
+    'ingredient',
+    'holiday',
+    'diet',
+    'allergy',
+    'technique',
+    'cuisine',
+    'course',
+    'source',
+    'brand',
+    'restriction'
+]
+
+ingredients = client.metadata('ingredient')
+diets = client.metadata('diet')
+sources = client.metadata('source')
+
+recipe = yummly.recipe(recipe_id)
+
+print('Recipe ID:', recipe.id)
+print('Recipe:', recipe.name)
+print('Rating:', recipe.rating)
+print('Total Time:', recipe.totalTime)
+print('Yields:', recipe.yields)
+print('Ingredients:')
+for ingred in recipe.ingredientLines:
+    print(ingred)
