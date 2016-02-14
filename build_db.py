@@ -12,10 +12,10 @@ client = Client(api_id=YOUR_API_ID, api_key=YOUR_API_KEY, timeout=TIMEOUT, retri
 params = ["beef", "pork", "chicken", "turkey", "fish"]
 with open("recipe_csv.csv", "w") as f:   # may change the file name to "meat_dish_csv.csv"
     for param in params:
-        results = Client.search(param)
+        results = client.search(param)
         for result in results.matches:
             recipe_id = result["id"]
-            recipe = Client.recipe(recipe_id)
+            recipe = client.recipe(recipe_id)
             recipe_name = recipe["name"]
             recipe_num_serve = recipe["yield"]  # need to figure out the difference between this and the attribute "number of serving"
             recipe_total_time = recipe["totalTime"]  # notice there is also an attribute called total time in seconds
