@@ -15,7 +15,7 @@ def find_recipes(client, param, recipe_db, course, max_time):
     param["requirePictures"] = True
     param["allowedCourse[]"] = [course]
     param["maxTotalTimeInSeconds"] = max_time
-    recipes = client.search(param)
+    recipes = client.search("", **param)
     for match in recipes.matches:
         ingredients = match["ingredients"]
         recipe_id = match["id"]
@@ -46,13 +46,9 @@ def go(param):
     else: 
         breakfast_alt_list = []
         main_dish_alt_list = []
-    
-    print recipe_db
 
     with open("recipe_db.json", "w") as f:  
         f.write(json.dumps(recipe_db))
-
-    print "got here"
 
     return(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list)
 
@@ -60,7 +56,8 @@ def go(param):
 def test1():
     param1 = {"allowedIngredient[]": ["beef"],
             "maxTotalTimeInSeconds": (1800, 1800),
-            "maxResult": 2}
+            "maxResult": 2,
+            "start": 0}
     return go(param1)
     
 test1()
@@ -69,31 +66,6 @@ test1()
 if __name__ == "__main__":
     go(sys.argv)
 '''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
