@@ -37,8 +37,8 @@ def go(param):
     breakfast_list = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
     main_dish_list = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
 
-    if "allowedIngredient[]" in param:
-        if "excludedIngredient[]" in param:
+    if param.has_key("allowedIngredient[]"):
+        if param.has_key("excludedIngredient[]"):
             param["excludedIngredient[]"].extend(param["allowedIngredient[]"])
         else:
             param["excludedIngredient[]"] = param["allowedIngredient[]"]
