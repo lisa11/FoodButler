@@ -37,25 +37,38 @@ def go(param):
 
     if "allowedIngredient[]" in param:
         if "excludedIngredient[]" in param:
-            param["excludedIngredient[]"].extend(param["allowedIngredient"])
+            param["excludedIngredient[]"].extend(param["allowedIngredient[]"])
         else:
-            param["excludedIngredient"] = param["allowedIngredient"]
-        del param["allowedIngredient"]
+            param["excludedIngredient[]"] = param["allowedIngredient[]"]
+        del param["allowedIngredient[]"]
         breakfast_alt_list = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
         main_dish_alt_list = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
     else: 
         breakfast_alt_list = []
         main_dish_alt_list = []
+    
+    print recipe_db
 
     with open("recipe_db.json", "w") as f:  
         f.write(json.dumps(recipe_db))
 
+    print "got here"
+
     return(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list)
 
 
+def test1():
+    param1 = {"allowedIngredient[]": ["beef"],
+            "maxTotalTimeInSeconds": (1800, 1800),
+            "maxResult": 2}
+    return go(param1)
+    
+test1()
 
+'''
 if __name__ == "__main__":
     go(sys.argv)
+'''
 
 
 
@@ -90,8 +103,7 @@ if __name__ == "__main__":
 
 
 
-
-
+'''
 with open("recipe_csv.csv", "w") as f:   # may change the file name to "meat_dish_csv.csv"
     for param in params:
         results = client.search(param)
@@ -109,7 +121,7 @@ with open("recipe_csv.csv", "w") as f:   # may change the file name to "meat_dis
             recipe_row = ",".join([recipe_id, recipe_name, recipe_url, recipe_image, recipe_num_serve, recipe_total_time,
                             recipe_rating, recipe_nutrition, recipe_ingredient])
             print(recipe_row, file = f)
-
+'''
 
 
 
