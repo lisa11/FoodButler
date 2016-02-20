@@ -1,3 +1,4 @@
+import json
 import random
 from subprocess import call
 
@@ -89,10 +90,10 @@ def generate_available_recipes(args_from_ui):
     element is the Recipe object and the second element a list of ingredients
     '''
     
-    with open("temp_dict.txt", "w") as f:
-        print(args_from_ui, file = f)
+    with open("temp_dict.json", "w") as f:
+        f.write(json.dumps(args_from_ui))
 
-    breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = call("python2 build_db.py temp_dict.txt", shell=True)
+    breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = call("python2 build_db.py temp_dict.json", shell=True)
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
 
 

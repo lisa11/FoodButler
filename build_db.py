@@ -1,5 +1,7 @@
 from yummly import Client
 import json
+import sys
+
 # default option values
 TIMEOUT = 5.0
 RETRIES = 0
@@ -55,7 +57,7 @@ def go(param):
 
 def test1():
     param1 = {"allowedIngredient[]": ["beef"],
-            "maxTotalTimeInSeconds": (1800, 1800),
+            "maxTotalTimeInSeconds": [1800, 1800],
             "maxResult": 2,
             "start": 0}
     return go(param1)
@@ -63,8 +65,17 @@ def test1():
 test1()
 
 '''
-if __name__ == "__main__":
-    go(sys.argv)
+if __name__=="__main__":
+    num_args = len(sys.argv)
+
+    if num_args != 2:
+        print("usage: python2 " + sys.argv[0] + "<dictionary json file name>")
+        sys.exit(0)
+
+    with open(sys.argv[1]) as f:
+        data = f.readlines()[0]
+    data = json.loads(data)
+    go(data)
 '''
 
 
