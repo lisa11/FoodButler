@@ -158,6 +158,9 @@ def generate_Day(clean_recipes, args_from_ui, Day1 = None, Day2 = None):
         major_ingredients += Day1.major_ingredients
     if Day2:
         major_ingredients += Day2.major_ingredients
+    
+    while day.calories < day.lower_calories or day.calories > day.upper_calories:
+        num = random.randint(0, len(breakfast_list) - 1)
     # how to adjust to the major ingredients to avoid...
     # need to come up a way
     # Urgent...
@@ -197,15 +200,15 @@ def generate_final_output(args_from_ui):
         else:
             day = generate_Day(clean_recipes, args_from_ui, Day1 = day_list[-1], Day2 = day_list[-2])
         day_list.append(day)
-        breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url" day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
-        lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url" day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
-        dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url" day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
+        breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
+        lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
+        dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
         calories_list.append(day.calories)
 
     for i in range(7):
         day = generate_Day(clean_recipes, args_from_ui)
-        alternative_breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url" day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
-        alternative_lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url" day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
-        alternative_dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url" day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
+        alternative_breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
+        alternative_lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
+        alternative_dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
 
     return breakfast_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
