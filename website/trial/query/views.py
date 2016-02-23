@@ -75,7 +75,8 @@ def query(request):
         form = SearchForm(request.GET)
 
         if form.is_valid():
-
+            #logging.error("what is this" % (form))
+            #print(form)
             return custom_redirect('results', **form.cleaned_data)
     else:  
         form = SearchForm()

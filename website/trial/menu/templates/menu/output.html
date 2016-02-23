@@ -1,0 +1,66 @@
+{{breakfast.0.0.picurl}}
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>MENU</h3>
+<table border="1" style="width:100%">
+  <tr>
+    {% for i in c.breakfast.0 %}
+    <td>
+    <h4>Name:</h4>
+        <body>{{i.name}}</body>
+    <h4>Cooking Time:</h4> 
+        <body>{{i.cookingtime}}</body>
+    <h4>Calories:</h4> 
+        <body>{{i.calories}}</body>
+    <h4>Ingredients:</h4> 
+        <ul style="list-style-type:disc">
+            {%for j in i.ingredients%}
+            <li>{{j}}</li>
+            {%endfor%}
+        </ul>
+    </td>
+    {% endfor %}
+  </tr> 
+
+    <tr>
+    {% for i in c.calories.0 %}
+    <td>
+    Total Calories: {{i}}
+    </td>
+    {% endfor %}
+  </tr> 
+</table>
+
+<h3>ALTERNATIVE</h3>
+<table border="1" style="width:100%">
+    <tr>
+    {% for i in c.abreakfast.0 %}
+    <td>
+    <h4>Name:</h4>
+        <body>{{i.name}}</body>
+    <h4>Cooking Time:</h4> 
+        <body>{{i.cookingtime}}</body>
+    <h4>Calories:</h4> 
+        <body>{{i.calories}}</body>
+    <h4>Ingredients:</h4> 
+        <ul style="list-style-type:disc">
+            {%for j in i.ingredients%}
+            <li>{{j}}</li>
+            {%endfor%}
+        </ul>
+        
+    </td>
+    {% endfor %}
+  </tr> 
+</table>
+</body>
+</html>
+
+
+TESTING
+{{m}}
+
+
