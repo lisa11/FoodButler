@@ -1,0 +1,18 @@
+# return from backend, 7 lists:
+breakfast_list
+lunch_list
+dinner_list
+calories_list: [200, 300, 500, 600, 700, 500, 450] # calories for every day
+alternative_breakfast_list
+alternative_lunch_list
+alternative_dinner_list
+
+'''
+The other six lists will each have 7 dictionaries, each dictionary representing one meal as
+{"name": day.breakfast.name, 
+"calories": day.breakfast.calories, 
+"cooking time": day.breakfast.cooking_time, 
+"ingredients": day.breakfast.full_ingredients, 
+"pic url" day.breakfast.pic_url, 
+"instruction url": day.breakfast.instruction_url}
+'''
