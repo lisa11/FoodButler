@@ -6,7 +6,8 @@ from subprocess import call
 # The ingredients we care that should not be repeated within three days
 MAJOR_INGREDIENTS = ["beef", "lamb", "chicken", "lobster", "shrimp", "pork",
                      "steak", "tomato", "onion", "potato", "broccoli",
-                     "cabbage", "lettuce", "leeks"]
+                     "cabbage", "lettuce", "leeks", "chicken wings",
+                     "eggplant"]
 TRIAL_NUM_BEFORE_GOING_TO_ALT = 3
 TRIL_NUM_BEFORE_REPEATING_INGREDIENT = 10
 FINAL_TOLERANCE = 20 # the number of days generated failed lower calories limit before discarding the lower limit
@@ -37,12 +38,12 @@ class Meal(object):
 
 class Day(object):
 
-    def __init__(self, price, calories, num_of_servings):
+    def __init__(self, price, calories, servings):
         '''
         price: max price for the day
         calories: lower and upper limits of calories for the day (a list)
         time: max time for breakfast and lunch/dinner (a list)
-        num_of_servings: number of people serving for the day
+        servings: number of people serving for the day
         '''
 
         self.breakfast = None
@@ -55,7 +56,7 @@ class Day(object):
         # self.main_meal_time = time[1]
         self.lower_calories = calories[0]
         self.upper_calories = calories[1]
-        self.num_of_servings = num_of_servings
+        self.servings = servings
 
 
     def insert_meal(self, meal, position):
@@ -85,7 +86,7 @@ def generate_available_recipes(args_from_ui):
                     "diet": "vegetarian",
                     "price": 200,
                     "time": [20, 60],
-                    "num_of_servings": 1
+                    "servings": 1
                     }
 
     return four lists. Each a list of tuples in which the first
@@ -111,7 +112,8 @@ def clean_recipes(available_recipes):
     '''
 
     breakfast_alt_list_old, breakfast_list_old, main_dish_alt_list_old, main_dish_list_old = available_recipes
-    
+    major_ingredients = []
+
     breakfast_alt_list = []
     if breakfast_alt_list_old != []:
         for i in range(len(breakfast_alt_list_old)):
@@ -121,6 +123,7 @@ def clean_recipes(available_recipes):
                     calories = x["value"]
                     break
             meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+            major_ingredients += breakfast_alt_list_old[i][1]
             breakfast_alt_list.append(meal)
     
     breakfast_list = []
@@ -131,6 +134,7 @@ def clean_recipes(available_recipes):
                 calories = x["value"]
                 break
         meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        major_ingredients += breakfast_list_old[i][1]
         breakfast_list.append(meal)
     
     main_dish_alt_list = []
@@ -142,6 +146,7 @@ def clean_recipes(available_recipes):
                     calories = x["value"]
                     break
             meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+            major_ingredients += main_dish_alt_list_old[i][1]
             main_dish_alt_list.append(meal)
     
     main_dish_list = []
@@ -152,8 +157,13 @@ def clean_recipes(available_recipes):
                 calories = x["value"]
                 break
         meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        major_ingredients += main_dish_list_old[i][1]
         main_dish_list.append(meal)
     
+    major_ingredients = list(set(major_ingredients))
+    with open("major_ingredients_in_trial.txt", "w") as f:
+        print(major_ingredients, file = f)
+
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
 
 
@@ -163,6 +173,13 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     Day2: the day object for the day before yesterday
     The lists must be in clean version!!!
     '''
+
+    if "price" not in args_from_ui:
+        args_from_ui["price"] = 0
+    if "calories_per_day" not in args_from_ui:
+        args_from_ui["calories_per_day"] = [0, 5000]
+    if "servings" not in args_from_ui:
+        args_from_ui["servings"] = 1
 
     day = Day(args_from_ui["price"], args_from_ui["calories_per_day"], args_from_ui["servings"])
     
