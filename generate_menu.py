@@ -296,7 +296,7 @@ def generate_final_output(args_from_ui):
     '''
     return breakfast_list, lunch_list, dinner_list, alternative_breakfast_list,
     alternative_lunch_list, alternative_dinner_list, each with 7 items.
-    Each item being a dictionary including "name", "calories", "cooking time",
+    Each item being a dictionary including "name", "calories", "cooking_time",
     ingredients as a list of strings, pic_url as a string, instruction_url
     as a string
     ''' 
@@ -327,16 +327,16 @@ def generate_final_output(args_from_ui):
         else:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, Day1 = day_list[-1], Day2 = day_list[-2])
         day_list.append(day)
-        breakfast_final_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
-        lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
-        dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
+        breakfast_final_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking_time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic_url": day.breakfast.pic_url, "instruction_url": day.breakfast.instruction_url})
+        lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking_time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic_url": day.lunch.pic_url, "instruction_url": day.lunch.instruction_url})
+        dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking_time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic_url": day.dinner.pic_url, "instruction_url": day.dinner.instruction_url})
         calories_list.append(day.calories)
 
     for i in range(7):
         day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
-        alternative_breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
-        alternative_lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
-        alternative_dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
+        alternative_breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking_time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic_url": day.breakfast.pic_url, "instruction_url": day.breakfast.instruction_url})
+        alternative_lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking_time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic_url": day.lunch.pic_url, "instruction_url": day.lunch.instruction_url})
+        alternative_dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking_time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic_url": day.dinner.pic_url, "instruction_url": day.dinner.instruction_url})
 
     with open("final_output.txt", "w") as f:
         print(breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list, file = f)
