@@ -54,17 +54,21 @@ def go(param):
 
     return(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list)
 
-
+'''
 def test1():
     param1 = {"allowedIngredient[]": ["beef"],
             "maxTotalTimeInSeconds": [1800, 1800],
             "maxResult": 2,
+            "price": 0,
+            "calories per day": [0, 2000],
+            "servings": 1,
             "start": 0}
     return go(param1)
     
 test1()
-
 '''
+
+
 if __name__=="__main__":
     num_args = len(sys.argv)
 
@@ -76,7 +80,7 @@ if __name__=="__main__":
         data = f.readlines()[0]
     data = json.loads(data)
     go(data)
-'''
+
 
 
 

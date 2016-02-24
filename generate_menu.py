@@ -103,52 +103,56 @@ def clean_recipes(available_recipes):
     Meal objects
     '''
 
-    # item["ingredients"] needs to be added to the dictionary
     breakfast_alt_list_old, breakfast_list_old, main_dish_alt_list_old, main_dish_list_old = available_recipes
     
     breakfast_alt_list = []
-    for item in breakfast_alt_list_old:
+    for i in range(len(breakfast_alt_list_old[0])):
+        item = breakfast_alt_list_old[0][i]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], item["ingredients"], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         breakfast_alt_list.append(meal)
     
     breakfast_list = []
-    for item in breakfast_list_old:
+    for i in range(len(breakfast_list_old[0])):
+        item = breakfast_list_old[0][i]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], item["ingredients"], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         breakfast_list.append(meal)
     
     main_dish_alt_list = []
-    for item in main_dish_alt_list_old:
+    for i in range(len(main_dish_alt_list_old[0])):
+        item = main_dish_alt_list[0][i]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], item["ingredients"], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         main_dish_alt_list.append(meal)
     
     main_dish_list = []
-    for item in main_dish_list_old:
+    for i in range(len(main_dish_list_old[0])):
+        item = main_dish_list_old[0][i]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], item["ingredients"], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         main_dish_list.append(meal)
     
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
 
 
-def generate_Day(clean_recipes, args_from_ui, Day1 = None, Day2 = None):
+def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, Day1 = None, Day2 = None):
     '''
     Day1: the day object for the previous day
     Day2: the day object for the day before yesterday
+    The lists must be in clean version!!!
     '''
 
     breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes
@@ -158,18 +162,90 @@ def generate_Day(clean_recipes, args_from_ui, Day1 = None, Day2 = None):
         major_ingredients += Day1.major_ingredients
     if Day2:
         major_ingredients += Day2.major_ingredients
+    major_ingredients = list(set(major_ingredients))
+    from_alt = [None, None, None]
     
-    while day.calories < day.lower_calories or day.calories > day.upper_calories:
-        num = random.randint(0, len(breakfast_list) - 1)
-    # how to adjust to the major ingredients to avoid...
-    # need to come up a way
-    # Urgent...
-    if breakfast_preferred_list:
-        num = random.randint(0, len(breakfast_list) - 1)
+    while day.calories < day.lower_calories:
+        
+        # Choose breakfast
+        t1 = 0
+        while day.breakfast == None and t1 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
+            t1 += 1
+            num1 = random.randint(0, len(breakfast_list) - 1)
+            if breakfast_list[num1].calories < 0.3 * day.upper_calories and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
+                day.insert_meal(breakfast_list[num1], "breakfast")
+                major_ingredients += breakfast_list[num1].major_ingredients
+                from_alt[0] = 0
+        if day.breakfast == None and breakfast_alt_list != []:
+            while day.breakfast == None and t1 < TRIL_NUM_BEFORE_REPEATING_INGREDIENT:
+                num1 = random.randint(0, len(breakfast_alt_list) - 1)
+                if breakfast_alt_list[num1].calories < 0.3 * day.upper_calories and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
+                    day.insert_meal(breakfast_alt_list[num1], "breakfast")
+                    major_ingredients += breakfast_list[num1].major_ingredients
+                    from_alt[0] = 1
+        if day.breakfast == None:
+            num1 = random.randint(0, len(breakfast_list) - 1)
+            day.insert_meal(breakfast_list[num1], "breakfast")
+            major_ingredients = list(set(major_ingredients) & set(breakfast_list[num1].major_ingredients))
+            from_alt[0] = 0
 
-    day.insert_meal(breakfast_list[random.randint(0, len(breakfast_list) - 1)], "breakfast")
-    day.insert_meal(lunch_list[random.randint(0, len(lunch_list) - 1)], "lunch")
-    day.insert_meal(dinner_list[random.randint(0, len(dinner_list) - 1)], "dinner")
+        # Choose Lunch
+        t2 = 0
+        while day.lunch == None and t2 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
+            t2 += 1
+            num2 = random.randint(0, len(main_dish_list) - 1)
+            if main_dish_list[num2].calories < 0.4 * day.upper_calories and [x for x in major_ingredients if x in main_dish_list[num2].major_ingredients] == []:
+                day.insert_meal(main_dish_list[num2], "lunch")
+                major_ingredients += main_dish_list[num2].major_ingredients
+                from_alt[1] = 0
+        if day.lunch == None and main_dish_alt_list != []:
+            while day.lunch == None and t2 < TRIL_NUM_BEFORE_REPEATING_INGREDIENT:
+                num2 = random.randint(0, len(main_dish_alt_list) - 1)
+                if main_dish_alt_list[num2].calories < 0.4 * day.upper_calories and [x for x in major_ingredients if x in main_dish_alt_list[num2].major_ingredients] == []:
+                    day.insert_meal(main_dish_alt_list[num2], "lunch")
+                    major_ingredients += main_dish_list[num2].major_ingredients
+                    from_alt[1] = 1
+        if day.lunch == None:
+            num2 = random.randint(0, len(main_dish_list) - 1)
+            day.insert_meal(main_dish_list[num1], "lunch")
+            major_ingredients = list(set(major_ingredients) & set(main_dish_list[num2].major_ingredients))
+            from_alt[1] = 0
+
+        # Choose Dinner
+        t3 = 0
+        while day.dinner == None and t3 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
+            t3 += 1
+            num3 = random.randint(0, len(main_dish_list) - 1)
+            if num3 != num2 and main_dish_list[num2].calories < 0.3 * day.upper_calories and [x for x in major_ingredients if x in main_dish_list[num2].major_ingredients] == []:
+                day.insert_meal(main_dish_list[num3], "dinner")
+                major_ingredients += main_dish_list[num3].major_ingredients
+                from_alt[2] = 0
+        if day.dinner == None and main_dish_alt_list != []:
+            while day.dinner == None and t3 < TRIL_NUM_BEFORE_REPEATING_INGREDIENT:
+                num3 = random.randint(0, len(main_dish_alt_list) - 1)
+                if num3 != num2 and main_dish_alt_list[num3].calories < 0.3 * day.upper_calories and [x for x in major_ingredients if x in main_dish_alt_list[num2].major_ingredients] == []:
+                    day.insert_meal(main_dish_alt_list[num3], "dinner")
+                    major_ingredients += main_dish_list[num3].major_ingredients
+                    from_alt[2] = 1
+        if day.lunch == None:
+            num3 = random.randint(0, len(main_dish_list) - 1)
+            day.insert_meal(main_dish_list[num1], "dinner")
+            major_ingredients = list(set(major_ingredients) & set(main_dish_list[num3].major_ingredients))
+            from_alt[2] = 0
+    
+    # Delete the selected dishes
+    if from_alt[0] == 0:
+        del breakfast_list[num1]
+    else:
+        del breakfast_alt_list[num1]
+    if from_alt[1] == 0:
+        del main_dish_list[num2]
+    else:
+        del main_dish_alt_list[num2]
+    if from_alt[2] == 0:
+        del main_dish_list[num3]
+    else:
+        del main_dish_alt_list[num3]
 
     return day
 
@@ -184,31 +260,40 @@ def generate_final_output(args_from_ui):
     ''' 
     
     available_recipes = generate_available_recipes(args_from_ui)
-    clean_recipes = clean_recipes(available_recipes)
+    print("successfully got available recipes")
+    with open("avilable_recipes.txt", "w") as f:
+        print(available_recipes, file = f)
+    breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes(available_recipes)
+    print("successfully cleaned the recipes")
+    with open("cleaned_recipes.txt", "w") as f:
+        print(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, file = f)
 
     day_list = []
     calories_list = []
-    breakfast_list = []
+    breakfast_final_list = []
     lunch_list = []
     dinner_list = []
 
     for i in range(7):
         if i == 0:
-            day = generate_Day(clean_recipes, args_from_ui)
+            day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
         elif i == 1:
-            day = generate_Day(clean_recipes, args_from_ui, Day1 = day_list[-1])
+            day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, Day1 = day_list[-1])
         else:
-            day = generate_Day(clean_recipes, args_from_ui, Day1 = day_list[-1], Day2 = day_list[-2])
+            day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, Day1 = day_list[-1], Day2 = day_list[-2])
         day_list.append(day)
-        breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
+        breakfast__final_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
         lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
         dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
         calories_list.append(day.calories)
 
     for i in range(7):
-        day = generate_Day(clean_recipes, args_from_ui)
+        day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
         alternative_breakfast_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
         alternative_lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
         alternative_dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
 
-    return breakfast_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
+    with open("final_output.txt", "w") as f:
+        print(breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list, file = f)
+    
+    return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
