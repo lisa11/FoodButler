@@ -164,13 +164,13 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     The lists must be in clean version!!!
     '''
 
-    day = Day(args_from_ui["price"], args_from_ui["calories per day"], args_from_ui["servings"])
+    day = Day(args_from_ui["price"], args_from_ui["calories_per_day"], args_from_ui["servings"])
     
     total = 0
     while (day.calories < day.lower_calories or day.calories > day.upper_calories) and total < FINAL_TOLERANCE:
 
         total += 1
-        day = Day(args_from_ui["price"], args_from_ui["calories per day"], args_from_ui["servings"])
+        day = Day(args_from_ui["price"], args_from_ui["calories_per_day"], args_from_ui["servings"])
         major_ingredients = []
         if Day1:
             major_ingredients += Day1.major_ingredients
