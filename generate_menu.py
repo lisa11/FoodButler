@@ -286,7 +286,7 @@ def generate_final_output(args_from_ui):
     
     available_recipes = generate_available_recipes(args_from_ui)
     print("successfully got available recipes")
-    with open("avilable_recipes.txt", "w") as f:
+    with open("available_recipes.txt", "w") as f:
         print(available_recipes, file = f)
     breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes(available_recipes)
     print("successfully cleaned the recipes")
