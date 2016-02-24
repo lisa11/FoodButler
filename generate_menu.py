@@ -10,6 +10,10 @@ MAJOR_INGREDIENTS = ["beef", "lamb", "chicken", "lobster", "shrimp", "pork",
 TRIAL_NUM_BEFORE_GOING_TO_ALT = 3
 TRIL_NUM_BEFORE_REPEATING_INGREDIENT = 10
 FINAL_TOLERANCE = 20 # the number of days generated failed lower calories limit before discarding the lower limit
+BREAKFAST_CALORIES_WEIGHT = 0.4
+LUNCH_CALORIES_WEIGHT = 0.5
+DINNER_CALORIES_WEIGHT = 0.5
+
 
 
 class Meal(object):
@@ -177,14 +181,14 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
         while day.breakfast == None and t1 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
             t1 += 1
             num1 = random.randint(0, len(breakfast_list) - 1)
-            if breakfast_list[num1].calories < 0.4 * day.upper_calories and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
+            if breakfast_list[num1].calories < BREAKFAST_CALORIES_WEIGHT * day.upper_calories and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
                 day.insert_meal(breakfast_list[num1], "breakfast")
                 major_ingredients += breakfast_list[num1].major_ingredients
                 from_alt[0] = 0
         if day.breakfast == None and breakfast_alt_list != []:
             while day.breakfast == None and t1 < TRIL_NUM_BEFORE_REPEATING_INGREDIENT:
                 num1 = random.randint(0, len(breakfast_alt_list) - 1)
-                if breakfast_alt_list[num1].calories < 0.4 * day.upper_calories and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
+                if breakfast_alt_list[num1].calories < BREAKFAST_CALORIES_WEIGHT * day.upper_calories and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
                     day.insert_meal(breakfast_alt_list[num1], "breakfast")
                     major_ingredients += breakfast_list[num1].major_ingredients
                     from_alt[0] = 1
@@ -199,14 +203,14 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
         while day.lunch == None and t2 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
             t2 += 1
             num2 = random.randint(0, len(main_dish_list) - 1)
-            if main_dish_list[num2].calories < 0.5 * day.upper_calories and [x for x in major_ingredients if x in main_dish_list[num2].major_ingredients] == []:
+            if main_dish_list[num2].calories < LUNCH_CALORIES_WEIGHT * day.upper_calories and [x for x in major_ingredients if x in main_dish_list[num2].major_ingredients] == []:
                 day.insert_meal(main_dish_list[num2], "lunch")
                 major_ingredients += main_dish_list[num2].major_ingredients
                 from_alt[1] = 0
         if day.lunch == None and main_dish_alt_list != []:
             while day.lunch == None and t2 < TRIL_NUM_BEFORE_REPEATING_INGREDIENT:
                 num2 = random.randint(0, len(main_dish_alt_list) - 1)
-                if main_dish_alt_list[num2].calories < 0.5 * day.upper_calories and [x for x in major_ingredients if x in main_dish_alt_list[num2].major_ingredients] == []:
+                if main_dish_alt_list[num2].calories < LUNCH_CALORIES_WEIGHT * day.upper_calories and [x for x in major_ingredients if x in main_dish_alt_list[num2].major_ingredients] == []:
                     day.insert_meal(main_dish_alt_list[num2], "lunch")
                     major_ingredients += main_dish_list[num2].major_ingredients
                     from_alt[1] = 1
@@ -221,14 +225,14 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
         while day.dinner == None and t3 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
             t3 += 1
             num3 = random.randint(0, len(main_dish_list) - 1)
-            if num3 != num2 and main_dish_list[num2].calories < 0.5 * day.upper_calories and [x for x in major_ingredients if x in main_dish_list[num2].major_ingredients] == []:
+            if num3 != num2 and main_dish_list[num2].calories < DINNER_CALORIES_WEIGHT * day.upper_calories and [x for x in major_ingredients if x in main_dish_list[num2].major_ingredients] == []:
                 day.insert_meal(main_dish_list[num3], "dinner")
                 major_ingredients += main_dish_list[num3].major_ingredients
                 from_alt[2] = 0
         if day.dinner == None and main_dish_alt_list != []:
             while day.dinner == None and t3 < TRIL_NUM_BEFORE_REPEATING_INGREDIENT:
                 num3 = random.randint(0, len(main_dish_alt_list) - 1)
-                if num3 != num2 and main_dish_alt_list[num3].calories < 0.5 * day.upper_calories and [x for x in major_ingredients if x in main_dish_alt_list[num2].major_ingredients] == []:
+                if num3 != num2 and main_dish_alt_list[num3].calories < DINNER_CALORIES_WEIGHT * day.upper_calories and [x for x in major_ingredients if x in main_dish_alt_list[num2].major_ingredients] == []:
                     day.insert_meal(main_dish_alt_list[num3], "dinner")
                     major_ingredients += main_dish_list[num3].major_ingredients
                     from_alt[2] = 1
