@@ -87,9 +87,6 @@ def generate_available_recipes(args_from_ui):
                     "time": [20, 60],
                     "num_of_servings": 1
                     }
-    Breakfast accounts for roughly 20 percent price and 30 percent calories
-    Lunch accounts for roughly 40 percent price and 40 percent calories
-    Dinner accounts for roughly 40 percent price and 30 percent calories
 
     return four lists. Each a list of tuples in which the first
     element is the Recipe object and the second element a list of ingredients
