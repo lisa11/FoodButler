@@ -94,9 +94,14 @@ def generate_available_recipes(args_from_ui):
     
     with open("temp_dict.json", "w") as f:
         f.write(json.dumps(args_from_ui))
+    
+    call("python2 build_db.py temp_dict.json", shell=True)
+    
+    with open("recipe_lists.json") as f:
+        recipe_lists = json.load(f)
 
-    breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = call("python2 build_db.py temp_dict.json", shell=True)
-    return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
+    return recipe_lists["breakfast_alt_list"], recipe_lists["breakfast_list"],\
+    recipe_lists["main_dish_alt_list"], recipe_lists["main_dish_list"]
 
 
 def clean_recipes(available_recipes):

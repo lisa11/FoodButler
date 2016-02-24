@@ -57,18 +57,20 @@ def go(param):
                                         "time": [20, 60]}
 
     Returns:
-        a tuple of 4 lists: breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
+        writes a json file containing a dict of 4 lists: breakfast_alt_list, breakfast_list, \
+        main_dish_alt_list, main_dish_list
     '''
     with open("recipe_db.json") as f:
         recipe_db = json.load(f)
-
+    
+    rv = {}
     breakfast_maxtime, maindish_maxtime = param["time"]
     del param["time"]
     breakfast_maxtime = breakfast_maxtime * 60
     maindish_maxtime = maindish_maxtime * 60
 
-    breakfast_list = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
-    main_dish_list = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
+    rv["breakfast_list"] = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
+    rv["main_dish_list"] = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
 
     if param.has_key("allowedIngredient[]"):
         if param.has_key("excludedIngredient[]"):
@@ -76,16 +78,17 @@ def go(param):
         else:
             param["excludedIngredient[]"] = param["allowedIngredient[]"]
         del param["allowedIngredient[]"]
-        breakfast_alt_list = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
-        main_dish_alt_list = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
+        rv["breakfast_alt_list"] = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
+        rv["main_dish_alt_list"] = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
     else: 
-        breakfast_alt_list = []
-        main_dish_alt_list = []
+        rv["breakfast_alt_list"] = []
+        rv["main_dish_alt_list"] = []
 
     with open("recipe_db.json", "w") as f:  
         f.write(json.dumps(recipe_db))
 
-    return(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list)
+    with open("recipe_lists.json", "w") as f:
+        f.write(json.dumps(rv))
 
 '''
 def test1():
@@ -116,6 +119,7 @@ if __name__=="__main__":
     if "calories per day" in param:
         del param["calories per day"]
     go(param)
+
 
 
 
