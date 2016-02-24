@@ -257,7 +257,13 @@ def generate_final_output(args_from_ui):
     ''' 
     
     available_recipes = generate_available_recipes(args_from_ui)
+    print("successfully got available recipes")
+    with open("avilable_recipes.txt", "w") as f:
+        print(available_recipes, file = f)
     breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes(available_recipes)
+    print("successfully cleaned the recipes")
+    with open("cleaned_recipes.txt", "w") as f:
+        print(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, file = f)
 
     day_list = []
     calories_list = []
@@ -284,4 +290,7 @@ def generate_final_output(args_from_ui):
         alternative_lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
         alternative_dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
 
+    with open("final_output.txt", "w") as f:
+        print(breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list, file = f)
+    
     return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
