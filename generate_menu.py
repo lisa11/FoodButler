@@ -108,43 +108,43 @@ def clean_recipes(available_recipes):
     breakfast_alt_list_old, breakfast_list_old, main_dish_alt_list_old, main_dish_list_old = available_recipes
     
     breakfast_alt_list = []
-    for i in range(len(breakfast_alt_list_old[0])):
-        item = breakfast_alt_list_old[0][i]
+    for i in range(len(breakfast_alt_list_old)):
+        item = breakfast_alt_list_old[i][0]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         breakfast_alt_list.append(meal)
     
     breakfast_list = []
-    for i in range(len(breakfast_list_old[0])):
-        item = breakfast_list_old[0][i]
+    for i in range(len(breakfast_list_old)):
+        item = breakfast_list_old[i][0]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         breakfast_list.append(meal)
     
     main_dish_alt_list = []
-    for i in range(len(main_dish_alt_list_old[0])):
-        item = main_dish_alt_list[0][i]
+    for i in range(len(main_dish_alt_list_old)):
+        item = main_dish_alt_list[i][0]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         main_dish_alt_list.append(meal)
     
     main_dish_list = []
-    for i in range(len(main_dish_list_old[0])):
-        item = main_dish_list_old[0][i]
+    for i in range(len(main_dish_list_old)):
+        item = main_dish_list_old[i][0]
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[1][i], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         main_dish_list.append(meal)
     
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
