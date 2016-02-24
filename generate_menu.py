@@ -9,6 +9,7 @@ MAJOR_INGREDIENTS = ["beef", "lamb", "chicken", "lobster", "shrimp", "pork",
                      "cabbage", "lettuce", "leeks"]
 TRIAL_NUM_BEFORE_GOING_TO_ALT = 3
 TRIL_NUM_BEFORE_REPEATING_INGREDIENT = 10
+FINAL_TOLERANCE = 15 # the number of days generated failed lower calories limit before discarding the lower limit
 
 
 class Meal(object):
@@ -157,15 +158,19 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
 
     breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes
     day = Day(args_from_ui["price"], args_from_ui["calories per day"], args_from_ui["servings"])
-    major_ingredients = []
-    if Day1:
-        major_ingredients += Day1.major_ingredients
-    if Day2:
-        major_ingredients += Day2.major_ingredients
-    major_ingredients = list(set(major_ingredients))
-    from_alt = [None, None, None]
     
-    while day.calories < day.lower_calories:
+    total = 0
+    while day.calories < day.lower_calories and total < FINAL_TOLERANCE:
+
+        total += 1
+        day = Day(args_from_ui["price"], args_from_ui["calories per day"], args_from_ui["servings"])
+        major_ingredients = []
+        if Day1:
+            major_ingredients += Day1.major_ingredients
+        if Day2:
+            major_ingredients += Day2.major_ingredients
+        major_ingredients = list(set(major_ingredients))
+        from_alt = [None, None, None]
         
         # Choose breakfast
         t1 = 0
