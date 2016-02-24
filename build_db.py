@@ -10,9 +10,23 @@ YOUR_API_KEY = "eb5bef37e3d25571eafd42e98ace7ee7"
 
 
 client = Client(api_id=YOUR_API_ID, api_key=YOUR_API_KEY, timeout=TIMEOUT, retries=RETRIES)
-#search = Client.search("green eggs and ham")
+#search = client.search("green eggs and ham")
 
 def find_recipes(client, param, recipe_db, course, max_time):
+    '''
+    Finds recipes that match the parameters provided; update the database. 
+
+    Inputs:
+        client: a client object
+        param: a dict of parameters
+        recipe_db: a dict mapping recipe ids to recipes
+        course: a string indicating the meal, "Break and Brunch" or "Main Dishes"
+        max_time: an integer
+
+    Returns:
+        a list of recipes ids (strings) that meets the parameters; updates the recipe_db dict\
+        in the process
+    '''
     recipe_list = []
     param["requirePictures"] = True
     param["allowedCourse[]"] = [course]
@@ -22,17 +36,36 @@ def find_recipes(client, param, recipe_db, course, max_time):
         ingredients = match["ingredients"]
         recipe_id = match["id"]
         if recipe_id in recipe_db:
-            recipe_list.append((recipe_db[recipe_id], ingredients))
+            recipe_list.append((recipe_db[recipe_id], ingredients)) # can simply update the dict
         else:
             recipe = client.recipe(recipe_id)
             recipe_list.append((recipe, ingredients))
             recipe_db[recipe_id] = recipe
 
+    return recipe_list
+
 def go(param):
+    '''
+    Generates 4 lists that meets the parameters
+
+    Inputs:
+        param: a dict of parameters. e.g:
+                                       {"allowedIngredient[]": ["onion", "tomato", "lamb"],
+                                        "excludedIngredient[]": ["pork", "potato"],
+                                        "allowedAllergy[]": ["egg"],
+                                        "allowedDiet[]": ["vegetarian"],
+                                        "time": [20, 60]}
+
+    Returns:
+        a tuple of 4 lists: breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
+    '''
     with open("recipe_db.json") as f:
         recipe_db = json.load(f)
 
-    breakfast_maxtime, maindish_maxtime = param["maxTotalTimeInSeconds"]
+    breakfast_maxtime, maindish_maxtime = param["time"]
+    del param["time"]
+    breakfast_maxtime = breakfast_maxtime * 60
+    maindish_maxtime = maindish_maxtime * 60
 
     breakfast_list = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
     main_dish_list = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
@@ -57,12 +90,9 @@ def go(param):
 '''
 def test1():
     param1 = {"allowedIngredient[]": ["beef"],
-            "maxTotalTimeInSeconds": [1800, 1800],
-            "maxResult": 2,
-            "price": 0,
-            "calories per day": [0, 2000],
-            "servings": 1,
-            "start": 0}
+              "time": [1800, 1800],
+              "maxResult": 2,
+              "start": 0}
     return go(param1)
     
 test1()
@@ -77,9 +107,15 @@ if __name__=="__main__":
         sys.exit(0)
 
     with open(sys.argv[1]) as f:
-        data = f.readlines()[0]
-    data = json.loads(data)
-    go(data)
+        param = f.readlines()[0]
+    param = json.load(param)
+    if "price" in param:
+        del param["price"]
+    if "servings" in param:
+        del param["servings"]
+    if "calories per day" in param:
+        del param["calories per day"]
+    go(param)
 
 
 
