@@ -1,0 +1,1 @@
+{"servings": 1, "price": 200, "allowedDiet[]": ["vegetarian"], "allowedIngredient[]": ["onion", "tomato", "lamb"], "calories per day": [50, 2000], "excludedIngredient[]": ["pork", "potato"], "allowedAllergy[]": ["egg"], "time": [20, 60]}
