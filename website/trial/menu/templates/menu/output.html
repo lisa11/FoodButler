@@ -6,8 +6,9 @@
 
 <h3>MENU</h3>
 <table border="1" style="width:100%">
+{%for h in m%}
   <tr>
-    {% for i in c.breakfast.0 %}
+    {% for i in h %}
     <td>
     <h4>Name:</h4>
         <body>{{i.name}}</body>
@@ -24,9 +25,10 @@
     </td>
     {% endfor %}
   </tr> 
+{%endfor%}
 
     <tr>
-    {% for i in c.calories.0 %}
+    {% for i in ca %}
     <td>
     Total Calories: {{i}}
     </td>
@@ -36,8 +38,9 @@
 
 <h3>ALTERNATIVE</h3>
 <table border="1" style="width:100%">
+{%for h in a%}
     <tr>
-    {% for i in c.abreakfast.0 %}
+    {% for i in h%}
     <td>
     <h4>Name:</h4>
         <body>{{i.name}}</body>
@@ -55,12 +58,17 @@
     </td>
     {% endfor %}
   </tr> 
+{%endfor%}
 </table>
 </body>
 </html>
 
 
 TESTING
-{{m}}
-
+{{d.0}}
+{% for i in d %}
+{% for j in i %}
+{{j}}
+{% endfor %}
+{% endfor %}
 
