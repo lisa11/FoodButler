@@ -51,8 +51,8 @@ class Day(object):
         self.price = price
         self.major_ingredients = []
         self.calories = 0
-        self.breakfast_time = time[0]
-        self.main_meal_time = time[1]
+        # self.breakfast_time = time[0]
+        # self.main_meal_time = time[1]
         self.lower_calories = calories[0]
         self.upper_calories = calories[1]
         self.num_of_servings = num_of_servings
@@ -113,14 +113,15 @@ def clean_recipes(available_recipes):
     breakfast_alt_list_old, breakfast_list_old, main_dish_alt_list_old, main_dish_list_old = available_recipes
     
     breakfast_alt_list = []
-    for i in range(len(breakfast_alt_list_old)):
-        item = breakfast_alt_list_old[i][0]
-        for x in item["nutritionEstimates"]:
-            if x["attribute"] == "FAT_KCAL":
-                calories = x["value"]
-                break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
-        breakfast_alt_list.append(meal)
+    if breakfast_alt_list_old != []:
+        for i in range(len(breakfast_alt_list_old)):
+            item = breakfast_alt_list_old[i][0]
+            for x in item["nutritionEstimates"]:
+                if x["attribute"] == "FAT_KCAL":
+                    calories = x["value"]
+                    break
+            meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+            breakfast_alt_list.append(meal)
     
     breakfast_list = []
     for i in range(len(breakfast_list_old)):
@@ -129,18 +130,19 @@ def clean_recipes(available_recipes):
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         breakfast_list.append(meal)
     
     main_dish_alt_list = []
-    for i in range(len(main_dish_alt_list_old)):
-        item = main_dish_alt_list[i][0]
-        for x in item["nutritionEstimates"]:
-            if x["attribute"] == "FAT_KCAL":
-                calories = x["value"]
-                break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
-        main_dish_alt_list.append(meal)
+    if main_dish_alt_list_old != []:
+        for i in range(len(main_dish_alt_list_old)):
+            item = main_dish_alt_list_old[i][0]
+            for x in item["nutritionEstimates"]:
+                if x["attribute"] == "FAT_KCAL":
+                    calories = x["value"]
+                    break
+            meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+            main_dish_alt_list.append(meal)
     
     main_dish_list = []
     for i in range(len(main_dish_list_old)):
@@ -149,7 +151,7 @@ def clean_recipes(available_recipes):
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         main_dish_list.append(meal)
     
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
@@ -162,7 +164,6 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     The lists must be in clean version!!!
     '''
 
-    breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes
     day = Day(args_from_ui["price"], args_from_ui["calories per day"], args_from_ui["servings"])
     
     total = 0
@@ -249,13 +250,26 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
         del breakfast_list[num1]
     else:
         del breakfast_alt_list[num1]
-    if from_alt[1] == 0:
-        del main_dish_list[num2]
-    else:
+
+    if from_alt[1] == 0 and from_alt[2] == 0:
+        if num2 < num3:
+            del main_dish_list[num3]
+            del main_dish_list[num2]
+        else:
+            del main_dish_list[num2]
+            del main_dish_list[num3]
+    elif from_alt[1] == 1 and from_alt[2] == 1:
+        if num2 < num3:
+            del main_dish_alt_list[num3]
+            del main_dish_alt_list[num2]
+        else:
+            del main_dish_alt_list[num2]
+            del main_dish_alt_list[num3]
+    elif from_alt[1] == 1 and from_alt[2] == 0:
         del main_dish_alt_list[num2]
-    if from_alt[2] == 0:
         del main_dish_list[num3]
-    else:
+    elif from_alt[1] == 0 and from_alt[2] == 1:
+        del main_dish_list[num2]
         del main_dish_alt_list[num3]
 
     return day
@@ -264,7 +278,7 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
 def generate_final_output(args_from_ui):
     '''
     return breakfast_list, lunch_list, dinner_list, alternative_breakfast_list,
-    alternative_main_meal_list, each with 7 items.
+    alternative_lunch_list, alternative_dinner_list, each with 7 items.
     Each item being a dictionary including "name", "calories", "cooking time",
     ingredients as a list of strings, pic_url as a string, instruction_url
     as a string
@@ -284,6 +298,9 @@ def generate_final_output(args_from_ui):
     breakfast_final_list = []
     lunch_list = []
     dinner_list = []
+    alternative_breakfast_list = []
+    alternative_lunch_list = []
+    alternative_dinner_list = []
 
     for i in range(7):
         if i == 0:
@@ -293,7 +310,7 @@ def generate_final_output(args_from_ui):
         else:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, Day1 = day_list[-1], Day2 = day_list[-2])
         day_list.append(day)
-        breakfast__final_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
+        breakfast_final_list.append({"name": day.breakfast.name, "calories": day.breakfast.calories, "cooking time": day.breakfast.cooking_time, "ingredients": day.breakfast.full_ingredients, "pic url": day.breakfast.pic_url, "instruction url": day.breakfast.instruction_url})
         lunch_list.append({"name": day.lunch.name, "calories": day.lunch.calories, "cooking time": day.lunch.cooking_time, "ingredients": day.lunch.full_ingredients, "pic url": day.lunch.pic_url, "instruction url": day.lunch.instruction_url})
         dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic url": day.dinner.pic_url, "instruction url": day.dinner.instruction_url})
         calories_list.append(day.calories)
@@ -307,4 +324,8 @@ def generate_final_output(args_from_ui):
     with open("final_output.txt", "w") as f:
         print(breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list, file = f)
     
+    with open("major_ingredients.txt", "w") as f:
+        for x in day_list:
+            print(x.major_ingredients, file = f)
+
     return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list

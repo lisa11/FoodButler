@@ -110,8 +110,7 @@ if __name__=="__main__":
         sys.exit(0)
 
     with open(sys.argv[1]) as f:
-        param = f.readlines()[0]
-    param = json.load(param)
+        param = json.load(f)
     if "price" in param:
         del param["price"]
     if "servings" in param:
