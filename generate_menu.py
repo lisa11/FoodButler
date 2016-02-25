@@ -339,8 +339,8 @@ def generate_final_output(args_from_ui):
         alternative_dinner_list.append({"name": day.dinner.name, "calories": day.dinner.calories, "cooking_time": day.dinner.cooking_time, "ingredients": day.dinner.full_ingredients, "pic_url": day.dinner.pic_url, "instruction_url": day.dinner.instruction_url})
 
     with open("final_output.txt", "w") as f:
-        print(breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list, file = f)
-    
+        print(breakfast_final_list, ", ", lunch_list, ", ", dinner_list, ", ", calories_list, ", ", alternative_breakfast_list, ", ", alternative_lunch_list, ", ", alternative_dinner_list, file = f)
+
     with open("major_ingredients.txt", "w") as f:
         for x in day_list:
             print(x.major_ingredients, file = f)
