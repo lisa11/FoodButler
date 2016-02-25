@@ -122,7 +122,11 @@ def clean_recipes(available_recipes):
                 if x["attribute"] == "FAT_KCAL":
                     calories = x["value"]
                     break
-            meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+            if item["ingredientLines"][0][0:11] == "Ingredients": # some repeated messy ingredientLines needs to be cleaned this way
+                ingredient_lines = [item["ingredientLines"][0][12:]]
+            else:
+                ingredient_lines = item["ingredientLines"]
+            meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[i][1], ingredient_lines, item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
             major_ingredients += breakfast_alt_list_old[i][1]
             breakfast_alt_list.append(meal)
     
@@ -133,7 +137,11 @@ def clean_recipes(available_recipes):
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        if item["ingredientLines"][0][0:11] == "Ingredients":
+            ingredient_lines = [item["ingredientLines"][0][12:]]
+        else:
+            ingredient_lines = item["ingredientLines"]
+        meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_list_old[i][1], ingredient_lines, item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         major_ingredients += breakfast_list_old[i][1]
         breakfast_list.append(meal)
     
@@ -145,7 +153,11 @@ def clean_recipes(available_recipes):
                 if x["attribute"] == "FAT_KCAL":
                     calories = x["value"]
                     break
-            meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+            if item["ingredientLines"][0][0:11] == "Ingredients":
+                ingredient_lines = [item["ingredientLines"][0][12:]]
+            else:
+                ingredient_lines = item["ingredientLines"]
+            meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], ingredient_lines, item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
             major_ingredients += main_dish_alt_list_old[i][1]
             main_dish_alt_list.append(meal)
     
@@ -156,7 +168,11 @@ def clean_recipes(available_recipes):
             if x["attribute"] == "FAT_KCAL":
                 calories = x["value"]
                 break
-        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], item["ingredientLines"], item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        if item["ingredientLines"][0][0:11] == "Ingredients":
+            ingredient_lines = [item["ingredientLines"][0][12:]]
+        else:
+            ingredient_lines = item["ingredientLines"]
+        meal = Meal(item["name"], 0, calories, item["totalTime"], main_dish_alt_list_old[i][1], ingredient_lines, item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         major_ingredients += main_dish_list_old[i][1]
         main_dish_list.append(meal)
     
