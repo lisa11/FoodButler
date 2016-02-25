@@ -1,11 +1,7 @@
-
-<label> Menu </label>
-
-    <form method="get">
-        {% csrf_token %}
-        <table class="form">
-        {{ form }}
-        </table>
-        <input type="submit" value="Submit" />
-    </form>
-
+<form method="get">
+    <label> Menu </label>
+    <table class="form">
+    {{ form }}
+    </table>
+    <input type="submit" name="search" value="submit">
+</form>
