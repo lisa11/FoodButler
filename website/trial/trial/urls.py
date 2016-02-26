@@ -38,5 +38,7 @@ urlpatterns = [
     url(r'^testing', "menu.views.testing"),
     url(r'^start/$', "query.views.query", name='start'),
     url(r'^results/$', "query.views.results", name='results'),
+    url(r'^output/$', "menu.views.output", name='output'),
+    url(r'^output/shopping_list/$', "menu.views.shopping_list", name="shopping_list")
 
 ]
