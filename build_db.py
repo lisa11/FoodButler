@@ -115,8 +115,8 @@ if __name__=="__main__":
         del param["price"]
     if "servings" in param:
         del param["servings"]
-    if "calories per day" in param:
-        del param["calories per day"]
+    if "calories_per_day" in param:
+        del param["calories_per_day"]
     go(param)
 
 
