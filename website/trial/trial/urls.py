@@ -40,6 +40,5 @@ urlpatterns = [
     url(r'^results/$', "query.views.results", name='results'),
     url(r'^output/$', "menu.views.output", name='output'),
     url(r'^output/shopping_list/$', "menu.views.shopping_list", name="shopping_list"),
-    url(r'^individual/$', "menu.views.timer", name='individual_page')
-
-]
+    url(r'^individual/$', "menu.views.timer", name='individual_page'), 
+    ]

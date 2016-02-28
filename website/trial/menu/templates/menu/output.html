@@ -14,6 +14,9 @@
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
+
+    <a id="displayText" href=":toggle()";> show </a>
+    <div id="toggleText" style="display: none">
     <h4>Ingredients:</h4> 
         <ul style="list-style-type:disc">
             {%for j in i.ingredients%}
@@ -21,6 +24,8 @@
             {%endfor%}
         </ul>
     <h4>
+    </div>
+
         <body>
         <a href={{i.instruction_url}}>
              <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
