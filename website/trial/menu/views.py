@@ -59,3 +59,18 @@ breakfast_list, lunch_list, dinner_list, calories_list, alternative_breakfast_li
 def shopping_list(request):
     m = [1, 2, 3]
     return render(request, 'menu/shopping_list.html', {"the":m})
+
+def timer(request):
+    c = {'breakfast':breakfast_list, 
+        'lunch':lunch_list, 
+        'dinner':dinner_list, 
+        'calories':calories_list,
+        'abreakfast':alternative_breakfast_list, 
+        'alunch':alternative_lunch_list,
+        'adinner':alternative_dinner_list, 
+        'list_range': 7}
+    m = breakfast_list,lunch_list,dinner_list
+    ca = calories_list
+    a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
+
+    return render(request, "menu/individual_page.html", {"c":c, 'm':m, 'ca':ca, 'a':a})

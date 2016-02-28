@@ -119,13 +119,13 @@ def clean_recipes(available_recipes):
         for i in range(len(breakfast_alt_list_old)):
             item = breakfast_alt_list_old[i][0]
             for x in item["nutritionEstimates"]:
-                if x["attribute"] == "FAT_KCAL":
+                if x["attribute"] == "ENERC_KCAL":
                     calories = x["value"]
                     break
             if item["ingredientLines"][0][0:11] == "Ingredients": # some repeated messy ingredientLines needs to be cleaned this way
                 ingredient_lines = [item["ingredientLines"][0][12:]]
             else:
-                ingredient_lines = item["ingredientLines"]
+                ingredient_lines = list(set(item["ingredientLines"]))
             meal = Meal(item["name"], 0, calories, item["totalTime"], breakfast_alt_list_old[i][1], ingredient_lines, item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
             major_ingredients += breakfast_alt_list_old[i][1]
             breakfast_alt_list.append(meal)
