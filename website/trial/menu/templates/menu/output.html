@@ -4,19 +4,16 @@
 <html>
 <body>
 
-<h3>MENU</h3>
+<h2>MENU</h2>
 <h4> <a href="{% url 'shopping_list' %}">Shopping List</a> </h4>
 <table border="1" style="width:100%">
 {%for h in m%}
   <tr>
     {% for i in h %}
-    <td>
-    <h4>Name:</h4>
-        <body>{{i.name}}</body>
-    <h4>Cooking Time:</h4> 
-        <body>{{i.cooking_time}}</body>
-    <h4>Calories:</h4> 
-        <body>{{i.calories}}</body>
+    <td style="width:14%">
+    <h3>{{i.name}}</h3>
+    <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
+    <p>Calories: <b>{{i.calories}}</b></p>
     <h4>Ingredients:</h4> 
         <ul style="list-style-type:disc">
             {%for j in i.ingredients%}
@@ -26,7 +23,7 @@
     <h4>
         <body>
         <a href={{i.instruction_url}}>
-             <img src={{i.pic_url}} style="width:100px;height:100px;border:0">
+             <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
         </a>
         </body>
     </h4> 
@@ -44,18 +41,15 @@
 </tr> 
 </table>
 
-<h3>ALTERNATIVE</h3>
+<h2>ALTERNATIVE</h2>
 <table border="1" style="width:100%">
 {%for h in a%}
     <tr>
     {% for i in h%}
-    <td>
-    <h4>Name:</h4>
-        <body>{{i.name}}</body>
-    <h4>Cooking Time:</h4> 
-        <body>{{i.cooking_time}}</body>
-    <h4>Calories:</h4> 
-        <body>{{i.calories}}</body>
+    <td style="width:14%">
+    <h3>{{i.name}}</h3>
+    <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
+    <p>Calories: <b>{{i.calories}}</b></p>
     <h4>Ingredients:</h4> 
         <ul style="list-style-type:disc">
             {%for j in i.ingredients%}
@@ -65,7 +59,7 @@
     <h4>
         <body>
         <a href={{i.instruction_url}}>
-             <img src={{i.pic_url}} style="width:100px;height:100px;border:0">
+             <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
         </a>
         </body>
     </h4> 
