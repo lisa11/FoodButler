@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<h4> <a href="{% url 'shopping_list' %}">Shopping List</a> </h4>
+<h4> <a href="shopping_list">Shopping List</a> </h4>
 <h2>MENU</h2>
 <head>
   <meta charset="utf-8">
@@ -21,7 +21,7 @@ $( "button" ).click(function() {
 {%for h in m%}
   <tr>
     {% for i in h %}
-    <td style="width:14%">
+    <td style="vertical-align: top">
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
@@ -66,7 +66,7 @@ $( "button" ).click(function() {
 {%for h in a%}
     <tr>
     {% for i in h%}
-    <td style="width:14%">
+    <td style="vertical-align: top">
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
