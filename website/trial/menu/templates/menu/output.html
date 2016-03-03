@@ -21,7 +21,7 @@ $( "button" ).click(function() {
 {%for h in m%}
   <tr>
     {% for i in h %}
-    <td style="vertical-align: top">
+    <td style="vertical-align:top;width:14%">
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
@@ -66,7 +66,7 @@ $( "button" ).click(function() {
 {%for h in a%}
     <tr>
     {% for i in h%}
-    <td style="vertical-align: top">
+    <td style="vertical-align:top;width:14%">
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
