@@ -13,13 +13,4 @@ function toggle() {
     }
 } 
 
-//http://www.w3schools.com/jsref/prop_style_visibility.asp
-function hideElem() {
-    document.getElementById("myP").style.visibility = "hidden";
-}
-
-function showElem() {
-    document.getElementById("myP").style.visibility = "visible";
-}
-
 
