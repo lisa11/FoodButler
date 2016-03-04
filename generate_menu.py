@@ -1,13 +1,14 @@
 import json
 import random
 from subprocess import call
+import re
 
 
 # The ingredients we care that should not be repeated within three days
-MAJOR_INGREDIENTS = ["beef", "lamb leg", "lamb", "chicken", "lobster", "shrimp", "pork",
+MAJOR_INGREDIENTS = ["beef", "lamb", "chicken", "lobster", "shrimp", "pork",
                      "steak", "tomato", "onion", "potato", "broccoli",
                      "cabbage", "lettuce", "leeks", "chicken wings",
-                     "eggplant", "lamb loin", "lamb rib chops", "lamb cubes"]
+                     "eggplant"]
 TRIAL_NUM_BEFORE_GOING_TO_ALT = 3
 TRIL_NUM_BEFORE_REPEATING_INGREDIENT = 10
 FINAL_TOLERANCE = 20 # the number of days generated failed lower calories limit before discarding the lower limit
@@ -29,8 +30,9 @@ class Meal(object):
         self.major_ingredients = []
         for ingredient in ingredients:
             self.ingredients.append(ingredient)
-            if ingredient in MAJOR_INGREDIENTS:
-                self.major_ingredients.append(ingredient)
+            for word in re.findall("[A-Za-z0-9]+", ingredient):
+                if word in MAJOR_INGREDIENTS:
+                    self.major_ingredients.append(word)
         self.pic_url = pic_url
         self.instruction_url = instruction_url
         self.full_ingredients = full_ingredients
