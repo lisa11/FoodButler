@@ -36,9 +36,10 @@ urlpatterns = [
     #url(r'', abc),
     url(r'^testing1', "menu.views.index"),
     url(r'^testing', "menu.views.testing"),
-    url(r'^start/$', "query.views.query", name='start'),
+    #url(r'^search/$', "menu.views.query", name='search'),
     url(r'^results/$', "query.views.results", name='results'),
     url(r'^output/$', "menu.views.output", name='output'),
     url(r'^output/shopping_list$', "menu.views.shopping_list", name="shopping_list"),
     url(r'^individual/$', "menu.views.timer", name='individual_page'),
+    url(r'^search/$', "menu.views.search", name='search')
     ]
