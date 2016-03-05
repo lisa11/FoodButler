@@ -160,6 +160,31 @@ def clean_recipes(available_recipes):
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
 
 
+def pick_recipe(day, meal_type, max_trail, recipe_list, calories_weight, used_ingredients, trial_count=0):
+    '''
+    Pick a recipe based on the list and parameters given
+
+    day: a Day object
+    meal_type: "breakfast" or "lunch" or "dinner"
+    max_trail: eg. TRIAL_NUM_BEFORE_GOING_TO_ALT, TRIAL_NUM_BEFORE_REPEATING_INGREDIENT
+    recipe_list: eg. breakfast_time
+    calories_weight: eg. BREAKFAST_CALORIES_WEIGHT
+    used_ingredients: a list of ingredients to avoid
+    trial_count: default 0
+
+    '''
+    chosen_recipe = None
+    while chosen_recipe == None and trial_count < max_trail:
+        trial_count += 1
+        index = random.randint(0, len(recipe_list) - 1)
+        recipe = recipe_list[index]
+        if recipe.calories < calories_weight * day.upper_calories 
+        and [x for x in used_ingredients if x in recipe.major_ingredients] == []:
+            day.insert_meal(recipe, meal_type)
+            used_ingredients += recipe.major_ingredients
+            chosen_recipe = recipe
+    return day, used_ingredients, trial_count
+
 def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, 
                  args_from_ui, Day1 = None, Day2 = None):
     '''
@@ -183,15 +208,34 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
 
         total += 1
         day = Day(args_from_ui["price"], args_from_ui["calories_per_day"], args_from_ui["servings"])
-        major_ingredients = []
+        used_ingredients = []
         if Day1:
-            major_ingredients += Day1.major_ingredients
+            used_ingredients += Day1.major_ingredients
         if Day2:
-            major_ingredients += Day2.major_ingredients
-        major_ingredients = list(set(major_ingredients))
+            used_ingredients += Day2.major_ingredients
+        used_ingredients = list(set(used_ingredients))
         from_alt = [None, None, None]
         
-        # Choose breakfast
+        # NEW-choose breakfast
+        day, used_ingredients, trial_count = pick_recipe(day, "breakfast", TRIAL_NUM_BEFORE_GOING_TO_ALT, 
+                                             breakfast_list, BREAKFAST_CALORIES_WEIGHT, used_ingredients)
+        
+        if day.breakfast != None:
+            from_alt[0] = False
+        else:
+            if breakfast_alt_list != []:
+                day, used_ingredients, trial_count = pick_recipe(day, "breakfast", TRIAL_NUM_BEFORE_REPEATING_INGREDIENT, 
+                                                     breakfast_alt_list, BREAKFAST_CALORIES_WEIGHT, used_ingredients, 
+                                                     trial_count)
+                if day.breakfast != None:
+                    from_alt[0] = True
+                else:
+                    day = pick_recipe(day, "breakfast", float('inf'), breakfast_list, BREAKFAST_CALORIES_WEIGHT, [])[0]
+                
+
+
+
+        '''# Choose breakfast
         t1 = 0
         while day.breakfast == None and t1 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
             t1 += 1
@@ -207,13 +251,13 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
                 if breakfast_alt_list[num1].calories < BREAKFAST_CALORIES_WEIGHT * day.upper_calories \
                 and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
                     day.insert_meal(breakfast_alt_list[num1], "breakfast")
-                    major_ingredients += breakfast_list[num1].major_ingredients
+                    major_ingredients += breakfast_alt_list[num1].major_ingredients
                     from_alt[0] = 1
         if day.breakfast == None:
             num1 = random.randint(0, len(breakfast_list) - 1)
             day.insert_meal(breakfast_list[num1], "breakfast")
             major_ingredients = list(set(major_ingredients) & set(breakfast_list[num1].major_ingredients))
-            from_alt[0] = 0
+            from_alt[0] = 0'''
 
         # Choose Lunch
         t2 = 0
