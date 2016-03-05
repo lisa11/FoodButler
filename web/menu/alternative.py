@@ -3,9 +3,8 @@
 import random
 
 
-def update_menu(result, discard_list, selected_list):
+def update_menu(discard_list, selected_list):
 	'''
-	result: the final_output from generate_menu.py
 	discard_list: a list of meal index (from 1 to 21) user would like to discard
 	selected_list: a list of meal index (from 1 to 21) user would like to add
 	               to the main menu from the alternative lists
@@ -13,7 +12,8 @@ def update_menu(result, discard_list, selected_list):
 	'''
 
     assert len(discard_list) == len(selected_list)
-    breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = result
+    with open("final_output.txt") as f:
+        breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = f.readline()
     main_list = breakfast_final_list + lunch_list + dinner_list + alternative_breakfast_list + alternative_lunch_list + alternative_dinner_list
     random.shuffle(selected_list) # to make it more exciting :D
     for i in range(len(selected_list)):
@@ -28,8 +28,12 @@ def update_menu(result, discard_list, selected_list):
     alternative_breakfast_list = main_list[21:28]
     alternative_lunch_list = main_list[28:35]
     alternative_dinner_list = main_list[35:42]
+    
     new_calories_list = []
     for i in range(7):
     	new_calories_list.append(breakfast_final_list[i]["calories"] + lunch_list[i]["calories"] + dinner_list[i]["calories"])
 
+    with open("final_output.txt", "w") as f:
+        print(breakfast_final_list, ",", lunch_list, ",", dinner_list, ",", new_calories_list, ",", alternative_breakfast_list, ",", alternative_lunch_list, ",", alternative_dinner_list, file = f)
+    
     return breakfast_final_list, lunch_list, dinner_list, new_calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
