@@ -2,12 +2,12 @@
 
 
 def build_sub_shopping_dict(day, result, rv_dict, meal_num):
-    for k in range(len(result[meal_num][i]["ingredients"])):
-        ingredient = result[meal_num][i]["ingredients"][k]
-        if ingredient not in rv_dict[i]:
-            rv_dict[i][ingredient] = 1
+    for k in range(len(result[meal_num][day]["ingredients"])):
+        ingredient = result[meal_num][day]["ingredients"][k]
+        if ingredient not in rv_dict[day]:
+            rv_dict[day][ingredient] = 1
         else:
-            rv_dict[i][ingredient] += 1
+            rv_dict[day][ingredient] += 1
 
 
 def generate_shopping_list(days):
