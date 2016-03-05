@@ -73,6 +73,7 @@ class Day(object):
         self.price += meal.price
         self.calories += meal.calories
         self.major_ingredients += meal.major_ingredients
+        self.major_ingredients = list(set(self.major_ingredients))
 
 
 def generate_available_recipes(args_from_ui):
