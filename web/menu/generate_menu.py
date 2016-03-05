@@ -229,9 +229,6 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
                 else:
                     day = pick_recipe(day, "breakfast", float('inf'), breakfast_list, BREAKFAST_CALORIES_WEIGHT, [])[0]
                 
-
-
-
         '''# Choose breakfast
         t1 = 0
         while day.breakfast == None and t1 < TRIAL_NUM_BEFORE_GOING_TO_ALT:
@@ -246,7 +243,7 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
             while day.breakfast == None and t1 < TRIAL_NUM_BEFORE_REPEATING_INGREDIENT:
                 num1 = random.randint(0, len(breakfast_alt_list) - 1)
                 if breakfast_alt_list[num1].calories < BREAKFAST_CALORIES_WEIGHT * day.upper_calories \
-                and [x for x in major_ingredients if x in breakfast_list[num1].major_ingredients] == []:
+                and [x for x in major_ingredients if x in breakfast_alt_list[num1].major_ingredients] == []:
                     day.insert_meal(breakfast_alt_list[num1], "breakfast")
                     major_ingredients += breakfast_alt_list[num1].major_ingredients
                     from_alt[0] = 1
