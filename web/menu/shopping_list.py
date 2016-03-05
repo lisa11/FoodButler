@@ -18,6 +18,9 @@ def generate_shopping_list(days):
     ingredient needed and a list of days on which this ingredient is needed
     '''
 
+    with open("final_output.txt") as f:
+        result = f.readline()
+    
     rv_dict = {}
     rv_list = []
     for day in range(7):
