@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+<form method="POST">
+  {% for val in value_list %}
+    <input type='text' value='{{ val }}' name='my_list'>{{ val }}</input>
+  {% endfor %}
+</form>
 <input type="submit" name="search" value="submit">
 <h4> <a href="shopping_list">Shopping List</a> </h4>
 <h2>MENU</h2>

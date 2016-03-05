@@ -5,3 +5,106 @@
     </table>
     <input type="submit" name="search" value="submit">
 </form>
+
+{% if rm != None %}
+{{rm}}
+{{add}}
+{%endif%}
+
+{% if m != None %}
+<h4> <a href="shopping_list">Shopping List</a> </h4>
+<h2>MENU</h2>
+<head>
+  <meta charset="utf-8">
+  <title>toggle demo</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+<button>Ingredients</button>
+<script>
+$( "button" ).click(function() {
+  $( "div1" ).toggle();
+});
+</script>
+</body>
+
+<body>
+<table border="1" style="width:100%" cellspacing="5" cellpadding="5" height="50px">
+{%for h in m%}
+  <tr>
+    {% for i in h %}
+    <input type="checkbox" name="cc_myself" />
+    <td style="vertical-align:top;width:14%">
+    <h3>{{i.name}}</h3>
+    <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
+    <p>Calories: <b>{{i.calories}}</b></p>
+    <div1 id="hidden" style="display:none">Ingredients:</h4> 
+        <ul style="list-style-type:disc">
+            {%for j in i.ingredients%}
+            <li>{{j}}</li>
+            {%endfor%}
+        </ul>
+    </div1>
+    <p>
+        <body>
+        <a href={{i.instruction_url}}>
+             <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
+        </a>
+        </body>
+    </p> 
+    </td>
+    {% endfor %}
+  </tr> 
+{%endfor%}
+
+<tr>
+    {% for i in ca %}
+    <td>
+    Total Calories: {{i}}
+    </td>
+    {% endfor %}
+</tr> 
+</table>
+
+<h2>ALTERNATIVE</h2>
+<body>
+<button>Ingredients</button>
+<script>
+$( "button" ).click(function() {
+  $( "div2" ).toggle();
+});
+</script>
+</body>
+<table border="1" style="width:100%">
+{%for h in a%}
+    <tr>
+    {% for i in h%}
+    <td style="vertical-align:top;width:14%">
+    <h3>{{i.name}}</h3>
+    <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
+    <p>Calories: <b>{{i.calories}}</b></p>
+    <div2 id="hidden" style="display:none">Ingredients:</h4> 
+        <ul style="list-style-type:disc">
+            {%for j in i.ingredients%}
+            <li>{{j}}</li>
+            {%endfor%}
+        </ul>
+    </div2>
+    <p>
+        <body>
+        <a href={{i.instruction_url}}>
+             <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
+        </a>
+        </body>
+    </p> 
+        
+    </td>
+    {% endfor %}
+  </tr> 
+{%endfor%}
+</table>
+</body>
+{% endif %}
+
+
+
