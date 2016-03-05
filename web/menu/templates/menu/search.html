@@ -12,7 +12,6 @@
 {%endif%}
 
 {% if m != None %}
-<h4> <a href="shopping_list">Shopping List</a> </h4>
 <h2>MENU</h2>
 <head>
   <meta charset="utf-8">
@@ -33,7 +32,6 @@ $( "button" ).click(function() {
 {%for h in m%}
   <tr>
     {% for i in h %}
-    <input type="checkbox" name="cc_myself" />
     <td style="vertical-align:top;width:14%">
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
@@ -46,11 +44,9 @@ $( "button" ).click(function() {
         </ul>
     </div1>
     <p>
-        <body>
         <a href={{i.instruction_url}}>
              <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
-        </a>
-        </body>
+        </a>   
     </p> 
     </td>
     {% endfor %}
@@ -91,11 +87,9 @@ $( "button" ).click(function() {
         </ul>
     </div2>
     <p>
-        <body>
         <a href={{i.instruction_url}}>
              <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
         </a>
-        </body>
     </p> 
         
     </td>
