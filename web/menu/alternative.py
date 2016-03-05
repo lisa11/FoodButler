@@ -4,21 +4,28 @@ import random
 
 
 def update_menu(discard_list, selected_list):
-	'''
+    '''
 	discard_list: a list of meal index (from 1 to 21) user would like to discard
 	selected_list: a list of meal index (from 1 to 21) user would like to add
 	               to the main menu from the alternative lists
 	NOTE: discard_list and selected_list must be of the same length
-	'''
+    '''
 
     assert len(discard_list) == len(selected_list)
     with open("final_output.txt") as f:
-        breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = f.readline()
+        result = f.readline()
+        breakfast_final_list = result[0]
+        lunch_list = result[1]
+        dinner_list = result[2]
+        calories_list = result[3]
+        alternative_breakfast_list = result[4]
+        alternative_lunch_list = result[5]
+        alternative_dinner_list = result[6]
     main_list = breakfast_final_list + lunch_list + dinner_list + alternative_breakfast_list + alternative_lunch_list + alternative_dinner_list
     random.shuffle(selected_list) # to make it more exciting :D
     for i in range(len(selected_list)):
         dish_to_discard = main_list[discard_list[i]]
-        dish_selected = alternative_list[selected_list[i]]
+        dish_selected = main_list[selected_list[i]]
         main_list[discard_list[i]] = dish_selected
         main_list[selected_list[i]] = dish_to_discard
 
