@@ -7,7 +7,6 @@ import datetime
 import sys
 
 
-
 def build_event_l(one_meal_list, start_time_in, start_date):
     '''
     example start_date: [2016,3,18]
@@ -45,10 +44,6 @@ def syn_to_calendar(start_date):
         breakfast_list = result["breakfast_final_list"]
         lunch_list = result["lunch_list"]
         dinner_list = result["dinner_list"]
-        calories_list = result["calories_list"]
-        alternative_breakfast_list = result["alternative_breakfast_list"]
-        alternative_lunch_list = result["alternative_lunch_list"]
-        alternative_dinner_list = result["alternative_dinner_list"]
 
     breakfast_events = build_event_l(breakfast_list, [8,0,0], start_date)
     lunch_events = build_event_l(lunch_list, [11,30,0], start_date)
