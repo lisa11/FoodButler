@@ -172,7 +172,8 @@ def pick_recipe(max_trail, recipe_list, max_calories, used_ingredients, used_rec
     '''
     chosen_recipe = None
     trial_count = 0
-    while trial_count < max_trail and chosen_recipe == None or chosen_recipe == used_recipe:
+    while trial_count < max_trail and (chosen_recipe == None or chosen_recipe == used_recipe):
+        print("Individual meal trial", trial_count)
         trial_count += 1
         index = random.randint(0, len(recipe_list) - 1)
         recipe = recipe_list[index]
@@ -263,8 +264,8 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     total = 0
 
     # while calories requirement not met 
-    while total < MAX_TRIAL_BEFORE_IGNORE_CALORIES and day.calories < day.lower_calories or day.calories > day.upper_calories:
-
+    while total < MAX_TRIAL_BEFORE_IGNORE_CALORIES and (day.calories < day.lower_calories or day.calories > day.upper_calories):
+        print("Total trial run in a day", total)
         total += 1
         day = Day(args_from_ui["price"], args_from_ui["calories_per_day"], args_from_ui["servings"])
         used_ingredients = set()
@@ -442,16 +443,19 @@ def generate_final_output(args_from_ui):
     for i in range(7):
         if i == 0:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
+            print("Generated day 0")
         elif i == 1:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, 
                 Day1 = day_list[-1])
+            print("Generated day 1")
         else:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, 
                 Day1 = day_list[-1], Day2 = day_list[-2])
+            print("Generated day", i)
         day_list.append(day)
         breakfast_final_list, lunch_list, dinner_list = update_output_lists(day, 
             (breakfast_final_list, lunch_list, dinner_list), i, False)
-        calories_output_list.append(day.calories)
+        calories_list.append(day.calories)
 
     for i in range(7):
         day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
