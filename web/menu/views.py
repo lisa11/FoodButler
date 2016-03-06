@@ -19,9 +19,37 @@ ALLERGIES = [("396^Dairy-Free", "Dairy"),
     ("401^Sulfite-Free", "Sulfite"),
     ("395^Tree Nut-Free", "Tree Nut"),
     ("392^Wheat-Free", "Wheat")]
-DIET = ['Lacto vegetarian', 'Ovo vegetarian', 'Pescetarian', 'Vegan', 'Vegetarian']
-CUISINE = ['American', 'Italian', 'Asian', 'Mexican, Southern & Soul Food', 'French', 'Southwestern', 'Barbecue', 'Indian', 'Chinese', 'Cajun & Creole', 'English', 'Mediterranean', 'Greek', 'Spanish', 'German', 'Thai', 'Moroccan', 'Irish', 'Japanese', 'Cuban', 'Hawaiin', 'Swedish', 'Hungarian', 'Portugese']
-SERVINGS = [1, 2, 3, 4]
+DIET = [("388^Lacto vegetarian","Lacto vegetarian"),
+    ("389^Ovo vegetarian","Ovo vegetarian"),
+    ("390^Pescetarian","Pescetarian"),
+    ("386^Vegan","Vegan"),
+    ("387^Lacto-ovo vegetarian","Lacto-ovo vegetarian"),
+    ("403^Paleo","Paleo")]
+CUISINE = [("cuisine^cuisine-american","American"), 
+    ("cuisine^cuisine-italian","Italian"), 
+    ("cuisine^cuisine-mexican","Mexican"), 
+    ("cuisine^cuisine-southern","Southern & Soul Food"), 
+    ("cuisine^cuisine-french","French"), 
+    ("cuisine^cuisine-southwestern","Southwestern"), 
+    ("cuisine^cuisine-barbecue-bbq","Barbecue"), 
+    ("cuisine^cuisine-indian","Indian"), 
+    ("cuisine^cuisine-chinese","Chinese"), 
+    ("cuisine^cuisine-cajun","Cajun & Creole"), 
+    ("cuisine^cuisine-mediterranean","Mediterranean"),
+    ("cuisine^cuisine-greek","Greek"),
+    ("cuisine^cuisine-english","English"),
+    ("cuisine^cuisine-spanish","Spanish"),
+    ("cuisine^cuisine-thai","Thai"),
+    ("cuisine^cuisine-german,","German"),
+    ("cuisine^cuisine-moroccan","Moroccan"),
+    ("cuisine^cuisine-irish","Irish"),
+    ("cuisine^cuisine-japanese","Japanese"),
+    ("cuisine^cuisine-cuban","Cuban"),
+    ("cuisine^cuisine-hawaiian","Hawaiian"),
+    ("cuisine^cuisine-swedish", "Swedish"),
+    ("cuisine^cuisine-hungarian","Hungarian"),
+    ("cuisine^cuisine-portuguese","Portuguese")]
+#SERVINGS = [1, 2, 3, 4]
 DAYS = [1,2,3,4,5,6,7]
 
 
@@ -47,12 +75,12 @@ class SearchForm(forms.Form):
         required=False)
     diet = forms.MultipleChoiceField(
         label='Diet',
-        choices= [(x, x) for x in DIET],
+        choices=DIET,
         widget=forms.CheckboxSelectMultiple, 
         required=False)
     cuisine = forms.MultipleChoiceField(
         label='Cuisine',
-        choices= [(x, x) for x in CUISINE],
+        choices=CUISINE,
         widget=forms.CheckboxSelectMultiple, 
         required=False)
     time_breakfast = forms.IntegerField(
