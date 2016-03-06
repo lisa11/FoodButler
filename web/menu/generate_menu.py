@@ -8,11 +8,11 @@ import re
 MAJOR_INGREDIENTS = ['steak', 'mustard', 'coriander', 'sprout', 'honey', 'tomato', 'bell', 'chickpea', 'couscous', 'pita', 'companelle', 'leeks', 'beet', 'walnut', 'shrimp', 'sierra', 'meat', 'orange', 'spinach', 'carrot', 'phyllo dough', 'lobster', 'celery', 'noodle', 'frond', 'fettucine', 'cherry', 'lamb', 'chocolate', 'hummus', 'cilantro', 'brownie', 'cookie', 'kiwi', 'cayenne', 'chicken wings', 'nana', 'cumin', 'salad', 'rice', 'eggplant', 'onion', 'avocado', 'khoa', 'podded pea', 'garam masala', 'cabbage', 'ras-el-hanout', 'mint', 'mushroom', 'sausage', 'pancake', 'baguette', 'naan', 'polenta', 'pumpkin', 'lettuce', 'broccoli', 'tagliatelle', 'loaves', 'parsley', 'curry', 'pork', 'cacao', 'linguine', 'cardamom', 'beef', 'loaf', 'apple', 'dough', 'meatball', 'berr', 'pudding', 'lentil', 'fruit', 'peach', 'asparagus', 'arugula', 'marshmallow', 'egg', 'molasses', 'seed', 'popcorn', 'pine nut', 'shetbet', 'cornmeal', 'albacore', 'coconut', 'bulgur', 'sandwich', 'red chilli', 'hamburger', 'oreo', 'thyme', 'tomatoes', 'pistachio', 'spaghetti', 'salmon', 'cucumber', 'corn', 'chicken', 'ditalini', 'pineapple', 'tortilla', 'potato', 'herb', 'strawberr', 'bread', 'pizza', 'fish', 'sauerkraut']
 MAX_TRIAL_BEFORE_GOING_TO_ALT = 3
 MAX_TRIAL_BEFORE_REPEATING_INGREDIENT = 7
-MAX_TRIAL_BEFORE_IGNORE_CALORIES = 20 # the number of days generated failed lower calories limit before discarding the lower limit
+MAX_TRIAL_BEFORE_IGNORE_CALORIES = 20 # is it only lower or both?
+#the number of days generated failed lower calories limit before discarding the lower limit
 BREAKFAST_CALORIES_WEIGHT = 0.4 # 40% of the total calories of the day 
 LUNCH_CALORIES_WEIGHT = 0.5
 DINNER_CALORIES_WEIGHT = 0.5
-
 
 
 class Meal(object):
