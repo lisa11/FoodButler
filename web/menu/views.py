@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
 from alternative import update_menu
 from generate_menu import generate_final_output
+from shopping_list import generate_shopping_list
 from django.core.urlresolvers import reverse
 #from .models import Event
 
@@ -139,15 +140,16 @@ def search(request):
                 add = list(map(int, form.cleaned_data['alt_add'].split()))
                 if len(rm) == len(add):
                     breakfast_final_list, lunch_list, dinner_list, new_calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = update_menu(rm, add)
-                    m = breakfast_list,lunch_list,dinner_list
-                    ca = calories_list
+                    m = breakfast_final_list,lunch_list,dinner_list
+                    ca = new_calories_list
                     a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
                     return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
                 else:
                     return render(request, "menu/search.html", {"form":form})
             elif form.cleaned_data['shopping_list']:
-                shopping_list = form.cleaned_data['shopping_list']
-                return render(request, "menu/shopping_list.html", {"form":form, "shopping_list":shopping_list}) 
+                shopping_list = list(map(int, form.cleaned_data['shopping_list']))
+                lst = generate_shopping_list(shopping_list)
+                return render(request, "menu/shopping_list.html", {"shopping_list":lst}) 
             elif form.cleaned_data['synch']:
                 date = form.cleaned_data['synch']
                 ##call the function
