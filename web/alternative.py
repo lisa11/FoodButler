@@ -30,6 +30,9 @@ def update_menu(discard_list, selected_list):
         main_list[discard_list[i] - 1] = dish_selected
         main_list[selected_list[i] - 1] = dish_to_discard
 
+    for i in range(len(main_list)):
+        main_list[i]["num"] = i + 1
+
     breakfast_final_list = main_list[0:7]
     lunch_list = main_list[7:14]
     dinner_list = main_list[14:21]
