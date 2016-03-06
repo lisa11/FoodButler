@@ -12,3 +12,5 @@ to enable OAuth
 4) sudo pip install --upgrade pip google-api-python-client
 to pick up google API library
 
+
+Before runing generate_menu.py, please pull the updated recipe_db.json which is our database. Everytime the function generate_menu.py is run, please push the updated recipe_db.json.
