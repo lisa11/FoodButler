@@ -1,5 +1,6 @@
 <form method="get">
     <label> Menu </label>
+    {% csrf_token %}
     <table class="form">
     {{ form }}
     </table>

@@ -76,6 +76,11 @@ class SearchForm(forms.Form):
         choices=[(x, x) for x in DAYS],
         widget=forms.CheckboxSelectMultiple, 
         required=False)
+    synch=forms.DateField(
+        label='Synch to Calendar', 
+        #input_formats='%Y-%m-%d',
+        help_text="mm/dd/yyyy",
+        required=False)
 
 def search(request):
     m=None
@@ -99,6 +104,14 @@ def search(request):
             elif form.cleaned_data['shopping_list']:
                 shopping_list = form.cleaned_data['shopping_list']
                 return render(request, "menu/shopping_list.html", {"form":form, "shopping_list":shopping_list}) 
+            elif form.cleaned_data['synch']:
+                date = form.cleaned_data['synch']
+                ##call the function
+                year = date.year
+                month=date.month
+                day = date.day
+                return render(request, "menu/shopping_list.html", {"date":[year, month,day]})
+
             else:
                 args={}
                 if form.cleaned_data['ingredients_already_have']:
