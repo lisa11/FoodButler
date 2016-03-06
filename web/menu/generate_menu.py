@@ -117,14 +117,14 @@ def clean_one_recipe_list(recipe_list, major_ingredients):
             if x["attribute"] == "ENERC_KCAL":
                 calories = x["value"]
                 break
-            if item["ingredientLines"][0][0:11] == "Ingredients": 
-                ingredient_lines = [item["ingredientLines"][0][12:]] # to get rid of the word "Ingredients" at the start
-            else:
-                ingredient_lines = list(set(item["ingredientLines"])) # to remove repeated lines
-            meal = Meal(item["name"], 0, calories, item["totalTime"], recipe_list[i][1], ingredient_lines,
-                   item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
-            major_ingredients += recipe_list[i][1]
-            cleaned_list.append(meal)
+        if item["ingredientLines"][0][0:11] == "Ingredients": 
+            ingredient_lines = [item["ingredientLines"][0][12:]] # to get rid of the word "Ingredients" at the start
+        else:
+            ingredient_lines = list(set(item["ingredientLines"])) # to remove repeated lines
+        meal = Meal(item["name"], 0, calories, item["totalTime"], recipe_list[i][1], ingredient_lines,
+                item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
+        major_ingredients += recipe_list[i][1]
+        cleaned_list.append(meal)
     return cleaned_list
     
 
