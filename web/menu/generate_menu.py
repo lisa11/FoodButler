@@ -113,9 +113,10 @@ def clean_one_recipe_list(recipe_list, major_ingredients):
     for i in range(len(recipe_list)):
         item = recipe_list[i][0] # the list consists of tuples eg. (one recipe dict, a list of ingredients used)
         for x in item["nutritionEstimates"]:
+            calories = 100
             if x["attribute"] == "ENERC_KCAL":
-                    calories = x["value"]
-                    break
+                calories = x["value"]
+                break
             if item["ingredientLines"][0][0:11] == "Ingredients": 
                 ingredient_lines = [item["ingredientLines"][0][12:]] # to get rid of the word "Ingredients" at the start
             else:
@@ -465,5 +466,4 @@ def generate_final_output(args_from_ui):
         for x in day_list:
             print(x.major_ingredients, file = f)
 
-    return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, 
-           alternative_lunch_list, alternative_dinner_list
+    return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
