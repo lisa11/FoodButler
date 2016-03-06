@@ -33,6 +33,8 @@ $( "button" ).click(function() {
   <tr>
     {% for i in h %}
     <td style="vertical-align:top;width:14%">
+    <div style='float: right; text-align: right'>{{i.num}}</div>
+    <div style='float: left; text-align: left'>
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
@@ -48,6 +50,7 @@ $( "button" ).click(function() {
              <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
         </a>   
     </p> 
+    </div>
     </td>
     {% endfor %}
   </tr> 
@@ -76,6 +79,8 @@ $( "button" ).click(function() {
     <tr>
     {% for i in h%}
     <td style="vertical-align:top;width:14%">
+    <div style='float: right; text-align: right'>{{i.num}}</div>
+    <div style='float: left; text-align: left'>
     <h3>{{i.name}}</h3>
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
@@ -91,7 +96,7 @@ $( "button" ).click(function() {
              <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
         </a>
     </p> 
-        
+    </div>
     </td>
     {% endfor %}
   </tr> 
