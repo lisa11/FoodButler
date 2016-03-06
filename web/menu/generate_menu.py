@@ -256,7 +256,7 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     if "price" not in args_from_ui:
         args_from_ui["price"] = 0
     if "calories_per_day" not in args_from_ui:
-        args_from_ui["calories_per_day"] = [0, 5000]
+        args_from_ui["calories_per_day"] = [1, 5000]
     if "servings" not in args_from_ui:
         args_from_ui["servings"] = 1
 
