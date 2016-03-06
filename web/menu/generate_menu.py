@@ -470,4 +470,15 @@ def generate_final_output(args_from_ui):
         for x in day_list:
             print(x.major_ingredients, file = f)
 
+    with open("final_output.json", "w") as f:
+        rv = {}
+        rv["breakfast_final_list"] = breakfast_final_list
+        rv["lunch_list"] = lunch_list
+        rv["dinner_list"] = dinner_list
+        rv["calories_list"] = calories_list
+        rv["alternative_breakfast_list"] = alternative_breakfast_list
+        rv["alternative_lunch_list"] = alternative_lunch_list
+        rv["alternative_dinner_list"] = alternative_dinner_list
+        f.write(json.dumps(rv))
+
     return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
