@@ -11,8 +11,10 @@ from django.core.urlresolvers import reverse
 
 ALLERGIES = ['Dairy', 'Egg', 'Gluten', 'Peanut', 'Soy', 'Sulfite', 'Treenut', 'Wheat']
 DIET = ['Lacto vegetarian', 'Ovo vegetarian', 'Pescetarian', 'Vegan', 'Vegetarian']
+CUISINE = ['American', 'Italian', 'Asian', 'Mexican, Southern & Soul Food', 'French', 'Southwestern', 'Barbecue', 'Indian', 'Chinese', 'Cajun & Creole', 'English', 'Mediterranean', 'Greek', 'Spanish', 'German', 'Thai', 'Moroccan', 'Irish', 'Japanese', 'Cuban', 'Hawaiin', 'Swedish', 'Hungarian', 'Portugese']
 SERVINGS = [1, 2, 3, 4]
 DAYS = [1,2,3,4,5,6,7]
+
 
 class SearchForm(forms.Form):
     ingredients_avoid=forms.CharField(
@@ -37,6 +39,11 @@ class SearchForm(forms.Form):
     diet = forms.MultipleChoiceField(
         label='Diet',
         choices= [(x, x) for x in DIET],
+        widget=forms.CheckboxSelectMultiple, 
+        required=False)
+    cuisine = forms.MultipleChoiceField(
+        label='Cuisine',
+        choices= [(x, x) for x in CUISINE],
         widget=forms.CheckboxSelectMultiple, 
         required=False)
     time_breakfast = forms.IntegerField(
@@ -138,6 +145,9 @@ def search(request):
                 if form.cleaned_data['calories_lower'] and form.cleaned_data['calories_upper']:
                     args['calories_per_day'] = [form.cleaned_data['calories_lower'], form.cleaned_data['calories_upper']]
                 
+                if form.cleaned_data['cuisine']:
+                    args['allowedCuisine[]'] = form.cleaned_data['cuisine']
+                    
                 #logging.error("what is this" % (form))
                 #return custom_redirect('results', **form.cleaned_data)
                 
