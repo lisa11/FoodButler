@@ -20,7 +20,7 @@ def find_recipes(client, param, recipe_db, course, max_time):
         client: a client object
         param: a dict of parameters
         recipe_db: a dict mapping recipe ids to recipes
-        course: a string indicating the meal, "Break and Brunch" or "Main Dishes"
+        course: a list containing a string indicating the meal, "Break and Brunch" or "Main Dishes"
         max_time: an integer
 
     Returns:
@@ -29,8 +29,9 @@ def find_recipes(client, param, recipe_db, course, max_time):
     '''
     recipe_list = []
     param["requirePictures"] = True
-    param["allowedCourse[]"] = [course]
-    param["maxTotalTimeInSeconds"] = max_time
+    param["allowedCourse[]"] = course
+    if max_time != None:
+        param["maxTotalTimeInSeconds"] = max_time
     recipes = client.search("", **param)
     for match in recipes.matches:
         ingredients = match["ingredients"]
@@ -64,13 +65,20 @@ def go(param):
         recipe_db = json.load(f)
     
     rv = {}
-    breakfast_maxtime, maindish_maxtime = param["time"]
-    del param["time"]
-    breakfast_maxtime = breakfast_maxtime * 60
-    maindish_maxtime = maindish_maxtime * 60
+    if "time" in param:
+        breakfast_max_time, main_dish_max_time = param["time"]
+        del param["time"]
+        breakfast_max_time = breakfast_max_time * 60
+        main_dish_max_time = main_dish_max_time * 60
+    else:
+        breakfast_max_time = None
+        main_dish_max_time = None
 
-    rv["breakfast_list"] = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
-    rv["main_dish_list"] = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
+    rv["breakfast_list"] = find_recipes(client, param, recipe_db, 
+        ["course^course-Breakfast and Brunch"], breakfast_max_time)  
+    rv["main_dish_list"] = find_recipes(client, param, recipe_db, 
+        ["course^course-Main Dishes"], main_dish_max_time)
+
 
     if param.has_key("allowedIngredient[]"):
         if param.has_key("excludedIngredient[]"):
@@ -78,8 +86,10 @@ def go(param):
         else:
             param["excludedIngredient[]"] = param["allowedIngredient[]"]
         del param["allowedIngredient[]"]
-        rv["breakfast_alt_list"] = find_recipes(client, param, recipe_db, "Breakfast and Brunch", breakfast_maxtime)  
-        rv["main_dish_alt_list"] = find_recipes(client, param, recipe_db, "Main Dishes", maindish_maxtime)
+        rv["breakfast_alt_list"] = find_recipes(client, param, recipe_db, 
+            ["course^course-Breakfast and Brunch"], breakfast_max_time)  
+        rv["main_dish_alt_list"] = find_recipes(client, param, recipe_db, 
+            ["course^course-Main Dishes"], main_dish_max_time)
     else: 
         rv["breakfast_alt_list"] = []
         rv["main_dish_alt_list"] = []
