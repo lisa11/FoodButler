@@ -1,7 +1,31 @@
+<style>
+
+    ul#id_cuisine li {
+        display: inline;
+    }
+
+    ul#id_allergy li {
+        display: inline;
+    }
+
+    ul#id_diet li {
+        display: inline;
+    }
+
+    ul#id_shopping_list li {
+        display: inline;
+    }
+
+    ul#menu{
+        list-style-type: disc;
+    }
+
+</style>
+
 <form method="get">
     <label> Menu </label>
-    {% csrf_token %}
     <table class="form">
+
     {{ form }}
     </table>
     <input type="submit" name="search" value="submit">
@@ -40,7 +64,7 @@ $( "button" ).click(function() {
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
     <div1 id="hidden" style="display:none">Ingredients:</h4> 
-        <ul style="list-style-type:disc">
+        <ul class="menu" style="list-style-type:disc">
             {%for j in i.ingredients%}
             <li>{{j}}</li>
             {%endfor%}
@@ -86,7 +110,7 @@ $( "button" ).click(function() {
     <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
     <p>Calories: <b>{{i.calories}}</b></p>
     <div2 id="hidden" style="display:none">Ingredients:</h4> 
-        <ul style="list-style-type:disc">
+        <ul class="menu" style="list-style-type:disc">
             {%for j in i.ingredients%}
             <li>{{j}}</li>
             {%endfor%}
