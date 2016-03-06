@@ -1,0 +1,7 @@
+['broccoli', 'arugula', 'lamb', 'hummus', 'steak', 'cherry', 'asparagus', 'onion', 'tomatoes']
+['honey', 'coconut', 'chocolate', 'egg']
+['chicken', 'meat', 'curry']
+['lamb', 'pizza', 'onion', 'cucumber']
+['orange', 'bread', 'apple', 'avocado', 'coconut']
+['chocolate', 'chicken']
+['cumin', 'cayenne', 'lamb', 'parsley', 'coriander', 'onion', 'tomatoes']
