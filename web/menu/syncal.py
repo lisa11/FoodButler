@@ -4,6 +4,7 @@
 # stored credentials.
 
 import datetime
+import sys
 
 
 
@@ -39,15 +40,29 @@ def syn_to_calendar(start_date):
     '''
     start_date example: [2016,3,10]
     '''
-    with open("final_output.txt") as f:
-        breakfast_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = f.readline()
+    with open("final_output.json") as f:
+        result = json.load(f)
+        breakfast_list = result["breakfast_final_list"]
+        lunch_list = result["lunch_list"]
+        dinner_list = result["dinner_list"]
+        calories_list = result["calories_list"]
+        alternative_breakfast_list = result["alternative_breakfast_list"]
+        alternative_lunch_list = result["alternative_lunch_list"]
+        alternative_dinner_list = result["alternative_dinner_list"]
+
     breakfast_events = build_event_l(breakfast_list, [8,0,0], start_date)
     lunch_events = build_event_l(lunch_list, [11,30,0], start_date)
-    dinner_events = build_event_l(dinner_list, [5,0,0], start_date)
+    dinner_events = build_event_l(dinner_list, [17,0,0], start_date)
 
     for event in breakfast_events + lunch_events + dinner_events:
         event = service.events().insert(calendarId='primary', body=event).execute()
         print 'Event created: %s' % (event.get('htmlLink'))
+
+
+if __name__=="__main__":
+    
+    args = [sys.argv[1], sys.argv[2], sys.argv[3]]
+    syn_to_calendar(args)
 
 '''
 def add_attachment(calendarService, driveService, calendarId, eventId, fileId):
