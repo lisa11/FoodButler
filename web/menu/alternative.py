@@ -25,10 +25,10 @@ def update_menu(discard_list, selected_list):
     main_list = breakfast_final_list + lunch_list + dinner_list + alternative_breakfast_list + alternative_lunch_list + alternative_dinner_list
     random.shuffle(selected_list) # to make it more exciting :D
     for i in range(len(selected_list)):
-        dish_to_discard = main_list[discard_list[i]]
-        dish_selected = main_list[selected_list[i]]
-        main_list[discard_list[i]] = dish_selected
-        main_list[selected_list[i]] = dish_to_discard
+        dish_to_discard = main_list[discard_list[i] - 1]
+        dish_selected = main_list[selected_list[i] - 1]
+        main_list[discard_list[i] - 1] = dish_selected
+        main_list[selected_list[i] - 1] = dish_to_discard
 
     breakfast_final_list = main_list[0:7]
     lunch_list = main_list[7:14]
