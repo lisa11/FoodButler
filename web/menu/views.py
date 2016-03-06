@@ -9,7 +9,16 @@ from django.core.urlresolvers import reverse
 
 # Create your views here.
 
-ALLERGIES = ['Dairy', 'Egg', 'Gluten', 'Peanut', 'Soy', 'Sulfite', 'Treenut', 'Wheat']
+ALLERGIES = [("396^Dairy-Free", "Dairy"),
+    ("397^Egg-Free", "Egg"),
+    ("393^Gluten-Free", "Gluten"),
+    ("394^Peanut-Free","Peanut"),
+    ("398^Seafood-Free", "Seafood"),
+    ("399^Sesame-Free", "Sesame"),
+    ("400^Soy-Free", "Soy"),
+    ("401^Sulfite-Free", "Sulfite"),
+    ("395^Tree Nut-Free", "Tree Nut"),
+    ("392^Wheat-Free", "Wheat")]
 DIET = ['Lacto vegetarian', 'Ovo vegetarian', 'Pescetarian', 'Vegan', 'Vegetarian']
 CUISINE = ['American', 'Italian', 'Asian', 'Mexican, Southern & Soul Food', 'French', 'Southwestern', 'Barbecue', 'Indian', 'Chinese', 'Cajun & Creole', 'English', 'Mediterranean', 'Greek', 'Spanish', 'German', 'Thai', 'Moroccan', 'Irish', 'Japanese', 'Cuban', 'Hawaiin', 'Swedish', 'Hungarian', 'Portugese']
 SERVINGS = [1, 2, 3, 4]
@@ -33,7 +42,7 @@ class SearchForm(forms.Form):
         required=False)
     allergy=forms.MultipleChoiceField(
         label='Allergy',
-        choices=[(x, x) for x in ALLERGIES],
+        choices=ALLERGIES,
         widget=forms.CheckboxSelectMultiple, 
         required=False)
     diet = forms.MultipleChoiceField(
@@ -65,12 +74,12 @@ class SearchForm(forms.Form):
     #    )
     calories_lower=forms.IntegerField(
         label="Minimum Calories Per Day", 
-        min_value=0,
+        min_value=1,
         max_value=5000,
         required=False)
     calories_upper=forms.IntegerField(
         label="Maximum Calories Per Day",
-        min_value=0,
+        min_value=1,
         max_value=5000, 
         required=False)
     alt_rm=forms.CharField(
@@ -147,7 +156,7 @@ def search(request):
                 
                 if form.cleaned_data['cuisine']:
                     args['allowedCuisine[]'] = form.cleaned_data['cuisine']
-                    
+
                 #logging.error("what is this" % (form))
                 #return custom_redirect('results', **form.cleaned_data)
                 
