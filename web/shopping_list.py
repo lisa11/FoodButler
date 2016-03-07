@@ -3,6 +3,7 @@
 import json
 
 
+
 def build_sub_shopping_dict(day, result, rv_dict, meal_num):
     for k in range(len(result[meal_num][day]["ingredients"])):
         ingredient = result[meal_num][day]["ingredients"][k]
