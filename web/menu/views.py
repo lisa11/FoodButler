@@ -5,6 +5,7 @@ from django import forms
 from alternative import update_menu
 from generate_menu import generate_final_output
 from shopping_list import generate_shopping_list
+from sync_initiate import sync
 from django.core.urlresolvers import reverse
 #from .models import Event
 
@@ -157,6 +158,8 @@ def search(request):
                 year = date.year
                 month=date.month
                 day = date.day
+                lst = [year, month, day]
+                sync(lst)
             else:
                 args={}
                 if form.cleaned_data['ingredients_already_have']:
@@ -190,7 +193,7 @@ def search(request):
                 m = breakfast_list,lunch_list,dinner_list
                 ca = calories_list
                 a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
-                return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
+                return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a, "args":args})
                 
     else:  
         form = SearchForm()
