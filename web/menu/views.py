@@ -160,6 +160,7 @@ def search(request):
                 day = date.day
                 lst = [year, month, day]
                 sync(lst)
+                return render(request, "menu/search.html", {"form":form})
             else:
                 args={}
                 if form.cleaned_data['ingredients_already_have']:
