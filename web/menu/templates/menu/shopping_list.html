@@ -1,6 +1,26 @@
-Shopping List
-
-<img src="http://lh4.ggpht.com/SBSgSXuwGVHFK6sMG3uqwtGKWMfRv6JUe7ltX3b88XZbAKH4ugmPUr1rTwGYA6CGNs1CViJHRDBhHYp8oMPt4g=s360" alt="cannot be displayed">
-
-
-{{shopping_list}}
+<h2>Shopping List</h2>
+<table border="1" width="100%">
+<tr>
+<td>
+{%for day, things in shopping_list.items%}
+    <table style="display:inline-block;float:left;vertical-align:top">
+    <th>Day{{day}}</th>
+    <tr>
+        <td><b>Item</b></td>
+        <td><b>Amount</b></td>
+    </tr>
+    {%for ingredient, amount in things.items%}
+        <tr>
+        <td>
+            {{ingredient}}
+        </td>
+        <td>
+            {{amount}}
+        </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endfor %}
+</td>
+</tr>
+</table>
