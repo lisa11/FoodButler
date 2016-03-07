@@ -70,7 +70,7 @@ class Day(object):
             self.lunch = meal
         if position == "dinner":
             self.dinner = meal
-        self.price += meal.price
+        #self.price += meal.price
         self.calories += meal.calories
         self.major_ingredients += meal.major_ingredients
         self.major_ingredients = list(set(self.major_ingredients))
