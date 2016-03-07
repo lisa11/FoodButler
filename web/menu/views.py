@@ -157,8 +157,6 @@ def search(request):
                 year = date.year
                 month=date.month
                 day = date.day
-                return render(request, "menu/shopping_list.html", {"date":[year, month,day]})
-
             else:
                 args={}
                 if form.cleaned_data['ingredients_already_have']:
@@ -194,26 +192,12 @@ def search(request):
                 a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
                 return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
                 
-            #return render(request, "menu/output.html", {"c":args, "alt":form})
     else:  
         form = SearchForm()
 
     return render(request, "menu/search.html", {"form":form})
 
 def output(request):
-    d = {"name": "string1", 
-        "calories": 50, 
-        "cookingtime": 60, 
-        "ingredients": ['hello', 'world'], 
-        "picurl": 'string2', 
-        "instructionurl": 'string3'}
-    #breakfast_list=[d for i in range(7)]
-    #lunch_list=[d for i in range(7)]
-    #dinner_list=[d for i in range(7)]
-    #calories_list=[200, 300, 500, 600, 700, 500, 450] # calories for every day
-    #alternative_breakfast_list=[d for i in range(7)]
-    #alternative_lunch_list=[d for i in range(7)]
-    #alternative_dinner_list=[d for i in range(7)]
     c = {'breakfast':breakfast_list, 
         'lunch':lunch_list, 
         'dinner':dinner_list, 
