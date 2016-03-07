@@ -74,10 +74,8 @@ def go(param):
         breakfast_max_time = None
         main_dish_max_time = None
 
-    rv["breakfast_list"] = find_recipes(client, param, recipe_db, 
-        ["course^course-Breakfast and Brunch"], breakfast_max_time)  
-    rv["main_dish_list"] = find_recipes(client, param, recipe_db, 
-        ["course^course-Main Dishes"], main_dish_max_time)
+    rv["breakfast_list"] = find_recipes(client, param, recipe_db, ["course^course-Breakfast and Brunch"], breakfast_max_time)  
+    rv["main_dish_list"] = find_recipes(client, param, recipe_db, ["course^course-Main Dishes"], main_dish_max_time)
 
 
     if param.has_key("allowedIngredient[]"):

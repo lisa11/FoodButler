@@ -1,1 +1,1 @@
-{"allowedIngredient[]": ["lamb", "onion", "tomatoes"], "allowedCuisine[]": ["cuisine^cuisine-american"], "calories_per_day": [500, 2000], "maxTotalTimeInSeconds": [20, 60]}
+{"calories_per_day": [1, 2000]}
