@@ -29,6 +29,10 @@ SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'FoodButler'
 
+BREAKFAST_START_TIME = [8,0,0]
+LUNCH_START_TIME = [11,30,0]
+DINNER_START_TIME = [17,0,0]
+
 
 def build_event_l(one_meal_list, start_time_in, start_date):
     '''
@@ -88,13 +92,17 @@ def get_credentials():
     return credentials
 
 
-def syn_to_calendar(start_date):
+def syn_to_calendar():
     '''
     start_date example: [2016,3,10]
+    This will be loaded from a json file that contains this list
     '''
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
+
+    with open("start_date.json") as f:
+        start_date = json.load(f)
 
     with open("final_output.json") as f:
         result = json.load(f)
@@ -102,13 +110,17 @@ def syn_to_calendar(start_date):
         lunch_list = result["lunch_list"]
         dinner_list = result["dinner_list"]
 
-    breakfast_events = build_event_l(breakfast_list, [8,0,0], start_date)
-    lunch_events = build_event_l(lunch_list, [11,30,0], start_date)
-    dinner_events = build_event_l(dinner_list, [17,0,0], start_date)
+    breakfast_events = build_event_l(breakfast_list, BREAKFAST_START_TIME, start_date)
+    lunch_events = build_event_l(lunch_list, LUNCH_START_TIME, start_date)
+    dinner_events = build_event_l(dinner_list, DINNER_START_TIME, start_date)
 
     for event in breakfast_events + lunch_events + dinner_events:
         event = service.events().insert(calendarId='primary', body=event).execute()
         #print 'Event created: %s' % (event.get('htmlLink'))
+
+
+syn_to_calendar()
+
 
 '''
 def add_attachment(calendarService, driveService, calendarId, eventId, fileId):
