@@ -31,17 +31,7 @@ from django.http import HttpResponse
 
 
 urlpatterns = [
-    #url(r'^polls/', include('polls.urls')),
     url(r'^admin/', admin.site.urls),
-    #url(r'', abc),
-    #url(r'^testing1', "menu.views.index"),
-    #url(r'^testing', "menu.views.testing"),
-    #url(r'^search/$', "menu.views.query", name='search'),
-    #url(r'^results/$', "query.views.results", name='results'),
-    url(r'^output/$', "menu.views.output", name='output'),
-    url(r'^output/shopping_list$', "menu.views.shopping_list", name="shopping_list"),
-    #url(r'^individual/$', "menu.views.individual", name='individual_page'),
+    url(r'^search/shopping_list$', "menu.views.shopping_list", name="shopping_list"),
     url(r'^search/$', "menu.views.search", name='search'), 
-    #url(r'^output/([0-9]{4})/$', 'menu.views.individual', name='individual_page'),
-
     ]

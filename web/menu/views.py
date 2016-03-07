@@ -1,16 +1,12 @@
 from django.shortcuts import render
-
 from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
 from alternative import update_menu
 from generate_menu import generate_final_output
 from shopping_list import generate_shopping_list
 from sync_initiate import sync
-from django.core.urlresolvers import reverse
-#from .models import Event
 
-# Create your views here.
-
+#hard-coded inputs for Yummly API
 ALLERGIES = [("396^Dairy-Free", "Dairy"),
     ("397^Egg-Free", "Egg"),
     ("393^Gluten-Free", "Gluten"),
@@ -59,7 +55,7 @@ DAYS = [(1, "Day1"),
     (6, "Day6"),
     (7, "Day7")]
 
-
+#modified from pa3/ui/search/views.py
 class SearchForm(forms.Form):
     ingredients_avoid=forms.CharField(
         label="Ingredients to Avoid", 
@@ -68,12 +64,6 @@ class SearchForm(forms.Form):
     ingredients_already_have=forms.CharField(
         label='Ingredients to Include', 
         #help_text="(Ingredients to include in meal)",
-        required=False)
-    number_of_meal=forms.IntegerField(
-        label='Number of Meals',
-        help_text='(Number of meals to that contains Ingredients to Include)', 
-        min_value=1,
-        max_value=21,
         required=False)
     allergy=forms.MultipleChoiceField(
         label='Allergy',
@@ -127,9 +117,23 @@ class SearchForm(forms.Form):
         #input_formats='%Y-%m-%d',
         help_text="mm/dd/yyyy",
         required=False)
+    breakfast_start=forms.TimeField(
+        label='Start time for Breakfast', 
+        #input_formats='%Y-%m-%d',
+        help_text="HH:MM (24 hours)",
+        required=False)
+    lunch_start=forms.TimeField(
+        label='Start time for Lunch', 
+        help_text="HH:MM (24 hours)",
+        required=False)
+    dinner_start=forms.TimeField(
+        label='Start time for Dinner', 
+        help_text="HH:MM (24 hours)",
+        required=False)
 
+#modified from pa3/ui/search/views.py
 def search(request):
-    m=None
+    menu=None
     rm=None
     shopping_list=None
     if request.GET.get('search'):
@@ -141,10 +145,10 @@ def search(request):
                 add = list(map(int, form.cleaned_data['alt_add'].split()))
                 if len(rm) == len(add):
                     breakfast_final_list, lunch_list, dinner_list, new_calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = update_menu(rm, add)
-                    m = breakfast_final_list,lunch_list,dinner_list
-                    ca = new_calories_list
-                    a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
-                    return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
+                    menu = breakfast_final_list,lunch_list,dinner_list
+                    calories = new_calories_list
+                    alternative = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
+                    return render(request, "menu/search.html", {"form":form, 'm':menu, 'ca':calories, 'a':alternative})
                 else:
                     return render(request, "menu/search.html", {"form":form})
             elif form.cleaned_data['shopping_list']:
@@ -153,12 +157,15 @@ def search(request):
                 lst1 = {"3":["the", "old", "testing"]}
                 return render(request, "menu/shopping_list.html", {"shopping_list":lst, "lst1":lst1}) 
             elif form.cleaned_data['synch']:
-                date = form.cleaned_data['synch']
-                ##call the function
-                year = date.year
-                month=date.month
-                day = date.day
-                lst = [year, month, day]
+                bs = []
+                ls = []
+                ds = []
+                if form.cleaned_data['breakfast_start'] and form.cleaned_data['lunch_start'] and form.cleaned_data['dinner_start']:
+                    bs = form.cleaned_data['breakfast_start']
+                    ls = form.cleaned_data['lunch_start']
+                    ds = form.cleaned_data['dinner_start']
+                user_input = form.cleaned_data['synch']
+                date = [user_input.year, user_input.month, user_input.day]
                 sync(lst)
                 return render(request, "menu/search.html", {"form":form})
             else:
@@ -200,20 +207,3 @@ def search(request):
         form = SearchForm()
 
     return render(request, "menu/search.html", {"form":form})
-
-def output(request):
-    c = {'breakfast':breakfast_list, 
-        'lunch':lunch_list, 
-        'dinner':dinner_list, 
-        'calories':calories_list,
-        'abreakfast':alternative_breakfast_list, 
-        'alunch':alternative_lunch_list,
-        'adinner':alternative_dinner_list, 
-        'list_range': 7}
-    m = breakfast_list,lunch_list,dinner_list
-    ca = calories_list
-    a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
-    l2 = list(range(7))
-    l1 = list(range(3))
-
-    return render(request, "menu/output.html", {"c":c, 'm':m, 'ca':ca, 'a':a, "l1":l1, 'l2':l2})
