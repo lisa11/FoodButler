@@ -3,8 +3,31 @@
 # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
 # stored credentials.
 
+from __future__ import print_function
+import httplib2
+import os
+
+from apiclient import discovery
+import oauth2client
+from oauth2client import client
+from oauth2client import tools
+
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+
+import json
 import datetime
 import sys
+
+
+# If modifying these scopes, delete your previously saved credentials
+# at ~/.credentials/calendar-python-quickstart.json
+SCOPES = 'https://www.googleapis.com/auth/calendar'
+CLIENT_SECRET_FILE = 'client_secret.json'
+APPLICATION_NAME = 'FoodButler'
 
 
 def build_event_l(one_meal_list, start_time_in, start_date):
@@ -13,14 +36,15 @@ def build_event_l(one_meal_list, start_time_in, start_date):
     example start_time: [8,0,0]   i.e. 8:00:00
     '''
     year, month, day = start_date
-    hour, minute, secend = start_time_in
-    start_datetime = datetime.datetime(year, month, day, hour, minute, second)
+    hour, minute, second = start_time_in
+    start_datetime = datetime.datetime(int(year), int(month), int(day), hour, minute, second)
+
     end_datetime = start_datetime + datetime.timedelta(hours = 2)
     rv_event_l = []
     for meal in one_meal_list:
         event = {}    
         event["summary"] = meal["name"]
-        event["description"] = "calories: " + meal["calories"] + "    cooking time: " + meal["cooking_time"]
+        event["description"] = "calories: " + str(meal["calories"]) + "    cooking time: " + meal["cooking_time"]
         start_datetime_s = str(start_datetime)
         s_date, s_time = start_datetime_s.split()
         start_time = s_date + "T" + s_time + "-06:00"
@@ -35,10 +59,43 @@ def build_event_l(one_meal_list, start_time_in, start_date):
     return rv_event_l
 
 
+def get_credentials():
+    """Gets valid user credentials from storage.
+
+    If nothing has been stored, or if the stored credentials are invalid,
+    the OAuth2 flow is completed to obtain the new credentials.
+
+    Returns:
+        Credentials, the obtained credential.
+    """
+    home_dir = os.path.expanduser('~')
+    credential_dir = os.path.join(home_dir, '.credentials')
+    if not os.path.exists(credential_dir):
+        os.makedirs(credential_dir)
+    credential_path = os.path.join(credential_dir,
+                                   'calendar-python-quickstart.json')
+
+    store = oauth2client.file.Storage(credential_path)
+    credentials = store.get()
+    if not credentials or credentials.invalid:
+        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+        flow.user_agent = APPLICATION_NAME
+        if flags:
+            credentials = tools.run_flow(flow, store, flags)
+        else: # Needed only for compatibility with Python 2.6
+            credentials = tools.run(flow, store)
+        print('Storing credentials to ' + credential_path)
+    return credentials
+
+
 def syn_to_calendar(start_date):
     '''
     start_date example: [2016,3,10]
     '''
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    service = discovery.build('calendar', 'v3', http=http)
+
     with open("final_output.json") as f:
         result = json.load(f)
         breakfast_list = result["breakfast_final_list"]
@@ -51,13 +108,7 @@ def syn_to_calendar(start_date):
 
     for event in breakfast_events + lunch_events + dinner_events:
         event = service.events().insert(calendarId='primary', body=event).execute()
-        print 'Event created: %s' % (event.get('htmlLink'))
-
-
-if __name__=="__main__":
-    
-    args = [sys.argv[1], sys.argv[2], sys.argv[3]]
-    syn_to_calendar(args)
+        #print 'Event created: %s' % (event.get('htmlLink'))
 
 '''
 def add_attachment(calendarService, driveService, calendarId, eventId, fileId):
