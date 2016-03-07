@@ -110,6 +110,8 @@ def syn_to_calendar(start_date):
         event = service.events().insert(calendarId='primary', body=event).execute()
         #print 'Event created: %s' % (event.get('htmlLink'))
 
+syn_to_calendar([2016,3,10])
+
 '''
 def add_attachment(calendarService, driveService, calendarId, eventId, fileId):
     file = driveService.files().get(fileId=fileId).execute()
