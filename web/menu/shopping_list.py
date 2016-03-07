@@ -34,7 +34,7 @@ def generate_shopping_list(days):
 
     rv_dict = {}
     week_list = []
-    rv_list = []
+    rv_dict = {}
     for day in range(7):
         rv_dict[day] = {}
         for meal in range(3):
@@ -45,8 +45,8 @@ def generate_shopping_list(days):
             sub_shopping_list.append((ingredient, rv_dict[day][ingredient]))
         week_list.append(sub_shopping_list)
     for day in days:
-        rv_list.append(week_list[day])
-    return rv_list
+        rv_dict[day] = week_list[day]
+    return rv_dict
 
 
 
