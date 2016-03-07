@@ -92,13 +92,17 @@ def get_credentials():
     return credentials
 
 
-def syn_to_calendar(start_date):
+def syn_to_calendar():
     '''
     start_date example: [2016,3,10]
+    This will be loaded from a json file that contains this list
     '''
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
+
+    with open("start_date.json") as f:
+        start_date = json.load(f)
 
     with open("final_output.json") as f:
         result = json.load(f)
@@ -114,7 +118,9 @@ def syn_to_calendar(start_date):
         event = service.events().insert(calendarId='primary', body=event).execute()
         #print 'Event created: %s' % (event.get('htmlLink'))
 
-syn_to_calendar([2016,3,10])
+
+syn_to_calendar()
+
 
 '''
 def add_attachment(calendarService, driveService, calendarId, eventId, fileId):
