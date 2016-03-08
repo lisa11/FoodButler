@@ -34,6 +34,7 @@ def build_event_l(one_meal_list, start_time_in, start_date):
     '''
     example start_date: [2016,3,18]
     example start_time: [8,0,0]   i.e. 8:00:00
+    The default (hard-coded) time zone is Chicago/Central Time
     '''
     year, month, day = start_date
     hour, minute, second = start_time_in
@@ -44,7 +45,9 @@ def build_event_l(one_meal_list, start_time_in, start_date):
     for meal in one_meal_list:
         event = {}    
         event["summary"] = meal["name"]
-        event["description"] = "calories: " + str(meal["calories"]) + "    cooking time: " + meal["cooking_time"]
+        event["description"] = "calories: " + str(meal["calories"]) + "    cooking time: " + meal["cooking_time"] + "\n"
+        event["description"] += "ingredients: " + str(meal["ingredients"]) + "\n"
+        event["description"] += "instruction url: " + meal["instruction_url"]
         start_datetime_s = str(start_datetime)
         s_date, s_time = start_datetime_s.split()
         start_time = s_date + "T" + s_time + "-06:00"
