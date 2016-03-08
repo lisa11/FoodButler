@@ -112,7 +112,7 @@ def syn_to_calendar(start_date):
         #print 'Event created: %s' % (event.get('htmlLink'))
 
 
-with open("start_date.json") as f:
+with open("time_dict.json") as f:
     time_dict = json.load(f)
 if "breakfast_start_time" in time_dict:
     BREAKFAST_START_TIME = time_dict["breakfast_start_time"]

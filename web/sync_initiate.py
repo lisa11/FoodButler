@@ -8,7 +8,7 @@ def sync(time_dict):
     helper function to call python2 syncal.py
     '''
 
-    with open("start_date.json", "w") as f:
+    with open("time_dict.json", "w") as f:
         f.write(json.dumps(time_dict))
 
     call("python2 syncal.py", shell=True)
