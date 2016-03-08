@@ -3,6 +3,9 @@
 # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
 # stored credentials.
 
+# The default (hard coded) time zone for this program
+# is set to America/Chicago
+
 from __future__ import print_function
 import httplib2
 import os
