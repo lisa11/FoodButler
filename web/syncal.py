@@ -109,9 +109,13 @@ def syn_to_calendar(start_date):
     breakfast_events = build_event_l(breakfast_list, BREAKFAST_START_TIME, start_date)
     lunch_events = build_event_l(lunch_list, LUNCH_START_TIME, start_date)
     dinner_events = build_event_l(dinner_list, DINNER_START_TIME, start_date)
+    
+    # Create a new secondary calendar
+    calendar_list_entry = {'id': 'Weekly Menu By FoodButler'}
+    created_calendar_list_entry = service.calendarList().insert(body=calendar_list_entry).execute()
 
     for event in breakfast_events + lunch_events + dinner_events:
-        event = service.events().insert(calendarId='Weekly Menu', body=event).execute()
+        event = service.events().insert(calendarId='Weekly Menu By FoodButler', body=event).execute()
         #print 'Event created: %s' % (event.get('htmlLink'))
 
 
