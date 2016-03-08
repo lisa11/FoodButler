@@ -74,8 +74,10 @@ def go(param):
         breakfast_max_time = None
         main_dish_max_time = None
 
-    rv["breakfast_list"] = find_recipes(client, param, recipe_db, ["course^course-Breakfast and Brunch"], breakfast_max_time)  
-    rv["main_dish_list"] = find_recipes(client, param, recipe_db, ["course^course-Main Dishes"], main_dish_max_time)
+    rv["breakfast_list"] = find_recipes(client, param, recipe_db, \
+        ["course^course-Breakfast and Brunch"], breakfast_max_time)  
+    rv["main_dish_list"] = find_recipes(client, param, recipe_db, \
+        ["course^course-Main Dishes"], main_dish_max_time)
 
 
     if param.has_key("allowedIngredient[]"):
@@ -98,16 +100,6 @@ def go(param):
     with open("recipe_lists.json", "w") as f:
         f.write(json.dumps(rv))
 
-'''
-def test1():
-    param1 = {"allowedIngredient[]": ["beef"],
-              "time": [1800, 1800],
-              "maxResult": 2,
-              "start": 0}
-    return go(param1)
-    
-test1()
-'''
 
 
 if __name__=="__main__":
