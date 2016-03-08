@@ -135,7 +135,6 @@ class SearchForm(forms.Form):
 def search(request):
     menu=None
     rm=None
-    shopping_list=None
     if request.GET.get('search'):
         form = SearchForm(request.GET)
 
@@ -157,16 +156,22 @@ def search(request):
                 lst1 = {"3":["the", "old", "testing"]}
                 return render(request, "menu/shopping_list.html", {"shopping_list":lst, "lst1":lst1}) 
             elif form.cleaned_data['synch']:
+                args = {}
                 bs = []
                 ls = []
                 ds = []
-                if form.cleaned_data['breakfast_start'] and form.cleaned_data['lunch_start'] and form.cleaned_data['dinner_start']:
+                if form.cleaned_data['breakfast_start']:
                     bs = form.cleaned_data['breakfast_start']
+                    args['breakfast_start_time'] = [bs.hour, bs.minute, bs.second]
+                if form.cleaned_data['lunch_start']:
                     ls = form.cleaned_data['lunch_start']
+                    args['lunch_start_time'] = [ls.hour, ls.minute, ls.second]
+                if form.cleaned_data['dinner_start']:
                     ds = form.cleaned_data['dinner_start']
-                user_input = form.cleaned_data['synch']
-                date = [user_input.year, user_input.month, user_input.day]
-                sync(lst)
+                    args['dinner_start_time'] = [ds.hour, ds.minute, ds.second]
+                date = form.cleaned_data['synch']
+                args['start_date'] = [date.year, date.month, date.day]
+                sync(args)
                 return render(request, "menu/search.html", {"form":form})
             else:
                 args={}
