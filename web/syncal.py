@@ -111,7 +111,7 @@ def syn_to_calendar(start_date):
     dinner_events = build_event_l(dinner_list, DINNER_START_TIME, start_date)
 
     for event in breakfast_events + lunch_events + dinner_events:
-        event = service.events().insert(calendarId='primary', body=event).execute()
+        event = service.events().insert(calendarId='Weekly Menu', body=event).execute()
         #print 'Event created: %s' % (event.get('htmlLink'))
 
 
