@@ -44,6 +44,22 @@ def generate_shopping_list(days):
         if i not in days:
             del rv_dict[i]
     
-    return rv_dict
+    if len(rv_dict) <= 4:
+        return rv_dict
+    else:
+        day_count = 0
+        rv_dict1 = {}
+        for day in range(1,8):
+            if day in rv_dict:
+                day_count += 1
+                rv_dict1[day] = rv_dict[day]
+                del rv_dict[day]
+                if day_count == 4:
+                    return (rv_dict1, rv_dict)
+
+
+
+
+
 
 
