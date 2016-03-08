@@ -157,9 +157,6 @@ def search(request):
                 return render(request, "menu/shopping_list.html", {"shopping_list":lst, "lst1":lst1}) 
             elif form.cleaned_data['synch']:
                 args = {}
-                bs = []
-                ls = []
-                ds = []
                 if form.cleaned_data['breakfast_start']:
                     bs = form.cleaned_data['breakfast_start']
                     args['breakfast_start_time'] = [bs.hour, bs.minute, bs.second]

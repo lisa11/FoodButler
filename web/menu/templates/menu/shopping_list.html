@@ -1,9 +1,11 @@
 <h2>Shopping List</h2>
-<table width="100%">
+<table width="100%" style="border-spacing:15px 0">
 
-{%for day, things in shopping_list.items%}
+{%for lst in shopping_list%}
+
 <tr>
-<td style="vertical-align:top">
+{%for day, things in lst.items%}
+<td style="vertical-align:top" width="25%">
     <!-- <table border="1" style="display:inline-block;float:left;vertical-align:top"> -->
     <table>
     <th>Day{{day}}</th>
@@ -23,7 +25,7 @@
     {% endfor %}
     </table>
 </td>
+{% endfor %}
 </tr>
 {% endfor %}
-
 </table>
