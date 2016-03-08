@@ -152,9 +152,8 @@ def search(request):
                     return render(request, "menu/search.html", {"form":form})
             elif form.cleaned_data['shopping_list']:
                 shopping_list = list(map(int, form.cleaned_data['shopping_list']))
-                lst = generate_shopping_list(shopping_list)
-                lst1 = {"3":["the", "old", "testing"]}
-                return render(request, "menu/shopping_list.html", {"shopping_list":lst, "lst1":lst1}) 
+                lsts = generate_shopping_list(shopping_list)
+                return render(request, "menu/shopping_list.html", {"shopping_list":lsts}) 
             elif form.cleaned_data['synch']:
                 args = {}
                 if form.cleaned_data['breakfast_start']:
@@ -177,9 +176,6 @@ def search(request):
                 
                 if form.cleaned_data['ingredients_avoid']:
                     args['excludedIngredient[]'] = form.cleaned_data['ingredients_avoid'].split()
-                
-                if form.cleaned_data['number_of_meal']:
-                    args['meal_number'] = form.cleaned_data['number_of_meal']
 
                 if form.cleaned_data['allergy']:
                     args['allowedAllergy[]'] = form.cleaned_data['allergy']
