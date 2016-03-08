@@ -29,10 +29,6 @@ SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'FoodButler'
 
-BREAKFAST_START_TIME = [8,0,0]
-LUNCH_START_TIME = [11,30,0]
-DINNER_START_TIME = [17,0,0]
-
 
 def build_event_l(one_meal_list, start_time_in, start_date):
     '''
@@ -92,7 +88,7 @@ def get_credentials():
     return credentials
 
 
-def syn_to_calendar():
+def syn_to_calendar(start_date):
     '''
     start_date example: [2016,3,10]
     This will be loaded from a json file that contains this list
@@ -100,9 +96,6 @@ def syn_to_calendar():
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
-
-    with open("start_date.json") as f:
-        start_date = json.load(f)
 
     with open("final_output.json") as f:
         result = json.load(f)
@@ -119,7 +112,22 @@ def syn_to_calendar():
         #print 'Event created: %s' % (event.get('htmlLink'))
 
 
-syn_to_calendar()
+with open("start_date.json") as f:
+    time_dict = json.load(f)
+if "breakfast_start_time" in time_dict:
+    BREAKFAST_START_TIME = time_dict["breakfast_start_time"]
+else:
+    BREAKFAST_START_TIME = [8,0,0]
+if "lunch_start_time" in time_dict:
+    LUNCH_START_TIME = time_dict["lunch_start_time"]
+else:
+    LUNCH_START_TIME = [11,30,0]
+if "dinner_start_time" in time_dict:
+    DINNER_START_TIME = time_dict["dinner_start_time"]
+else:
+    DINNER_START_TIME = [17,0,0]
+
+syn_to_calendar(time_dict["start_date"])
 
 
 '''
