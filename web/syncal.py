@@ -6,6 +6,10 @@
 # The default (hard coded) time zone for this program
 # is set to America/Chicago
 
+# References:
+# https://developers.google.com/google-apps/calendar/v3/reference/calendars/insert#examples
+# https://developers.google.com/google-apps/calendar/v3/reference/events/insert#response
+
 from __future__ import print_function
 import httplib2
 import os
@@ -48,9 +52,16 @@ def build_event_l(one_meal_list, start_time_in, start_date):
     for meal in one_meal_list:
         event = {}    
         event["summary"] = meal["name"]
-        event["description"] = "calories: " + str(meal["calories"]) + "    cooking time: " + meal["cooking_time"] + "\n"
-        event["description"] += "ingredients: " + str(meal["ingredients"]) + "\n"
+        event["description"] = "calories: " + str(meal["calories"]) + "kcal" + "    cooking time: " + meal["cooking_time"] + "\n"
+        event["description"] += "ingredients: "
+        for ingredient in meal["ingredients"]:
+            event["description"] += ingredient + ", "
+        event["description"] += "\n"
         event["description"] += "instruction url: " + meal["instruction_url"]
+        event["source.url"] = meal["instruction_url"]
+        event["gadget.display"] = "icon"
+        event["gadget.iconLink"] = meal["pic_url"]
+        event["gadget.link"] = meal["instruction_url"]
         start_datetime_s = str(start_datetime)
         s_date, s_time = start_datetime_s.split()
         start_time = s_date + "T" + s_time + "-06:00"
