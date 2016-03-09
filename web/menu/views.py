@@ -55,7 +55,7 @@ DAYS = [(1, "Day1"),
     (6, "Day6"),
     (7, "Day7")]
 
-#modified from pa3/ui/search/views.py
+#Modified from pa3/ui/search/views.py
 class SearchForm(forms.Form):
     ingredients_avoid=forms.CharField(
         label="Ingredients to Avoid", 
@@ -131,7 +131,7 @@ class SearchForm(forms.Form):
         help_text="HH:MM (24 hours)",
         required=False)
 
-#modified from pa3/ui/search/views.py
+#Modified from pa3/ui/search/views.py
 def search(request):
     menu=None
     rm=None
@@ -199,7 +199,7 @@ def search(request):
                 m = breakfast_list,lunch_list,dinner_list
                 ca = calories_list
                 a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
-                return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a, "args":args})
+                return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
                 
     else:  
         form = SearchForm()

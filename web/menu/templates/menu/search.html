@@ -1,3 +1,4 @@
+<!-- Direct Copy from http://www.w3schools.com/css/css_list.asp START -->
 <style>
 
     ul#id_cuisine li {
@@ -21,24 +22,22 @@
     }
 
 </style>
+<!-- Direct Copy from http://www.w3schools.com/css/css_list.asp END -->
 
+<!-- Direct Copy from Gustav during office hour START -->
 <form method="get">
-    <label> Menu </label>
-    <table class="form">
-
-    {{ form }}
-    </table>
-    <input type="submit" name="search" value="submit">
+  <label> Menu </label>
+  <table class="form"> {{ form }} </table>
+  <input type="submit" name="search" value="submit">
 </form>
+<!-- Direct Copy from Gustav during office hour END -->
 
-{% if rm != None %}
-{{rm}}
-{{add}}
-{%endif%}
-
+<!-- Original START -->
 {% if m != None %}
-ARGS TO UI HERE: {{args}}
 <h2>MENU</h2>
+<!-- Original END -->
+
+<!-- direct copy from http://api.jquery.com/toggle/ START -->
 <head>
   <meta charset="utf-8">
   <title>toggle demo</title>
@@ -52,76 +51,78 @@ $( "button" ).click(function() {
 });
 </script>
 </body>
+<!-- direct copy from http://api.jquery.com/toggle/ END -->
 
+<!-- Original START -->
 <body>
-<table border="1" style="width:100%" cellspacing="5" cellpadding="5" height="50px">
-{%for h in m%}
-  <tr>
-    {% for i in h %}
-    <td style="vertical-align:top;width:14%">
-    <div style='float: right; text-align: right'>{{i.num}}</div>
-    <div style='float: left; text-align: left'>
-    <h3>{{i.name}}</h3>
-    <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
-    <p>Calories: <b>{{i.calories}}</b></p>
-    <div1 id="hidden" style="display:none">Ingredients:</h4> 
-        <ul class="menu" style="list-style-type:disc">
-            {%for j in i.ingredients%}
-            <li>{{j}}</li>
-            {%endfor%}
-        </ul>
-    </div1>
-    <p>
-        <a href={{i.instruction_url}}>
-             <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
-        </a>   
-    </p> 
-    </div>
-    </td>
-    {% endfor %}
-  </tr> 
-{%endfor%}
+  <table border="1" style="width:100%" cellspacing="5" cellpadding="5" height="50px">
+    {%for h in m%}
+    <tr>
+      {% for i in h %}
+        <td style="vertical-align:top;width:14%">
+          <div style='float: right; text-align: right'>{{i.num}}</div>
+          <div style='float: left; text-align: left'>
+            <h3>{{i.name}}</h3>
+            <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
+            <p>Calories: <b>{{i.calories}}</b></p>
+            <div1 id="hidden" style="display:none">Ingredients:</h4> 
+              <ul class="menu" style="list-style-type:disc">
+              {%for j in i.ingredients%}
+                <li>{{j}}</li>
+              {%endfor%}
+              </ul>
+            </div1>
+            <p>
+              <a href={{i.instruction_url}}>
+                <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
+              </a>   
+            </p> 
+          </div>
+        </td>
+      {% endfor %}
+    </tr> 
+    {%endfor%}
 
-<tr>
+    <tr>
     {% for i in ca %}
-    <td>
-    Total Calories: {{i}}
-    </td>
+      <td>
+      Total Calories: {{i}}
+      </td>
     {% endfor %}
-</tr> 
-</table>
+    </tr> 
+  </table>
 
-<h2>ALTERNATIVE</h2>
-<table border="1" style="width:100%">
-{%for h in a%}
+  <h2>ALTERNATIVE</h2>
+  <table border="1" style="width:100%">
+  {%for h in a%}
     <tr>
     {% for i in h%}
-    <td style="vertical-align:top;width:14%">
-    <div style='float: right; text-align: right'>{{i.num}}</div>
-    <div style='float: left; text-align: left'>
-    <h3>{{i.name}}</h3>
-    <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
-    <p>Calories: <b>{{i.calories}}</b></p>
-    <div2 id="hidden" style="display:none">Ingredients:</h4> 
-        <ul class="menu" style="list-style-type:disc">
+      <td style="vertical-align:top;width:14%">
+      <div style='float: right; text-align: right'>{{i.num}}</div>
+      <div style='float: left; text-align: left'>
+        <h3>{{i.name}}</h3>
+        <p>Cooking Time: <b>{{i.cooking_time}}</b></p>
+        <p>Calories: <b>{{i.calories}}</b></p>
+        <div2 id="hidden" style="display:none">Ingredients:</h4> 
+          <ul class="menu" style="list-style-type:disc">
             {%for j in i.ingredients%}
             <li>{{j}}</li>
             {%endfor%}
-        </ul>
-    </div2>
-    <p>
-        <a href={{i.instruction_url}}>
-             <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
-        </a>
-    </p> 
-    </div>
-    </td>
+          </ul>
+        </div2>
+        <p>
+          <a href={{i.instruction_url}}>
+            <img src={{i.pic_url}} style="width:250px;height:250px;border:0">
+          </a>
+        </p> 
+      </div>
+      </td>
     {% endfor %}
-  </tr> 
-{%endfor%}
-</table>
+    </tr> 
+  {%endfor%}
+  </table>
 </body>
 {% endif %}
-
+<!-- Original END -->
 
 

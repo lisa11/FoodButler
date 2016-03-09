@@ -1,31 +1,30 @@
+<!-- Original START -->
 <h2>Shopping List</h2>
 <table width="100%" style="border-spacing:15px 0">
-
 {%for lst in shopping_list%}
-
-<tr>
-{%for day, things in lst.items%}
-<td style="vertical-align:top" width="25%">
-    <!-- <table border="1" style="display:inline-block;float:left;vertical-align:top"> -->
-    <table>
-    <th>Day{{day}}</th>
-    <tr>
-        <td><b>Item</b></td>
-        <td><b>Amount</b></td>
-    </tr>
-    {%for ingredient, amount in things.items%}
+  <tr>
+  {%for day, things in lst.items%}
+    <td style="vertical-align:top" width="25%">
+      <table>
+        <th>Day{{day}}</th>
         <tr>
-        <td>
-            {{ingredient}}
-        </td>
-        <td>
-            {{amount}}
-        </td>
+          <td><b>Item</b></td>
+          <td><b>Amount</b></td>
         </tr>
-    {% endfor %}
-    </table>
-</td>
-{% endfor %}
-</tr>
+        {%for ingredient, amount in things.items%}
+          <tr>
+            <td>
+              {{ingredient}}
+            </td>
+            <td>
+              {{amount}}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </td>
+  {% endfor %}
+  </tr>
 {% endfor %}
 </table>
+<!-- Original END -->
