@@ -196,6 +196,7 @@ def search(request):
                 #return custom_redirect('results', **form.cleaned_data)
                 
                 breakfast_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = generate_final_output(args)
+                
                 m = breakfast_list,lunch_list,dinner_list
                 ca = calories_list
                 a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
