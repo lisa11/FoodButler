@@ -213,3 +213,8 @@ def search(request):
         form = SearchForm()
 
     return render(request, "menu/search.html", {"form":form})
+
+
+def instruction(request):
+    m = [1, 2, 3]
+    return render(request, 'menu/instruction.html', {"the":m})

@@ -22,5 +22,6 @@ from django.http import HttpResponse
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', "menu.views.search", name='search'), 
+    url(r'^$', "menu.views.search", name='search'),
+    url(r'^instruction', "menu.views.instruction", name="instruction")
     ]
