@@ -118,16 +118,16 @@ class SearchForm(forms.Form):
         help_text="mm/dd/yyyy",
         required=False)
     breakfast_start=forms.TimeField(
-        label='Start time for Breakfast', 
+        label='Breakfast Start Time', 
         #input_formats='%Y-%m-%d',
         help_text="HH:MM (24 hours)",
         required=False)
     lunch_start=forms.TimeField(
-        label='Start time for Lunch', 
+        label='Lunch Start Time', 
         help_text="HH:MM (24 hours)",
         required=False)
     dinner_start=forms.TimeField(
-        label='Start time for Dinner', 
+        label='Dinner Start Time', 
         help_text="HH:MM (24 hours)",
         required=False)
 
