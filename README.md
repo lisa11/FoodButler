@@ -14,3 +14,7 @@ to pick up google API library
 
 
 Before runing generate_menu.py, please pull the updated recipe_db.json which is our database. Everytime the function generate_menu.py is run, please push the updated recipe_db.json.
+
+Maximum time in the search form only refers to the preparation time. It might take a significant longer time with cooking time added in the calculation, which is the result displayed in the menu tables.
+
+Some calories amount are unreasonable from the information the api returns. We have no way to deal with that.

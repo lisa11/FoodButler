@@ -1,1 +1,1 @@
-{"allowedCuisine[]": ["cuisine^cuisine-american"], "allowedIngredient[]": ["lamb"], "allowedAllergy[]": ["396^Dairy-Free"], "calories_per_day": [1000, 2000]}
+{"excludedIngredient[]": ["lamb"], "allowedIngredient[]": ["shrimps"]}
