@@ -384,6 +384,7 @@ def generate_final_output(args_from_ui):
 
     for i in range(7):
         day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
+        print("Generated alternative day", i)
         alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = update_output_lists(day, 
             (alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list), i, True)
 
