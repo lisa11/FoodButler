@@ -81,13 +81,13 @@ class SearchForm(forms.Form):
         widget=forms.CheckboxSelectMultiple, 
         required=False)
     time_breakfast = forms.IntegerField(
-        label="Maximum Breakfast Cooking Time",
+        label="Maximum Breakfast Cooking Time (min)",
         #help_text="(Maximun breakfast cooking time)",
         min_value=0,
         max_value=300,
         required=False)
     time_meal = forms.IntegerField(
-        label="Maximum Lunch/Dinner Cooking Time",
+        label="Maximum Lunch/Dinner Cooking Time (min)",
         #help_text="(Maximun lunch or dinner cooking time)",
         min_value=0,
         max_value=300, 
