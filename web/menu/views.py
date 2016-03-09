@@ -205,10 +205,10 @@ def search(request):
                     alternative_dinner_list = output[6]
                 
                     m = breakfast_list,lunch_list,dinner_list
-                    ca = calories_lisst
+                    ca = calories_list
                     a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
                     return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
-                
+
     else:  
         form = SearchForm()
 
