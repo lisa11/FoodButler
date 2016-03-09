@@ -65,11 +65,9 @@ def go(param):
         recipe_db = json.load(f)
     
     rv = {}
-    if "time" in param:
-        breakfast_max_time, main_dish_max_time = param["time"]
-        del param["time"]
-        breakfast_max_time = breakfast_max_time * 60
-        main_dish_max_time = main_dish_max_time * 60
+    if "maxTotalTimeInSeconds" in param:
+        breakfast_max_time, main_dish_max_time = param["maxTotalTimeInSeconds"]
+        del param["maxTotalTimeInSeconds"]
     else:
         breakfast_max_time = None
         main_dish_max_time = None

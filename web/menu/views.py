@@ -184,7 +184,7 @@ def search(request):
                     args['allowedDiet[]'] = form.cleaned_data['diet']
                 
                 if form.cleaned_data['time_breakfast'] and form.cleaned_data['time_meal']:
-                    args['maxTotalTimeInSeconds'] = [form.cleaned_data['time_breakfast'], form.cleaned_data['time_meal']]
+                    args['maxTotalTimeInSeconds'] = [form.cleaned_data['time_breakfast'] * 60, form.cleaned_data['time_meal'] * 60]
                 
                 if form.cleaned_data['calories_lower'] and form.cleaned_data['calories_upper']:
                     args['calories_per_day'] = [form.cleaned_data['calories_lower'], form.cleaned_data['calories_upper']]

@@ -12,3 +12,4 @@ def sync(time_dict):
         f.write(json.dumps(time_dict))
 
     call("python2 syncal.py", shell=True)
+    call("rm time_dict.json", shell=True)
