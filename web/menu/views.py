@@ -192,15 +192,22 @@ def search(request):
                 if form.cleaned_data['cuisine']:
                     args['allowedCuisine[]'] = form.cleaned_data['cuisine']
 
-                #logging.error("what is this" % (form))
-                #return custom_redirect('results', **form.cleaned_data)
+                output = generate_final_output(args)
+                if output == None:
+                    return HttpResponse('<h1>Menu cannot be generated, please change your search criteria.</h1>')
+                else: 
+                    breakfast_list = output[0] 
+                    lunch_list = output[1] 
+                    dinner_list = output[2] 
+                    calories_list = output[3] 
+                    alternative_breakfast_list = output[4] 
+                    alternative_lunch_list = output[5] 
+                    alternative_dinner_list = output[6]
                 
-                breakfast_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = generate_final_output(args)
-                
-                m = breakfast_list,lunch_list,dinner_list
-                ca = calories_list
-                a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
-                return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
+                    m = breakfast_list,lunch_list,dinner_list
+                    ca = calories_lisst
+                    a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
+                    return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
                 
     else:  
         form = SearchForm()
