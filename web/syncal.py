@@ -54,9 +54,9 @@ def build_event_l(one_meal_list, start_time_in, start_date):
         event["summary"] = meal["name"]
         event["description"] = "calories: " + str(meal["calories"]) + "kcal" + "    cooking time: " + meal["cooking_time"] + "\n" + "\n"
         event["description"] += "ingredients: "
-        #for ingredient in meal["ingredients"]:
-        #    event["description"] += "\n" + "      " + ingredient + ", "
-        #event["description"] += "\n" + "\n"
+        for ingredient in meal["ingredients"]:
+            event["description"] += "\n" + "      " + ingredient + ", "
+        event["description"] += "\n" + "\n"
         event["description"] += "instruction url: " + meal["instruction_url"]
         start_datetime_s = str(start_datetime)
         s_date, s_time = start_datetime_s.split()
