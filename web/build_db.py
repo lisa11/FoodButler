@@ -58,7 +58,7 @@ def go(param):
                                         "time": [20, 60]}
 
     Returns:
-        writes a json file containing a dict of 4 lists: breakfast_alt_list, breakfast_list, \
+        writes a json file containing a dict of 4 lists: breakfast_alt_list, breakfast_list,
         main_dish_alt_list, main_dish_list
     '''
     with open("recipe_db.json") as f:
@@ -86,9 +86,9 @@ def go(param):
         else:
             param["excludedIngredient[]"] = param["allowedIngredient[]"]
         del param["allowedIngredient[]"]
-        rv["breakfast_alt_list"] = find_recipes(client, param, recipe_db, 
+        rv["breakfast_alt_list"] = find_recipes(client, param, recipe_db, \
             ["course^course-Breakfast and Brunch"], breakfast_max_time)  
-        rv["main_dish_alt_list"] = find_recipes(client, param, recipe_db, 
+        rv["main_dish_alt_list"] = find_recipes(client, param, recipe_db, \
             ["course^course-Main Dishes"], main_dish_max_time)
     else: 
         rv["breakfast_alt_list"] = []

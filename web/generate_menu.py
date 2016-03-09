@@ -6,11 +6,11 @@ import re
 
 # The ingredients we care that should not be repeated within three days
 MAJOR_INGREDIENTS = ['steak', 'mustard', 'coriander', 'sprout', 'honey', 'tomato', 'bell', 'chickpea', 'couscous', 'pita', 'companelle', 'leeks', 'beet', 'walnut', 'shrimp', 'sierra', 'meat', 'orange', 'spinach', 'carrot', 'phyllo dough', 'lobster', 'celery', 'noodle', 'frond', 'fettucine', 'cherry', 'lamb', 'chocolate', 'hummus', 'cilantro', 'brownie', 'cookie', 'kiwi', 'cayenne', 'chicken wings', 'nana', 'cumin', 'salad', 'rice', 'eggplant', 'onion', 'avocado', 'khoa', 'podded pea', 'garam masala', 'cabbage', 'ras-el-hanout', 'mint', 'mushroom', 'sausage', 'pancake', 'baguette', 'naan', 'polenta', 'pumpkin', 'lettuce', 'broccoli', 'tagliatelle', 'loaves', 'parsley', 'curry', 'pork', 'cacao', 'linguine', 'cardamom', 'beef', 'loaf', 'apple', 'dough', 'meatball', 'berr', 'pudding', 'lentil', 'fruit', 'peach', 'asparagus', 'arugula', 'marshmallow', 'egg', 'molasses', 'seed', 'popcorn', 'pine nut', 'shetbet', 'cornmeal', 'albacore', 'coconut', 'bulgur', 'sandwich', 'red chilli', 'hamburger', 'oreo', 'thyme', 'tomatoes', 'pistachio', 'spaghetti', 'salmon', 'cucumber', 'corn', 'chicken', 'ditalini', 'pineapple', 'tortilla', 'potato', 'herb', 'strawberr', 'bread', 'pizza', 'fish', 'sauerkraut', 'brioche', 'buns', 'pie', 'sirloin', 'hazelnut', 'cake', 'pecorino', 'mango', 'granola', 'mushroom', 'graviera', 'fettucine', 'wedge']
-MAX_TRIAL_BEFORE_GOING_TO_ALT = 5
-MAX_TRIAL_BEFORE_REPEATING_INGREDIENT = 10
-MAX_TRIAL_BEFORE_IGNORE_CALORIES = 20 # is it only lower or both?
+MAX_TRIAL_BEFORE_GOING_TO_ALT = 2
+MAX_TRIAL_BEFORE_REPEATING_INGREDIENT = 3
+MAX_TRIAL_BEFORE_IGNORE_CALORIES = 10 # is it only lower or both?
 #the number of days generated failed lower calories limit before discarding the lower limit
-BREAKFAST_CALORIES_WEIGHT = 0.5 # 50% of the total calories of the day 
+BREAKFAST_CALORIES_WEIGHT = 0.4 # 40% of the total calories of the day 
 LUNCH_CALORIES_WEIGHT = 0.6
 DINNER_CALORIES_WEIGHT = 0.6
 
@@ -101,6 +101,9 @@ def generate_available_recipes(args_from_ui):
     with open("recipe_lists.json") as f:
         recipe_lists = json.load(f)
     
+    call("rm temp_dict.json", shell=True)
+    call("rm recipe_lists.json", shell=True)
+
     return recipe_lists
 
 
