@@ -1,1 +1,1 @@
-{"allowedAllergy[]": ["396^Dairy-Free"], "allowedCuisine[]": ["cuisine^cuisine-american"], "calories_per_day": [1000, 2000], "allowedIngredient[]": ["lamb"]}
+{"allowedCuisine[]": ["cuisine^cuisine-american"], "allowedIngredient[]": ["lamb"], "allowedAllergy[]": ["396^Dairy-Free"], "calories_per_day": [1000, 2000]}
