@@ -19,19 +19,8 @@ from django.contrib import admin
 
 from django.http import HttpResponse
 
-#def abc(request):
-    #path = request.path
-    #name = request.GET.get("name", "(no name)")
-    #return HttpResponse("""
-    #<h1>Title</h1>
-    #<p>Welcome! You came to {}. Your name is {}.</p>
-    #""".format(path, name))
-
-#http://localhost:8000/sdjtnfjhkgh/?name=lisa
-
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^search/shopping_list$', "menu.views.shopping_list", name="shopping_list"),
-    url(r'^search/$', "menu.views.search", name='search'), 
+    url(r'^$', "menu.views.search", name='search'), 
     ]
