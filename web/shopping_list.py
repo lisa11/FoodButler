@@ -45,7 +45,7 @@ def generate_shopping_list(days):
             del rv_dict[i]
     
     if len(rv_dict) <= 4:
-        return rv_dict
+        return rv_dict, {}
     else:
         day_count = 0
         rv_dict1 = {}
