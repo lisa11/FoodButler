@@ -17,10 +17,9 @@ DINNER_CALORIES_WEIGHT = 0.6
 
 class Meal(object):
 
-    def __init__(self, name, price, calories, time, ingredients, full_ingredients, pic_url, instruction_url):
+    def __init__(self, name, calories, time, ingredients, full_ingredients, pic_url, instruction_url):
 
         self.name = name
-        self.price = price
         self.calories = calories
         self.cooking_time = time
         self.ingredients = []
@@ -37,7 +36,7 @@ class Meal(object):
 
 class Day(object):
 
-    def __init__(self, price, calories, servings):
+    def __init__(self, calories):
         '''
         price: max price for the day
         calories: lower and upper limits of calories for the day (a list)
@@ -48,14 +47,10 @@ class Day(object):
         self.breakfast = None
         self.lunch = None
         self.dinner = None
-        self.price = price
         self.major_ingredients = []
         self.calories = 0
-        # self.breakfast_time = time[0]
-        # self.main_meal_time = time[1]
         self.lower_calories = calories[0]
         self.upper_calories = calories[1]
-        self.servings = servings
 
 
     def insert_meal(self, meal, position):
@@ -70,7 +65,6 @@ class Day(object):
             self.lunch = meal
         if position == "dinner":
             self.dinner = meal
-        #self.price += meal.price
         self.calories += meal.calories
         self.major_ingredients += meal.major_ingredients
         self.major_ingredients = list(set(self.major_ingredients))
@@ -79,14 +73,12 @@ class Day(object):
 def generate_available_recipes(args_from_ui):
     '''
     input: input from front end, a dictionary.
-    sample args_from_ui = {"calories": [50, 500], 
+    sample args_from_ui = {"calories_per_day": [50, 500], 
                     "ingredients_already_have": ["onion", "tomato", "lamb"],
                     "ingredients_avoid": ["pork", "potato"],
                     "allergy": "egg",
                     "diet": "vegetarian",
-                    "price": 200,
                     "time": [20, 60],
-                    "servings": 1
                     }
 
     return four lists. Each a list of tuples in which the first
@@ -123,7 +115,7 @@ def clean_one_recipe_list(recipe_list, major_ingredients):
             ingredient_lines = [item["ingredientLines"][0][12:]] # to get rid of the word "Ingredients" at the start
         else:
             ingredient_lines = list(set(item["ingredientLines"])) # to remove repeated lines
-        meal = Meal(item["name"], 0, calories, item["totalTime"], recipe_list[i][1], ingredient_lines,\
+        meal = Meal(item["name"], calories, item["totalTime"], recipe_list[i][1], ingredient_lines,\
                 item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         major_ingredients += recipe_list[i][1]
         cleaned_list.append(meal)
@@ -271,21 +263,18 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     The lists must be in clean version!!!
     '''
 
-    if "price" not in args_from_ui:
-        args_from_ui["price"] = 0
+    # Set a default calories range if none is given
     if "calories_per_day" not in args_from_ui:
         args_from_ui["calories_per_day"] = [1, 5000]
-    if "servings" not in args_from_ui:
-        args_from_ui["servings"] = 1
 
-    day = Day(args_from_ui["price"], args_from_ui["calories_per_day"], args_from_ui["servings"])
+    day = Day(args_from_ui["calories_per_day"]) # This is the initialization for the first time
     total = 0
 
     # while calories requirement not met 
     while total < MAX_TRIAL_BEFORE_IGNORE_CALORIES and (day.calories < day.lower_calories or day.calories > day.upper_calories):
         print("Total trial run in a day:", total)
         total += 1
-        day = Day(args_from_ui["price"], args_from_ui["calories_per_day"], args_from_ui["servings"])
+        day = Day(args_from_ui["calories_per_day"])
         used_ingredients = set()
         if Day1:
             used_ingredients.update(set(Day1.major_ingredients))
