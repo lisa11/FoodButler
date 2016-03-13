@@ -113,7 +113,7 @@ class Day(object):
 
     def insert_meal(self, meal, position):
         '''
-        meal: a Meal object (or a dictionary actually...)
+        meal: a Meal object
         position: "breakfast", "lunch", or "dinner"
         '''
 
@@ -130,7 +130,7 @@ class Day(object):
 
 class MyError(Exception):
     '''
-    Exception class for insufficient recipes supplied
+    Exception class mainly for insufficient recipes supplied
     '''
 
     def __init__(self, message="insufficient qualified recipes returned by yummly"):
@@ -146,8 +146,8 @@ def generate_available_recipes(args_from_ui):
     sample args_from_ui = {"calories_per_day": [50, 500], 
                     "ingredients_already_have": ["onion", "tomato", "lamb"],
                     "ingredients_avoid": ["pork", "potato"],
-                    "allergy": ["egg"],
-                    "diet": ["vegetarian"],
+                    "allergy": ["397^Egg-Free"],
+                    "diet": ["386^Vegan"],
                     "time": [20, 60],
                     }
 
@@ -426,10 +426,12 @@ def generate_final_output(args_from_ui):
     alternative_dinner_list = []
 
     for i in range(7):
+        # Check for available lists
         if breakfast_alt_list == [] and breakfast_list == []:
             raise MyError()
         elif main_dish_alt_list == [] and main_dish_list == []:
             raise MyError()
+        # Start generating the day
         if i == 0:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
             print("Generated day 0")
