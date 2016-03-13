@@ -134,7 +134,7 @@ class MyError(Exception):
     '''
 
     def __init__(self):
-        self.message = "insufficient recipes"
+        self.message = "insufficient qualified recipes returned by yummly"
     
     def __str__(self):
         return repr(self.message)
@@ -327,7 +327,6 @@ def update_recipe_lists(day, available_recipes, from_alt):
         if day.lunch != day.dinner:
             main_dish_list.remove(day.dinner)
     return breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list
-
 
 
 def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, 
