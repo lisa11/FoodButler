@@ -116,6 +116,14 @@ class Day(object):
         self._major_ingredients = list(set(self._major_ingredients))
 
 
+class MyError(Exception):
+    def __init__(self):
+        self.message = "insufficient recipes"
+    
+    def __str__(self):
+        return repr(self.message)
+
+
 def generate_available_recipes(args_from_ui):
     '''
     input: input from front end, a dictionary.
@@ -266,7 +274,7 @@ def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=
                 from_alt = True 
             else:
                 print("both main_list and alt_list are empty")
-                raise ValueError
+                raise MyError()
         
     assert(chosen_recipe != None)
     day.insert_meal(chosen_recipe, meal_type)
@@ -297,10 +305,8 @@ def update_recipe_lists(day, available_recipes, from_alt):
     if from_alt[2]:
         main_dish_alt_list.remove(day.dinner)
     else:
-        print(from_alt[2])
-        print(day.dinner)
-        print(day.lunch == day.dinner)
-        print(len(main_dish_list))
+        if day.lunch == day.dinner:
+            raise MyError()
         main_dish_list.remove(day.dinner)
     return breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list
 
@@ -391,11 +397,6 @@ def generate_final_output(args_from_ui):
     
     breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes(available_recipes)
     print("successfully cleaned the recipes")
-    
-    if breakfast_alt_list == [] and breakfast_list == []:
-        return None
-    elif main_dish_alt_list == [] and main_dish_list == []:
-        return None
 
     day_list = []
     calories_list = []
@@ -407,6 +408,10 @@ def generate_final_output(args_from_ui):
     alternative_dinner_list = []
 
     for i in range(7):
+        if breakfast_alt_list == [] and breakfast_list == []:
+            raise MyError()
+        elif main_dish_alt_list == [] and main_dish_list == []:
+            raise MyError()
         if i == 0:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
             print("Generated day 0")

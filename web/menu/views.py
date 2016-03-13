@@ -5,6 +5,7 @@ from alternative import update_menu
 from generate_menu import generate_final_output
 from shopping_list import generate_shopping_list
 from sync_initiate import sync
+from generate_menu import MyError
 
 #hard-coded inputs for Yummly API
 ALLERGIES = [("396^Dairy-Free", "Dairy"),
@@ -192,22 +193,23 @@ def search(request):
                 if form.cleaned_data['cuisine']:
                     args['allowedCuisine[]'] = form.cleaned_data['cuisine']
 
-                output = generate_final_output(args)
-                if output == None:
-                    return HttpResponse('<h1>Menu cannot be generated, please change your search criteria.</h1>')
-                else: 
-                    breakfast_list = output[0] 
-                    lunch_list = output[1] 
-                    dinner_list = output[2] 
-                    calories_list = output[3] 
-                    alternative_breakfast_list = output[4] 
-                    alternative_lunch_list = output[5] 
-                    alternative_dinner_list = output[6]
+                try:
+                    output = generate_final_output(args)
+                except MyError:
+                    return HttpResponse('<h1>Menu cannot be generated due to insufficient qualified recipes, please change your search criteria.</h1>')
+                    
+                breakfast_list = output[0] 
+                lunch_list = output[1] 
+                dinner_list = output[2] 
+                calories_list = output[3] 
+                alternative_breakfast_list = output[4] 
+                alternative_lunch_list = output[5] 
+                alternative_dinner_list = output[6]
                 
-                    m = breakfast_list,lunch_list,dinner_list
-                    ca = calories_list
-                    a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
-                    return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
+                m = breakfast_list,lunch_list,dinner_list
+                ca = calories_list
+                a = alternative_breakfast_list, alternative_lunch_list,alternative_dinner_list
+                return render(request, "menu/search.html", {"form":form, 'm':m, 'ca':ca, 'a':a})
 
     else:  
         form = SearchForm()
