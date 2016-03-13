@@ -1,3 +1,4 @@
+# Modified from https://pypi.python.org/pypi/yummly/0.3.3
 from yummly import Client
 import json
 import sys
@@ -53,8 +54,8 @@ def go(param):
         param: a dict of parameters. e.g:
                                        {"allowedIngredient[]": ["onion", "tomato", "lamb"],
                                         "excludedIngredient[]": ["pork", "potato"],
-                                        "allowedAllergy[]": ["egg"],
-                                        "allowedDiet[]": ["vegetarian"],
+                                        "allowedAllergy[]": ["397^Egg-Free"],
+                                        "allowedDiet[]": ["386^Vegan"],
                                         "time": [20, 60]}
 
     Returns:
@@ -109,10 +110,6 @@ if __name__=="__main__":
 
     with open(sys.argv[1]) as f:
         param = json.load(f)
-    if "price" in param:
-        del param["price"]
-    if "servings" in param:
-        del param["servings"]
     if "calories_per_day" in param:
         del param["calories_per_day"]
     go(param)
