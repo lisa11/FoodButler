@@ -196,7 +196,7 @@ def search(request):
                 try:
                     output = generate_final_output(args)
                 except MyError as e:
-                    return render(request, "menu/search.html", {"form":form, 'e':"Menu cannot be generated due to {}, please change your search criteria".format(e.message)})
+                    return render(request, "menu/search.html", {"form":form, 'e':"Menu cannot be generated due to {}, please change your search criteria.".format(e.message)})
                     #return HttpResponse('<h1>Menu cannot be generated due to insufficient qualified recipes, please change your search criteria.</h1>')
                     
                 breakfast_list = output[0] 

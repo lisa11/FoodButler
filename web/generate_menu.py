@@ -133,8 +133,8 @@ class MyError(Exception):
     Exception class for insufficient recipes supplied
     '''
 
-    def __init__(self):
-        self.message = "insufficient qualified recipes returned by yummly"
+    def __init__(self, message="insufficient qualified recipes returned by yummly"):
+        self.message = message
     
     def __str__(self):
         return repr(self.message)
