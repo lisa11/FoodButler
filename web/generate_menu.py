@@ -8,6 +8,7 @@ import re
 MAJOR_INGREDIENTS = ['steak', 'mustard', 'coriander', 'sprout', 'honey', 'tomato', 'bell', 'chickpea', 'couscous', 'pita', 'companelle', 'leeks', 'beet', 'walnut', 'shrimp', 'sierra', 'meat', 'orange', 'spinach', 'carrot', 'phyllo dough', 'lobster', 'celery', 'noodle', 'frond', 'fettucine', 'cherry', 'lamb', 'chocolate', 'hummus', 'cilantro', 'brownie', 'cookie', 'kiwi', 'cayenne', 'chicken wings', 'nana', 'cumin', 'salad', 'rice', 'eggplant', 'onion', 'avocado', 'khoa', 'podded pea', 'garam masala', 'cabbage', 'ras-el-hanout', 'mint', 'mushroom', 'sausage', 'pancake', 'baguette', 'naan', 'polenta', 'pumpkin', 'lettuce', 'broccoli', 'tagliatelle', 'loaves', 'parsley', 'curry', 'pork', 'cacao', 'linguine', 'cardamom', 'beef', 'loaf', 'apple', 'dough', 'meatball', 'berr', 'pudding', 'lentil', 'fruit', 'peach', 'asparagus', 'arugula', 'marshmallow', 'egg', 'molasses', 'seed', 'popcorn', 'pine nut', 'shetbet', 'cornmeal', 'albacore', 'coconut', 'bulgur', 'sandwich', 'red chilli', 'hamburger', 'oreo', 'thyme', 'tomatoes', 'pistachio', 'spaghetti', 'salmon', 'cucumber', 'corn', 'chicken', 'ditalini', 'pineapple', 'tortilla', 'potato', 'herb', 'strawberr', 'bread', 'pizza', 'fish', 'sauerkraut', 'brioche', 'buns', 'pie', 'sirloin', 'hazelnut', 'cake', 'pecorino', 'mango', 'granola', 'mushroom', 'graviera', 'fettucine', 'wedge', 'macaroni', 'ham', 'almonds', 'soy', 'flax', 'wheat', 'mushrooms', 'korma', 'peanut', 'peas', 'strawberries', 'zucchini', 'cheddar', 'potatoes', 'prosciutto', 'pomegranate', 'nuts', 'tortillas', 'bacon', 'lemon', 'wedges', 'yoghurt', 'almond', 'jasmine', 'apples', 'onions', 'sockeye', 'nut', 'cutlet', 'pistachios', 'rutabaga', 'ribs', 'bananas', 'yogurt', 'vegetables', 'loin', 'noodles', 'scallions', 'breasts', 'mozzarella', 'milk', 'fillet', 'matcha', 'pasta', 'tenderloins', 'oranges', 'sesame', 'shoulder', 'cereal', 'cider', 'turnips', 'tenderloin', 'oyster', 'rib', 'carrots', 'kale', 'cauliflower', 'leg', 'yolks', 'cheese', 'seeds', 'vegetable', 'feta', 'taco', 'oats', 'fillets', 'sausages', 'walnuts', 'sheep', 'thighs', 'blueberries', 'turkey', 'coffee', 'steaks', 'breast', 'beans']
 MAX_TRIAL_BEFORE_GOING_TO_ALT = 2
 MAX_TRIAL_BEFORE_REPEATING_INGREDIENT = 3
+MAX_TRIAL_AFTER_REPEATING_INGREDIENT = 1
 MAX_TRIAL_BEFORE_IGNORE_CALORIES = 10 # is it only lower or both?
 #the number of days generated failed lower calories limit before discarding the lower limit
 BREAKFAST_CALORIES_WEIGHT = 0.4 # 40% of the total calories of the day 
@@ -88,7 +89,7 @@ class Day(object):
 
     def is_qualified(self):
         '''
-        See if the day is is qualified under calories limit
+        See if the day is qualified under calories limit
         '''
 
         if self.breakfast and self.lunch and self.dinner \
@@ -117,6 +118,10 @@ class Day(object):
 
 
 class MyError(Exception):
+    '''
+    Exception class for insufficient recipes supplied
+    '''
+
     def __init__(self):
         self.message = "insufficient recipes"
     
@@ -130,12 +135,12 @@ def generate_available_recipes(args_from_ui):
     sample args_from_ui = {"calories_per_day": [50, 500], 
                     "ingredients_already_have": ["onion", "tomato", "lamb"],
                     "ingredients_avoid": ["pork", "potato"],
-                    "allergy": "egg",
-                    "diet": "vegetarian",
+                    "allergy": ["egg"],
+                    "diet": ["vegetarian"],
                     "time": [20, 60],
                     }
 
-    return four lists. Each a list of tuples in which the first
+    return a dictionary of four lists. Each a list of tuples in which the first
     element is the Recipe object and the second element a list of ingredients
     '''
     
@@ -264,13 +269,14 @@ def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=
         from_alt = True
     
     if chosen_recipe == None:
-        if main_list != []: # start repeating ingredients
-        # 5 is a magical number
-            chosen_recipe = pick_recipe(1, main_list, float("inf"), set(), used_recipe) 
+        # start repeating ingredients, the pick recipe function
+        # would only be run once in this scenario
+        if main_list != []:
+            chosen_recipe = pick_recipe(MAX_TRIAL_AFTER_REPEATING_INGREDIENT, main_list, max_calories, set(), used_recipe) 
             from_alt = False
         else:
             if alt_list != []:
-                chosen_recipe = pick_recipe(1, alt_list, float("inf"), set(), used_recipe)
+                chosen_recipe = pick_recipe(MAX_TRIAL_AFTER_REPEATING_INGREDIENT, alt_list, max_calories, set(), used_recipe)
                 from_alt = True 
             else:
                 print("both main_list and alt_list are empty")
@@ -345,6 +351,7 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
         day, used_ingredients, dinner_from_alt = set_meal(day, "dinner", main_dish_list,\
                                                         main_dish_alt_list, used_ingredients, day.lunch)
     
+    # at this point meals are already set regardless of whether meeting calories limits
     breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list = \
         update_recipe_lists(day, (breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list), \
         [breakfast_from_alt, lunch_from_alt, dinner_from_alt])
