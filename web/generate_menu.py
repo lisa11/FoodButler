@@ -35,6 +35,17 @@ class Meal(object):
         self.full_ingredients = full_ingredients
 
 
+    def __str__(self):
+
+        rv = {"name": self.name, "calories": self.calories, \
+            "cooking_time": self.cooking_time, \
+            "full_ingredients": self.full_ingredients, \
+            "major_ingredients": self.major_ingredients, \
+            "pic_url": self.pic_url, \
+            "instruction_url": self.instruction_url}
+        return rv
+
+
 class Day(object):
 
     def __init__(self, calories):
