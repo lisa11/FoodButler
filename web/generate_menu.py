@@ -38,19 +38,65 @@ class Day(object):
 
     def __init__(self, calories):
         '''
-        price: max price for the day
         calories: lower and upper limits of calories for the day (a list)
-        time: max time for breakfast and lunch/dinner (a list)
-        servings: number of people serving for the day
         '''
 
-        self.breakfast = None
-        self.lunch = None
-        self.dinner = None
-        self.major_ingredients = []
-        self.calories = 0
-        self.lower_calories = calories[0]
-        self.upper_calories = calories[1]
+        self._breakfast = None
+        self._lunch = None
+        self._dinner = None
+        self._major_ingredients = []
+        self._calories = 0
+        self._lower_calories = calories[0]
+        self._upper_calories = calories[1]
+
+
+    @property
+    def breakfast(self):
+
+        return self._breakfast
+
+    @property
+    def lunch(self):
+        
+        return self._lunch
+
+    @property
+    def dinner(self):
+
+        return self._dinner
+
+    @property
+    def major_ingredients(self):
+
+        return self._major_ingredients
+
+    @property
+    def calories(self):
+
+        return self._calories
+
+    @property
+    def upper_calories(self):
+
+        return self._upper_calories
+
+    @property
+    def lower_calories(self):
+
+        return self._lower_calories
+
+
+    def is_qualified(self):
+        '''
+        See if the day is is qualified under calories limit
+        '''
+
+        if self.breakfast and self.lunch and self.dinner \
+            and self.calories >= self._lower_calories \
+            and self.calories <= self._upper_calories:
+            return True
+        else:
+            return False
 
 
     def insert_meal(self, meal, position):
@@ -60,14 +106,14 @@ class Day(object):
         '''
 
         if position == "breakfast":
-            self.breakfast = meal
+            self._breakfast = meal
         if position == "lunch":
-            self.lunch = meal
+            self._lunch = meal
         if position == "dinner":
-            self.dinner = meal
-        self.calories += meal.calories
-        self.major_ingredients += meal.major_ingredients
-        self.major_ingredients = list(set(self.major_ingredients))
+            self._dinner = meal
+        self._calories += meal.calories
+        self._major_ingredients += meal.major_ingredients
+        self._major_ingredients = list(set(self._major_ingredients))
 
 
 def generate_available_recipes(args_from_ui):
@@ -137,18 +183,18 @@ def clean_recipes(recipe_lists):
     major_ingredients = []
     
     if breakfast_alt_list_old != []: # assuming major_ingredients list will be changed in backend, no need to return 
-        breakfast_alt_list = clean_one_recipe_list(breakfast_alt_list_old, major_ingredients)
+        breakfast_alt_list = list(set(clean_one_recipe_list(breakfast_alt_list_old, major_ingredients)))
     else:
         breakfast_alt_list = []
     
-    breakfast_list = clean_one_recipe_list(breakfast_list_old, major_ingredients)
+    breakfast_list = list(set(clean_one_recipe_list(breakfast_list_old, major_ingredients)))
     
     if main_dish_alt_list_old != []:
-        main_dish_alt_list = clean_one_recipe_list(main_dish_alt_list_old, major_ingredients)
+        main_dish_alt_list = list(set(clean_one_recipe_list(main_dish_alt_list_old, major_ingredients)))
     else:
         main_dish_alt_list = []
     
-    main_dish_list = clean_one_recipe_list(main_dish_list_old, major_ingredients)
+    main_dish_list = list(set(clean_one_recipe_list(main_dish_list_old, major_ingredients)))
     
     major_ingredients = list(set(major_ingredients))
     with open("major_ingredients_in_trial.txt", "w") as f:
@@ -170,7 +216,7 @@ def pick_recipe(max_trail, recipe_list, max_calories, used_ingredients, used_rec
     '''
     chosen_recipe = None
     trial_count = 0
-    while trial_count < max_trail and (chosen_recipe == None or chosen_recipe == used_recipe):
+    while (trial_count < max_trail) and (chosen_recipe == None or chosen_recipe == used_recipe):
         print("Individual meal trial", trial_count)
         print(len(recipe_list))
         trial_count += 1
@@ -212,14 +258,15 @@ def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=
     if chosen_recipe == None:
         if main_list != []: # start repeating ingredients
         # 5 is a magical number
-            chosen_recipe = pick_recipe(5, main_list, max_calories, set(), used_recipe) 
+            chosen_recipe = pick_recipe(1, main_list, float("inf"), set(), used_recipe) 
             from_alt = False
         else:
             if alt_list != []:
-                chosen_recipe = pick_recipe(5, alt_list, max_calories, set(), used_recipe)
+                chosen_recipe = pick_recipe(1, alt_list, float("inf"), set(), used_recipe)
                 from_alt = True 
             else:
                 print("both main_list and alt_list are empty")
+                raise ValueError
         
     assert(chosen_recipe != None)
     day.insert_meal(chosen_recipe, meal_type)
@@ -250,8 +297,12 @@ def update_recipe_lists(day, available_recipes, from_alt):
     if from_alt[2]:
         main_dish_alt_list.remove(day.dinner)
     else:
+        print(from_alt[2])
+        print(day.dinner)
+        print(day.lunch == day.dinner)
+        print(len(main_dish_list))
         main_dish_list.remove(day.dinner)
-    #return breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list
+    return breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list
 
 
 
@@ -271,7 +322,7 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     total = 0
 
     # while calories requirement not met 
-    while total < MAX_TRIAL_BEFORE_IGNORE_CALORIES and (day.calories < day.lower_calories or day.calories > day.upper_calories):
+    while total < MAX_TRIAL_BEFORE_IGNORE_CALORIES and not day.is_qualified():
         print("Total trial run in a day:", total)
         total += 1
         day = Day(args_from_ui["calories_per_day"])
@@ -288,7 +339,8 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
         day, used_ingredients, dinner_from_alt = set_meal(day, "dinner", main_dish_list,\
                                                         main_dish_alt_list, used_ingredients, day.lunch)
     
-    update_recipe_lists(day, (breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list),
+    breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list = \
+        update_recipe_lists(day, (breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list), \
         [breakfast_from_alt, lunch_from_alt, dinner_from_alt])
     return day 
 
