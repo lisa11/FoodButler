@@ -323,10 +323,10 @@ def update_recipe_lists(day, available_recipes, from_alt):
     else:
         main_dish_list.remove(day.lunch)
 
-    if from_alt[2]:
-        main_dish_alt_list.remove(day.dinner)
-    else:
-        if day.lunch != day.dinner:
+    if day.lunch != day.dinner:
+        if from_alt[2]:
+            main_dish_alt_list.remove(day.dinner)
+        else:
             main_dish_list.remove(day.dinner)
     return breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list
 
