@@ -84,43 +84,36 @@ class Day(object):
 
     @property
     def breakfast(self):
-
         return self._breakfast
 
     @property
-    def lunch(self):
-        
+    def lunch(self):        
         return self._lunch
 
     @property
     def dinner(self):
-
         return self._dinner
 
     @property
     def major_ingredients(self):
-
         return self._major_ingredients
 
     @property
     def calories(self):
-
         return self._calories
 
     @property
     def upper_calories(self):
-
         return self._upper_calories
 
     @property
     def lower_calories(self):
-
         return self._lower_calories
 
 
     def is_qualified(self):
         '''
-        See if the day is qualified under calories limit
+        See if the day is qualified under calories limit and with all meals chosen
         '''
 
         if (self.breakfast != None) and (self.lunch != None) and (self.dinner != None)\
