@@ -1,10 +1,21 @@
+# Code in this file use the final output of recipes to generate the shopping lists. 
+# The shoppling lists will then be passed to web.
 # Must be used together with input from generate_menu.py or front end
+
 
 import json
 
 
-
 def build_sub_shopping_dict(day, result, rv_dict, meal_num):
+    '''
+    Build a dictionary that has days of a week as keys and corresponding 
+    ingredients as values
+    Inputs:
+        day: an integer in range [0, 6]
+        result: final_output from backend after finalizing for alternative changes
+        rv_dict: dict, for recursion purpose
+        meal_num: 0, 1, 2 representing breakfast, lunch and dinner respectively
+    '''
     for k in range(len(result[meal_num][day]["ingredients"])):
         ingredient = result[meal_num][day]["ingredients"][k]
         if ingredient not in rv_dict[day + 1]:
@@ -15,10 +26,13 @@ def build_sub_shopping_dict(day, result, rv_dict, meal_num):
 
 def generate_shopping_list(days):
     '''
-	generate the shopping list after finalizing menu
-	result: final_output from backend after finalizing for alternative changes
-    output: a list with each element a list of 2 elements -- the 
-    ingredient needed and a list of days on which this ingredient is needed
+	Generate the shopping list after finalizing menu
+	Input:
+        days: a list of integers
+
+    Return: 
+        a list with each element a list of 2 elements -- the ingredient 
+        needed and a list of days on which this ingredient is needed
     '''
 
     with open("final_output.json") as f:
