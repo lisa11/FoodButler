@@ -11,7 +11,7 @@ import re
 MAJOR_INGREDIENTS = ['steak', 'mustard', 'coriander', 'sprout', 'honey', 'tomato', 'bell', 'chickpea', 'couscous', 'pita', 'companelle', 'leeks', 'beet', 'walnut', 'shrimp', 'sierra', 'meat', 'orange', 'spinach', 'carrot', 'phyllo dough', 'lobster', 'celery', 'noodle', 'frond', 'fettucine', 'cherry', 'lamb', 'chocolate', 'hummus', 'cilantro', 'brownie', 'cookie', 'kiwi', 'cayenne', 'chicken wings', 'nana', 'cumin', 'salad', 'rice', 'eggplant', 'onion', 'avocado', 'khoa', 'podded pea', 'garam masala', 'cabbage', 'ras-el-hanout', 'mint', 'mushroom', 'sausage', 'pancake', 'baguette', 'naan', 'polenta', 'pumpkin', 'lettuce', 'broccoli', 'tagliatelle', 'loaves', 'parsley', 'curry', 'pork', 'cacao', 'linguine', 'cardamom', 'beef', 'loaf', 'apple', 'dough', 'meatball', 'berr', 'pudding', 'lentil', 'fruit', 'peach', 'asparagus', 'arugula', 'marshmallow', 'egg', 'molasses', 'seed', 'popcorn', 'pine nut', 'shetbet', 'cornmeal', 'albacore', 'coconut', 'bulgur', 'sandwich', 'red chilli', 'hamburger', 'oreo', 'thyme', 'tomatoes', 'pistachio', 'spaghetti', 'salmon', 'cucumber', 'corn', 'chicken', 'ditalini', 'pineapple', 'tortilla', 'potato', 'herb', 'strawberr', 'bread', 'pizza', 'fish', 'sauerkraut', 'brioche', 'buns', 'pie', 'sirloin', 'hazelnut', 'cake', 'pecorino', 'mango', 'granola', 'mushroom', 'graviera', 'fettucine', 'wedge', 'macaroni', 'ham', 'almonds', 'soy', 'flax', 'wheat', 'mushrooms', 'korma', 'peanut', 'peas', 'strawberries', 'zucchini', 'cheddar', 'potatoes', 'prosciutto', 'pomegranate', 'nuts', 'tortillas', 'bacon', 'lemon', 'wedges', 'yoghurt', 'almond', 'jasmine', 'apples', 'onions', 'sockeye', 'nut', 'cutlet', 'pistachios', 'rutabaga', 'ribs', 'bananas', 'yogurt', 'vegetables', 'loin', 'noodles', 'scallions', 'breasts', 'mozzarella', 'milk', 'fillet', 'matcha', 'pasta', 'tenderloins', 'oranges', 'sesame', 'shoulder', 'cereal', 'cider', 'turnips', 'tenderloin', 'oyster', 'rib', 'carrots', 'kale', 'cauliflower', 'leg', 'yolks', 'cheese', 'seeds', 'vegetable', 'feta', 'taco', 'oats', 'fillets', 'sausages', 'walnuts', 'sheep', 'thighs', 'blueberries', 'turkey', 'coffee', 'steaks', 'breast', 'beans']
 MAX_TRIAL_BEFORE_GOING_TO_ALT = 2
 MAX_TRIAL_BEFORE_REPEATING_INGREDIENT = 3
-MAX_TRIAL_AFTER_REPEATING_INGREDIENT = 1
+MAX_TRIAL_AFTER_REPEATING_INGREDIENT = 5
 MAX_TRIAL_BEFORE_IGNORE_CALORIES = 10 # is it only lower or both?
 #the number of days generated failed lower calories limit before discarding the lower limit
 BREAKFAST_CALORIES_WEIGHT = 0.4 # 40% of the total calories of the day 
@@ -118,7 +118,7 @@ class Day(object):
         See if the day is qualified under calories limit
         '''
 
-        if self.breakfast and self.lunch and self.dinner \
+        if (self.breakfast != None) and (self.lunch != None) and (self.dinner != None)\
             and self.calories >= self._lower_calories \
             and self.calories <= self._upper_calories:
             return True
@@ -186,14 +186,17 @@ def generate_available_recipes(args_from_ui):
     return recipe_lists
 
 
-def clean_one_recipe_list(recipe_list, major_ingredients):
+def clean_one_recipe_list(recipe_list, major_ingredients, default_cal):
     '''
     Clean one recipe list to generate a list of meal objects and build a list of major ingredients
+
+    Inputs:
+        default_cal: an integer. 100 for breakfast and 500 for main dish 
     '''
     cleaned_list = []
     for i in range(len(recipe_list)):
         item = recipe_list[i][0] # the list consists of tuples eg. (one recipe dict, a list of ingredients used)
-        calories = 100 # default calories 
+        calories = default_cal 
         for x in item["nutritionEstimates"]:
             if x["attribute"] == "ENERC_KCAL":
                 calories = x["value"]
@@ -223,23 +226,27 @@ def clean_recipes(recipe_lists):
 
     major_ingredients = []
     
-    if breakfast_alt_list_old != []: # assuming major_ingredients list will be changed in backend, no need to return 
-        breakfast_alt_list = list(set(clean_one_recipe_list(breakfast_alt_list_old, major_ingredients)))
+    if breakfast_alt_list_old != []:
+    # use list(set()) to remove repeated recipe in the list returned by API  
+        breakfast_alt_list = list(set(clean_one_recipe_list(breakfast_alt_list_old, major_ingredients, 100)))
     else:
         breakfast_alt_list = []
     
-    breakfast_list = list(set(clean_one_recipe_list(breakfast_list_old, major_ingredients)))
+    breakfast_list = list(set(clean_one_recipe_list(breakfast_list_old, major_ingredients, 100)))
     
     if main_dish_alt_list_old != []:
-        main_dish_alt_list = list(set(clean_one_recipe_list(main_dish_alt_list_old, major_ingredients)))
+        main_dish_alt_list = list(set(clean_one_recipe_list(main_dish_alt_list_old, major_ingredients, 500)))
     else:
         main_dish_alt_list = []
     
-    main_dish_list = list(set(clean_one_recipe_list(main_dish_list_old, major_ingredients)))
+    main_dish_list = list(set(clean_one_recipe_list(main_dish_list_old, major_ingredients, 500)))
     
     major_ingredients = list(set(major_ingredients))
     with open("major_ingredients_in_trial.txt", "w") as f:
         print(major_ingredients, file = f)
+
+    print("len of lists:", "breakfast_alt_list", len(breakfast_alt_list), "breakfast_list", len(breakfast_list), \
+        "main_dish_alt_list", len(main_dish_alt_list), "main_dish_list", len(main_dish_list))
 
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
 
@@ -263,11 +270,10 @@ def pick_recipe(max_trail, recipe_list, max_calories, used_ingredients, used_rec
         trial_count += 1
         index = random.randint(0, len(recipe_list) - 1)
         recipe = recipe_list[index]
-        # what if these two conditions are not met? chosen_recipe keep on returning none
         if recipe.calories < max_calories and list(used_ingredients & set(recipe.major_ingredients)) == []: 
             used_ingredients.update(set(recipe.major_ingredients))
             chosen_recipe = recipe
-    return chosen_recipe #, used_ingredients
+    return chosen_recipe 
 
 
 def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=None):
@@ -290,10 +296,12 @@ def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=
     chosen_recipe = None
     if main_list != []:
         chosen_recipe = pick_recipe(MAX_TRIAL_BEFORE_GOING_TO_ALT, main_list, max_calories, used_ingredients, used_recipe)
+        print("choosing from main_list")
         from_alt = False
 
     if chosen_recipe == None and alt_list != []:
         chosen_recipe = pick_recipe(MAX_TRIAL_BEFORE_REPEATING_INGREDIENT, alt_list, max_calories, used_ingredients, used_recipe)
+        print("choosing from alt_list")
         from_alt = True
     
     if chosen_recipe == None:
@@ -306,9 +314,9 @@ def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=
             if alt_list != []:
                 chosen_recipe = pick_recipe(MAX_TRIAL_AFTER_REPEATING_INGREDIENT, alt_list, max_calories, set(), used_recipe)
                 from_alt = True 
-            else:
-                print("both main_list and alt_list are empty")
-                raise MyError()
+            #else:
+             #   print("both main_list and alt_list are empty")
+              #  raise MyError()
         
     if chosen_recipe == None:
         raise MyError()
