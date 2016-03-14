@@ -34,7 +34,6 @@ class Meal(object):
         self.instruction_url = instruction_url
         self.full_ingredients = full_ingredients
 
-
     def __str__(self):
 
         rv = {"name": self.name, "calories": self.calories, \
@@ -43,7 +42,7 @@ class Meal(object):
             "major_ingredients": self.major_ingredients, \
             "pic_url": self.pic_url, \
             "instruction_url": self.instruction_url}
-        return rv
+        return str(rv)
 
 
 class Day(object):
@@ -146,10 +145,10 @@ def generate_available_recipes(args_from_ui):
     '''
     input: input from front end, a dictionary.
     sample args_from_ui = {"calories_per_day": [50, 500], 
-                    "ingredients_already_have": ["onion", "tomato", "lamb"],
-                    "ingredients_avoid": ["pork", "potato"],
-                    "allergy": ["397^Egg-Free"],
-                    "diet": ["386^Vegan"],
+                    "allowedIngredient[]": ["onion", "tomato", "lamb"],
+                    "excludedIngredient[]": ["pork", "potato"],
+                    "allowedAllergy[]": ["397^Egg-Free"],
+                    "allowedDiet[]": ["386^Vegan"],
                     "time": [20, 60],
                     }
 
