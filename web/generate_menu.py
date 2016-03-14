@@ -1,3 +1,6 @@
+# The code in the file is the algorithm to generate the output menu of recipes.
+# It is mainly written by ourselves.
+
 import json
 import random
 from subprocess import call
@@ -19,7 +22,17 @@ DINNER_CALORIES_WEIGHT = 0.6
 class Meal(object):
 
     def __init__(self, name, calories, time, ingredients, full_ingredients, pic_url, instruction_url):
-
+        '''
+        Generate a class object containing basic information of a meal.
+        Inputs:
+            name: string, name of the dish
+            calories: 
+            time:
+            ingredients:
+            full_ingredients:
+            pic_url: string, the url of the dish's picture
+            instruction_url: string, the url to recipe webpage
+        '''
         self.name = name
         self.calories = calories
         self.cooking_time = time
@@ -35,7 +48,9 @@ class Meal(object):
         self.full_ingredients = full_ingredients
 
     def __str__(self):
-
+        '''
+        This methond helps with printing and testing.
+        '''
         rv = {"name": self.name, "calories": self.calories, \
             "cooking_time": self.cooking_time, \
             "full_ingredients": self.full_ingredients, \
@@ -49,9 +64,10 @@ class Day(object):
 
     def __init__(self, calories):
         '''
-        calories: lower and upper limits of calories for the day (a list)
+        Create a class object containing the recipes and their basic information for a day.
+        Input:
+            calories: lower and upper limits of calories for the day (a list)
         '''
-
         self._breakfast = None
         self._lunch = None
         self._dinner = None
@@ -475,3 +491,10 @@ def generate_final_output(args_from_ui):
         f.write(json.dumps(rv))
 
     return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
+
+
+
+
+
+
+    
