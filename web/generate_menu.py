@@ -307,6 +307,10 @@ def generate_final_output(args_from_ui):
     as a string
     ''' 
     
+    if "calories_per_day" in args_from_ui:
+        if len(args_from_ui["calories_per_day"]) != 2 or args_from_ui["calories_per_day"][1] >= args_from_ui["calories_per_day"][0]:
+            raise MyError(message="invalid calories range (must enter both upper and lower limits for calories per day, with upper limit greater than lower limit)")
+
     available_recipes = generate_available_recipes(args_from_ui)
     print("successfully got available recipes")
     
