@@ -17,6 +17,9 @@ MAX_TRIAL_BEFORE_IGNORE_CALORIES = 10 # is it only lower or both?
 BREAKFAST_CALORIES_WEIGHT = 0.4 # 40% of the total calories of the day 
 LUNCH_CALORIES_WEIGHT = 0.6
 DINNER_CALORIES_WEIGHT = 0.6
+# Default calories amount when there is no return of calories amount
+DEFAULT_CAL_BREAKFAST = 100
+DEFAULT_CAL_MAIN_DISH = 500
 
 
 class Meal(object):
@@ -26,10 +29,12 @@ class Meal(object):
         Generate a class object containing basic information of a meal.
         Inputs:
             name: string, name of the dish
-            calories: 
-            time:
-            ingredients:
-            full_ingredients:
+            calories: the amount of calories this meal contains
+            time: a string, the cooking time required for this meal
+            ingredients: a brief list of ingredient without amount obtained from search recipe query,
+                used for summarizing the major ingredients this meal uses
+            full_ingredients: a list of full ingredient lines with amount associated with each ingredient,
+                to be displayed in the final output to django
             pic_url: string, the url of the dish's picture
             instruction_url: string, the url to recipe webpage
         '''
@@ -128,6 +133,7 @@ class Day(object):
 
     def insert_meal(self, meal, position):
         '''
+        Insert a Meal to a specified position of a Day
         meal: a Meal object
         position: "breakfast", "lunch", or "dinner"
         '''
@@ -191,7 +197,12 @@ def clean_one_recipe_list(recipe_list, major_ingredients, default_cal):
     Clean one recipe list to generate a list of meal objects and build a list of major ingredients
 
     Inputs:
-        default_cal: an integer. 100 for breakfast and 500 for main dish 
+        recipe_list: a list of available recipes to clean
+        major_ingredients: a val for testing and improving purpose,
+            to keep track of what ingredients are included in the 
+            trial and we manually add some of the ingredients we
+            regard as major to MAJOR_INGREDIENTS 
+        default_cal: an integer. DEFAULT_CAL_BREAKFAST for breakfast and DEFAULT_CAL_MAIN_DISH for main dish
     '''
     cleaned_list = []
     for i in range(len(recipe_list)):
@@ -212,7 +223,6 @@ def clean_one_recipe_list(recipe_list, major_ingredients, default_cal):
     return cleaned_list
     
 
-
 def clean_recipes(recipe_lists):
     '''
     convert the messy lists from generate_available_recipes to lists of
@@ -228,18 +238,18 @@ def clean_recipes(recipe_lists):
     
     if breakfast_alt_list_old != []:
     # use list(set()) to remove repeated recipe in the list returned by API  
-        breakfast_alt_list = list(set(clean_one_recipe_list(breakfast_alt_list_old, major_ingredients, 100)))
+        breakfast_alt_list = list(set(clean_one_recipe_list(breakfast_alt_list_old, major_ingredients, DEFAULT_CAL_BREAKFAST)))
     else:
         breakfast_alt_list = []
     
-    breakfast_list = list(set(clean_one_recipe_list(breakfast_list_old, major_ingredients, 100)))
+    breakfast_list = list(set(clean_one_recipe_list(breakfast_list_old, major_ingredients, DEFAULT_CAL_BREAKFAST)))
     
     if main_dish_alt_list_old != []:
-        main_dish_alt_list = list(set(clean_one_recipe_list(main_dish_alt_list_old, major_ingredients, 500)))
+        main_dish_alt_list = list(set(clean_one_recipe_list(main_dish_alt_list_old, major_ingredients, DEFAULT_CAL_MAIN_DISH)))
     else:
         main_dish_alt_list = []
     
-    main_dish_list = list(set(clean_one_recipe_list(main_dish_list_old, major_ingredients, 500)))
+    main_dish_list = list(set(clean_one_recipe_list(main_dish_list_old, major_ingredients, DEFAULT_CAL_MAIN_DISH)))
     
     major_ingredients = list(set(major_ingredients))
     with open("major_ingredients_in_trial.txt", "w") as f:
@@ -256,7 +266,7 @@ def pick_recipe(max_trail, recipe_list, max_calories, used_ingredients, used_rec
     Pick a recipe based on the list and parameters given
 
     max_trail: eg. TRIAL_NUM_BEFORE_GOING_TO_ALT, TRIAL_NUM_BEFORE_REPEATING_INGREDIENT
-    recipe_list: eg. breakfast_time
+    recipe_list: eg. breakfast_list
     max_calories: max calories for this meal 
     used_ingredients: a set of ingredients to avoid
     used_recipe: a recipe used for lunch of the same day; to be avoided; might be None
@@ -474,6 +484,11 @@ def generate_final_output(args_from_ui):
         calories_list.append(day.calories)
 
     for i in range(7):
+        # Also need this check for alternative menu
+        if breakfast_alt_list == [] and breakfast_list == []:
+            raise MyError()
+        elif main_dish_alt_list == [] and main_dish_list == []:
+            raise MyError()
         day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
         print("Generated alternative day", i)
         alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = update_output_lists(day, 
