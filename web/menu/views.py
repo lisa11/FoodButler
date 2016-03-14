@@ -5,7 +5,7 @@ from alternative import update_menu
 from generate_menu import generate_final_output
 from shopping_list import generate_shopping_list
 from sync_initiate import sync
-from generate_menu import MyError
+from MyExceptions import MyError
 
 #hard-coded inputs for Yummly API
 ALLERGIES = [("396^Dairy-Free", "Dairy"),

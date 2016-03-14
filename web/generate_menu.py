@@ -5,6 +5,9 @@ import json
 import random
 from subprocess import call
 import re
+from Meal import Meal
+from Day import Day
+from MyExceptions import MyError
 
 
 # The ingredients we care that should not be repeated within three days
@@ -20,140 +23,6 @@ DINNER_CALORIES_WEIGHT = 0.6
 # Default calories amount when there is no return of calories amount
 DEFAULT_CAL_BREAKFAST = 100
 DEFAULT_CAL_MAIN_DISH = 500
-
-
-class Meal(object):
-
-    def __init__(self, name, calories, time, ingredients, full_ingredients, pic_url, instruction_url):
-        '''
-        Generate a class object containing basic information of a meal.
-        Inputs:
-            name: string, name of the dish
-            calories: the amount of calories this meal contains
-            time: a string, the cooking time required for this meal
-            ingredients: a brief list of ingredient without amount obtained from search recipe query,
-                used for summarizing the major ingredients this meal uses
-            full_ingredients: a list of full ingredient lines with amount associated with each ingredient,
-                to be displayed in the final output to django
-            pic_url: string, the url of the dish's picture
-            instruction_url: string, the url to recipe webpage
-        '''
-        self.name = name
-        self.calories = calories
-        self.cooking_time = time
-        self.ingredients = []
-        self.major_ingredients = []
-        for ingredient in ingredients:
-            self.ingredients.append(ingredient)
-            for word in re.findall("[A-Za-z0-9]+", ingredient):
-                if word in MAJOR_INGREDIENTS:
-                    self.major_ingredients.append(word)
-        self.pic_url = pic_url
-        self.instruction_url = instruction_url
-        self.full_ingredients = full_ingredients
-
-    def __str__(self):
-        '''
-        This methond helps with printing and testing.
-        '''
-        rv = {"name": self.name, "calories": self.calories, \
-            "cooking_time": self.cooking_time, \
-            "full_ingredients": self.full_ingredients, \
-            "major_ingredients": self.major_ingredients, \
-            "pic_url": self.pic_url, \
-            "instruction_url": self.instruction_url}
-        return str(rv)
-
-
-class Day(object):
-
-    def __init__(self, calories):
-        '''
-        Create a class object containing the recipes and their basic information for a day.
-        Input:
-            calories: lower and upper limits of calories for the day (a list)
-        '''
-        self._breakfast = None
-        self._lunch = None
-        self._dinner = None
-        self._major_ingredients = []
-        self._calories = 0
-        self._lower_calories = calories[0]
-        self._upper_calories = calories[1]
-
-
-    @property
-    def breakfast(self):
-        return self._breakfast
-
-    @property
-    def lunch(self):        
-        return self._lunch
-
-    @property
-    def dinner(self):
-        return self._dinner
-
-    @property
-    def major_ingredients(self):
-        return self._major_ingredients
-
-    @property
-    def calories(self):
-        return self._calories
-
-    @property
-    def upper_calories(self):
-        return self._upper_calories
-
-    @property
-    def lower_calories(self):
-        return self._lower_calories
-
-
-    def is_qualified(self):
-        '''
-        See if the day is qualified under calories limit and with all meals chosen
-        '''
-
-        if (self.breakfast != None) and (self.lunch != None) and (self.dinner != None)\
-            and self.calories >= self._lower_calories \
-            and self.calories <= self._upper_calories:
-            return True
-        else:
-            return False
-
-
-    def insert_meal(self, meal, position):
-        '''
-        Insert a Meal to a specified position of a Day
-        meal: a Meal object
-        position: "breakfast", "lunch", or "dinner"
-        '''
-
-        if position == "breakfast":
-            self._breakfast = meal
-        if position == "lunch":
-            self._lunch = meal
-        if position == "dinner":
-            self._dinner = meal
-        self._calories += meal.calories
-        self._major_ingredients += meal.major_ingredients
-        self._major_ingredients = list(set(self._major_ingredients))
-
-
-class MyError(Exception):
-    '''
-    Exception class mainly for insufficient recipes supplied
-    This class is modified from:
-    https://docs.python.org/2/tutorial/errors.html#user-defined-exceptions
-    '''
-
-    def __init__(self, message="insufficient qualified recipes returned by yummly"):
-        self.message = message
-    
-    def __str__(self):
-        return repr(self.message)
 
 
 def generate_available_recipes(args_from_ui):
