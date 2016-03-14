@@ -47,7 +47,7 @@ def build_event_l(one_meal_list, start_time_in, start_date):
     hour, minute, second = start_time_in
     start_datetime = datetime.datetime(int(year), int(month), int(day), hour, minute, second)
 
-    end_datetime = start_datetime + datetime.timedelta(hours = 2)
+    end_datetime = start_datetime + datetime.timedelta(hours = 2)    #increment the date and time by 2 hours
     rv_event_l = []
     for meal in one_meal_list:
         event = {}    
