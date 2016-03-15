@@ -52,16 +52,18 @@ Entering an ingredient that is not in that list will make that input invalid
 and therefore be ignored.
 
 #####################################################
+
 LOCATION OF CODES
 
 All the files the program runs on is in ..FoodButler/web 
 FoodButler/web/menu is the Django app for our program. 
 FoodButler/web/menu/views.py contains the codes for Django webpage
 FoodButler/web/menu/templates/menu contains html templates for webpage layout
+FoodButler/web/menu/static/jquery contains the jquery package to 
+   use for hiding the ingredients on the weekly menu
 FoodButler/web/trial/urls.py contains the url configuration for the webpage
 
 #####################################################
-
 
 INSTRUCTION ON HOW TO OPEN THE SEARCH PAGE:
 
