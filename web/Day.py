@@ -1,4 +1,5 @@
 # Day class to represent each day with three meals and some properties
+# This file is entirely original
 
 class Day(object):
 

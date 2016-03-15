@@ -1,4 +1,5 @@
 # Meal class to represent each meal
+# This file is entirely original
 
 class Meal(object):
 

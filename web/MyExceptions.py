@@ -1,4 +1,5 @@
 # Exception class for FoodButler Program
+# This file is modified from online resources
 
 class MyError(Exception):
     '''

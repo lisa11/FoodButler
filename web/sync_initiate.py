@@ -1,4 +1,5 @@
 # Helper python program to help initiate the syncal.py program
+# This file is entirely original
 
 from subprocess import call
 import json
