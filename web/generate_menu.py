@@ -154,9 +154,9 @@ def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=
     
     day: a Day object
     meal_type: "breakfast", "lunch" or "dinner"
-    used_ingredients: a set of used ingredients to avoid
     main_list: a list of recipes with ingredients user has
     alt_list: a list of recipes excluding ingredients that user has
+    used_ingredients: a set of used ingredients to avoid
     '''
     if meal_type == "breakfast":
         max_calories = BREAKFAST_CALORIES_WEIGHT * day.upper_calories
