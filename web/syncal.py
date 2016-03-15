@@ -37,18 +37,26 @@ SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'FoodButler'
 
+MEAL_LENGTH = 2 # default 2 hrs per meal
+# Default start times
+BREAKFAST_START_TIME = [8,0,0]
+LUNCH_START_TIME = [11,30,0]
+DINNER_START_TIME = [17,0,0]
+
 
 def build_event_l(one_meal_list, start_time_in, start_date):
     '''
     example start_date: [2016,3,18]
     example start_time: [8,0,0]   i.e. 8:00:00
     The default (hard-coded) time zone is Chicago/Central Time
+    Whether the time is interpreted as Daylight Saving Time or Winter Time
+    depends on the start date entered
     '''
     year, month, day = start_date
     hour, minute, second = start_time_in
     start_datetime = datetime.datetime(int(year), int(month), int(day), hour, minute, second)
 
-    end_datetime = start_datetime + datetime.timedelta(hours = 2)    #increment the date and time by 2 hours
+    end_datetime = start_datetime + datetime.timedelta(hours = MEAL_LENGTH)    #increment the date and time by MEAL_LENGTH
     rv_event_l = []
     for meal in one_meal_list:
         event = {}    
@@ -61,11 +69,11 @@ def build_event_l(one_meal_list, start_time_in, start_date):
         event["description"] += "instruction url: " + meal["instruction_url"]
         start_datetime_s = str(start_datetime)
         s_date, s_time = start_datetime_s.split()
-        start_time = s_date + "T" + s_time + "-06:00"
-        end_datetime = start_datetime + datetime.timedelta(hours = 2)
+        start_time = s_date + "T" + s_time
+        end_datetime = start_datetime + datetime.timedelta(hours = MEAL_LENGTH)
         end_time_s = str(end_datetime)
         e_date, e_time = end_time_s.split()
-        end_time = e_date +  "T" + e_time + "-06:00"
+        end_time = e_date +  "T" + e_time
         event["start"] = {"dateTime": start_time, "timeZone": "America/Chicago"}
         event["end"] = {"dateTime": end_time, "timeZone": "America/Chicago"}
         start_datetime = start_datetime + datetime.timedelta(days = 1)
@@ -133,16 +141,10 @@ with open("time_dict.json") as f:
     time_dict = json.load(f)
 if "breakfast_start_time" in time_dict:
     BREAKFAST_START_TIME = time_dict["breakfast_start_time"]
-else:
-    BREAKFAST_START_TIME = [8,0,0]
 if "lunch_start_time" in time_dict:
     LUNCH_START_TIME = time_dict["lunch_start_time"]
-else:
-    LUNCH_START_TIME = [11,30,0]
 if "dinner_start_time" in time_dict:
     DINNER_START_TIME = time_dict["dinner_start_time"]
-else:
-    DINNER_START_TIME = [17,0,0]
 
 syn_to_calendar(time_dict["start_date"])
 
