@@ -94,12 +94,12 @@ class SearchForm(forms.Form):
         max_value=300, 
         required=False)
     calories_lower=forms.IntegerField(
-        label="Minimum Calories Per Day", 
+        label="Minimum Calories Per Day (kcal)", 
         min_value=1,
         max_value=5000,
         required=False)
     calories_upper=forms.IntegerField(
-        label="Maximum Calories Per Day",
+        label="Maximum Calories Per Day (kcal)",
         min_value=1,
         max_value=5000, 
         required=False)
