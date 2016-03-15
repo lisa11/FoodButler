@@ -1,11 +1,15 @@
 # functions to call when users specify the alternative dishes and the original
 # dishes they want to discard from front end
+# This file is entirely original
 import random
 import json
 
 
 def update_menu(discard_list, selected_list):
     '''
+    Update the menu given user inputs. Return the updated menu to django
+    and update final_output_json correspondingly.
+
 	discard_list: a list of meal index (from 1 to 21) user would like to discard
 	selected_list: a list of meal index (from 1 to 21) user would like to add
 	               to the main menu from the alternative lists

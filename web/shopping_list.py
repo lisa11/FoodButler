@@ -1,8 +1,7 @@
 # Code in this file use the final output of recipes to generate the shopping lists. 
 # The shoppling lists will then be passed to web.
 # Must be used together with input from generate_menu.py or front end
-
-
+# This file is entirely original
 import json
 
 
@@ -27,12 +26,15 @@ def build_sub_shopping_dict(day, result, rv_dict, meal_num):
 def generate_shopping_list(days):
     '''
 	Generate the shopping list after finalizing menu
+    Will separate the output into two dictionaries if more than 4 days
+
 	Input:
         days: a list of integers
 
     Return: 
-        a list with each element a list of 2 elements -- the ingredient 
-        needed and a list of days on which this ingredient is needed
+        a dictionary (or two) with keys being day index (start form 1)
+        and values being dictionaries mapping ingredients used in that
+        day to amount needed
     '''
 
     with open("final_output.json") as f:

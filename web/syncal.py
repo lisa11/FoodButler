@@ -3,8 +3,9 @@
 # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
 # stored credentials.
 
-# The default (hard coded) time zone for this program
-# is set to America/Chicago
+# The default (hard coded) time zone for this program is set to America/Chicago
+# The entire build_event_l function and most of syn_to_calendar is written by us
+# Direct copy for get_credentials from the above quickstart example
 
 # References:
 # https://developers.google.com/google-apps/calendar/v3/reference/calendars/insert#examples
@@ -126,7 +127,6 @@ def syn_to_calendar(start_date):
 
     for event in breakfast_events + lunch_events + dinner_events:
         event = service.events().insert(calendarId=created_calendar["id"], body=event).execute()
-        #print 'Event created: %s' % (event.get('htmlLink'))
 
 
 with open("time_dict.json") as f:
@@ -145,34 +145,4 @@ else:
     DINNER_START_TIME = [17,0,0]
 
 syn_to_calendar(time_dict["start_date"])
-
-
-'''
-def add_attachment(calendarService, driveService, calendarId, eventId, fileId):
-    file = driveService.files().get(fileId=fileId).execute()
-    event = calendarService.events().get(calendarId=calendarId,
-                                         eventId=eventId).execute()
-
-    attachments = event.get('attachments', []])
-    attachments.append({
-        'fileUrl': file['alternateLink'],
-        'mimeType': file['mimeType'],
-        'title': file['title']
-    })
-
-    changes = {
-        'attachments': attachments
-    }
-    calendarService.events().patch(calendarId=calendarId, eventId=eventId,
-                                   body=changes,
-                                   supportsAttachments=True).execute()
-'''
-
-
-
-
-
-
-
-
 

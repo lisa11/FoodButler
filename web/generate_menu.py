@@ -1,6 +1,7 @@
 # The code in the file is the algorithm to generate the output menu of recipes.
-# It is mainly written by ourselves.
-
+# It is mostly written by ourselves, with the exception of the technique of 
+# calling shell script within program which we learned from the following:
+# http://stackoverflow.com/questions/17665124/call-python3-code-from-python2-code
 import json
 import random
 from subprocess import call
@@ -15,7 +16,7 @@ MAJOR_INGREDIENTS = ['steak', 'mustard', 'coriander', 'sprout', 'honey', 'tomato
 MAX_TRIAL_BEFORE_GOING_TO_ALT = 2
 MAX_TRIAL_BEFORE_REPEATING_INGREDIENT = 3
 MAX_TRIAL_AFTER_REPEATING_INGREDIENT = 5
-MAX_TRIAL_BEFORE_IGNORE_CALORIES = 10 # is it only lower or both?
+MAX_TRIAL_BEFORE_IGNORE_CALORIES = 10
 #the number of days generated failed lower calories limit before discarding the lower limit
 BREAKFAST_CALORIES_WEIGHT = 0.4 # 40% of the total calories of the day 
 LUNCH_CALORIES_WEIGHT = 0.6
@@ -64,8 +65,13 @@ def clean_one_recipe_list(recipe_list, major_ingredients, default_cal):
             to keep track of what ingredients are included in the 
             trial and we manually add some of the ingredients we
             regard as major to MAJOR_INGREDIENTS 
-        default_cal: an integer. DEFAULT_CAL_BREAKFAST for breakfast and DEFAULT_CAL_MAIN_DISH for main dish
+        default_cal: an integer. To be used when calories amount is not given from API
+            DEFAULT_CAL_BREAKFAST for breakfast and DEFAULT_CAL_MAIN_DISH for main dish
+    
+    Returns a cleaned recipe list and implicitly updates major_ingredients 
+    list as well to prepare for major_ingredients_in_trial.txt.
     '''
+
     cleaned_list = []
     for i in range(len(recipe_list)):
         item = recipe_list[i][0] # the list consists of tuples eg. (one recipe dict, a list of ingredients used)
@@ -89,8 +95,14 @@ def clean_recipes(recipe_lists):
     '''
     convert the messy lists from generate_available_recipes to lists of
     Meal objects
-    recipe_lists: a dict mapping to four lists 
+    recipe_lists: a dict mapping to four lists
+
+    Returns four cleaned recipe lists. Write a file major_ingredients_in_trial.txt
+    whicha records all ingredients included in the trial and we manually add 
+    some of the ingredients at our discretion to MAJOR_INGREDIENTS to
+    improve algorithm performance
     '''
+
     breakfast_alt_list_old = recipe_lists["breakfast_alt_list"]
     breakfast_list_old = recipe_lists["breakfast_list"]
     main_dish_alt_list_old = recipe_lists["main_dish_alt_list"]
@@ -117,28 +129,27 @@ def clean_recipes(recipe_lists):
     with open("major_ingredients_in_trial.txt", "w") as f:
         print(major_ingredients, file = f)
 
-    print("len of lists:", "breakfast_alt_list", len(breakfast_alt_list), "breakfast_list", len(breakfast_list), \
-        "main_dish_alt_list", len(main_dish_alt_list), "main_dish_list", len(main_dish_list))
-
     return breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list
 
 
 def pick_recipe(max_trail, recipe_list, max_calories, used_ingredients, used_recipe):
     '''
-    Pick a recipe based on the list and parameters given
+    Pick a recipe based on the available recipe list, used recipe, and used ingredients
 
     max_trail: eg. TRIAL_NUM_BEFORE_GOING_TO_ALT, TRIAL_NUM_BEFORE_REPEATING_INGREDIENT
     recipe_list: eg. breakfast_list
     max_calories: max calories for this meal 
-    used_ingredients: a set of ingredients to avoid
+    used_ingredients: a set of ingredients used in previous meals and to be avoided
+        This will be an empty set if we are already at a stage of repeating ingredients
     used_recipe: a recipe used for lunch of the same day; to be avoided; might be None
-
+    
+    Returns the chosen recipe as a Meal object and implicitly updates the 
+    used ingredients list with major ingredients used in the chosen meal
     '''
+
     chosen_recipe = None
     trial_count = 0
     while (trial_count < max_trail) and (chosen_recipe == None or chosen_recipe == used_recipe):
-        print("Individual meal trial", trial_count)
-        print(len(recipe_list))
         trial_count += 1
         index = random.randint(0, len(recipe_list) - 1)
         recipe = recipe_list[index]
@@ -150,14 +161,23 @@ def pick_recipe(max_trail, recipe_list, max_calories, used_ingredients, used_rec
 
 def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=None):
     '''
-    Update a Day object with selected recipe for a meal  
+    Update a Day object with selected recipe for a meal
+    Raise MyError if not enough recipe to set a meal
     
-    day: a Day object
-    meal_type: "breakfast", "lunch" or "dinner"
-    main_list: a list of recipes with ingredients user has
-    alt_list: a list of recipes excluding ingredients that user has
-    used_ingredients: a set of used ingredients to avoid
+    Inputs:
+        day: a Day object
+        meal_type: "breakfast", "lunch" or "dinner"
+        main_list: a list of recipes with ingredients user has
+        alt_list: a list of recipes excluding ingredients that user has
+        used_ingredients: a set of used ingredients to avoid
+    
+    Returns:
+        day: the updated day object
+        used_ingredients: the used ingredients from the input which has
+            been implicitly updated by pick_recipe
+        from_alt: a list of length 3 recording 
     '''
+
     if meal_type == "breakfast":
         max_calories = BREAKFAST_CALORIES_WEIGHT * day.upper_calories
     elif meal_type == "lunch":
@@ -168,27 +188,21 @@ def set_meal(day, meal_type, main_list, alt_list, used_ingredients, used_recipe=
     chosen_recipe = None
     if main_list != []:
         chosen_recipe = pick_recipe(MAX_TRIAL_BEFORE_GOING_TO_ALT, main_list, max_calories, used_ingredients, used_recipe)
-        print("choosing from main_list")
         from_alt = False
 
     if chosen_recipe == None and alt_list != []:
         chosen_recipe = pick_recipe(MAX_TRIAL_BEFORE_REPEATING_INGREDIENT, alt_list, max_calories, used_ingredients, used_recipe)
-        print("choosing from alt_list")
         from_alt = True
     
     if chosen_recipe == None:
-        # start repeating ingredients, the pick recipe function
-        # would only be run once in this scenario
+        # start generating menu with used ingredients
         if main_list != []:
             chosen_recipe = pick_recipe(MAX_TRIAL_AFTER_REPEATING_INGREDIENT, main_list, max_calories, set(), used_recipe) 
             from_alt = False
         else:
             if alt_list != []:
                 chosen_recipe = pick_recipe(MAX_TRIAL_AFTER_REPEATING_INGREDIENT, alt_list, max_calories, set(), used_recipe)
-                from_alt = True 
-            #else:
-             #   print("both main_list and alt_list are empty")
-              #  raise MyError()
+                from_alt = True
         
     if chosen_recipe == None:
         raise MyError()
@@ -205,7 +219,10 @@ def update_recipe_lists(day, available_recipes, from_alt):
     day: a Day object
     available_recipes: a tuple consisting 4 recipe lists
     from_alt: a list indicating whether each meal is choosen from alt_list, eg. [True, False, True]
+    
+    Returns the four updated available recipes lists
     '''
+
     breakfast_list, breakfast_alt_list, main_dish_list, main_dish_alt_list = available_recipes
 
     if from_alt[0]:
@@ -229,9 +246,13 @@ def update_recipe_lists(day, available_recipes, from_alt):
 def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, 
                  args_from_ui, Day1 = None, Day2 = None):
     '''
-    Day1: the day object for the previous day
-    Day2: the day object for the day before yesterday
-    The lists must be in clean version!!!
+    Generate a day with three meals under user-specified requirements
+
+    Day1: the day object for the previous day, optional
+    Day2: the day object for the day before yesterday, optional
+    The four available recipes lists must be in clean version!!!
+    
+    Returns the generated day object
     '''
 
     # Set a default calories range if none is given
@@ -243,7 +264,6 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
 
     # while calories requirement not met 
     while total < MAX_TRIAL_BEFORE_IGNORE_CALORIES and not day.is_qualified():
-        print("Total trial run in a day:", total)
         total += 1
         day = Day(args_from_ui["calories_per_day"])
         used_ingredients = set()
@@ -251,7 +271,7 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
             used_ingredients.update(set(Day1.major_ingredients))
         if Day2:
             used_ingredients.update(set(Day2.major_ingredients))
-        # not sure if used_ingredients list will be shared in backend; keep it here for now
+
         day, used_ingredients, breakfast_from_alt = set_meal(day, "breakfast", breakfast_list, \
                                                             breakfast_alt_list, used_ingredients)
         day, used_ingredients, lunch_from_alt = set_meal(day, "lunch", main_dish_list, \
@@ -266,16 +286,18 @@ def generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_di
     return day 
 
 
-
 def update_output_lists(day, output_lists, day_num, is_alt_list):
     '''
     Update breakfast, lunch, and dinner output lists with a day's menu
+    to prepare for sending results to django
 
-    day: a Day object
-    output_lists: a tuple consisting of 3 output lists
-    day_num: an integer; day of the week
-    is_alt_list: a boolean indicating whether the lists are for alternative lists
+    day: a Day object to be updated to the output_lists
+    output_lists: a tuple consisting of 3 output lists, containing already
+        generated days' breakfast, lunch, and dinner
+    day_num: an integer; day of the week, start from 0
+    is_alt_list: a boolean indicating whether the lists are for the alternative menu
     '''
+
     if is_alt_list:
         additional_index = 21
     else:
@@ -302,20 +324,26 @@ def generate_final_output(args_from_ui):
     '''
     return breakfast_list, lunch_list, dinner_list, alternative_breakfast_list,
     alternative_lunch_list, alternative_dinner_list, each with 7 items.
-    Each item being a dictionary including "name", "calories", "cooking_time",
+    Each item being a dictionary including "num", "name", "calories", "cooking_time",
     ingredients as a list of strings, pic_url as a string, instruction_url
     as a string
+
+    Also writes:
+        final_output.txt: for manually inspecting the output
+        major_ingredients.txt: for checking each day's list of major_ingredients
+            and see if there is any repetition, and if so, to what extent,
+            to evaluate the performance of this algorithm
+        final_output.json: the file where we store our final output to support
+            future requests from django, including switching meals, generating
+            shopping lists, and synchronize menu to Google Calendar
     ''' 
     
     if "calories_per_day" in args_from_ui:
         if len(args_from_ui["calories_per_day"]) != 2 or args_from_ui["calories_per_day"][1] >= args_from_ui["calories_per_day"][0]:
             raise MyError(message="invalid calories range (must enter both upper and lower limits for calories per day, with upper limit greater than lower limit)")
 
-    available_recipes = generate_available_recipes(args_from_ui)
-    print("successfully got available recipes")
-    
+    available_recipes = generate_available_recipes(args_from_ui)   
     breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list = clean_recipes(available_recipes)
-    print("successfully cleaned the recipes")
 
     day_list = []
     calories_list = []
@@ -335,15 +363,12 @@ def generate_final_output(args_from_ui):
         # Start generating the day
         if i == 0:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
-            print("Generated day 0")
         elif i == 1:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, 
                 Day1 = day_list[-1])
-            print("Generated day 1")
         else:
             day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui, 
                 Day1 = day_list[-1], Day2 = day_list[-2])
-            print("Generated day", i)
         day_list.append(day)
         breakfast_final_list, lunch_list, dinner_list = update_output_lists(day, 
             (breakfast_final_list, lunch_list, dinner_list), i, False)
@@ -356,7 +381,6 @@ def generate_final_output(args_from_ui):
         elif main_dish_alt_list == [] and main_dish_list == []:
             raise MyError()
         day = generate_Day(breakfast_alt_list, breakfast_list, main_dish_alt_list, main_dish_list, args_from_ui)
-        print("Generated alternative day", i)
         alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list = update_output_lists(day, 
             (alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list), i, True)
 
@@ -380,10 +404,3 @@ def generate_final_output(args_from_ui):
         f.write(json.dumps(rv))
 
     return breakfast_final_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
-
-
-
-
-
-
-    
