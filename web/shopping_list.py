@@ -46,7 +46,8 @@ def generate_shopping_list(days):
         alternative_breakfast_list = result["alternative_breakfast_list"]
         alternative_lunch_list = result["alternative_lunch_list"]
         alternative_dinner_list = result["alternative_dinner_list"]
-    result = (breakfast_list, lunch_list, dinner_list, calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list)
+    result = (breakfast_list, lunch_list, dinner_list, calories_list, \
+        alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list)
 
     week_list = []
     rv_dict = {}

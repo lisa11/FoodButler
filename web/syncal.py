@@ -56,12 +56,14 @@ def build_event_l(one_meal_list, start_time_in, start_date):
     hour, minute, second = start_time_in
     start_datetime = datetime.datetime(int(year), int(month), int(day), hour, minute, second)
 
-    end_datetime = start_datetime + datetime.timedelta(hours = MEAL_LENGTH)    #increment the date and time by MEAL_LENGTH
+    #increment the date and time by MEAL_LENGTH
+    end_datetime = start_datetime + datetime.timedelta(hours = MEAL_LENGTH)    
     rv_event_l = []
     for meal in one_meal_list:
         event = {}    
         event["summary"] = meal["name"]
-        event["description"] = "calories: " + str(meal["calories"]) + "kcal" + "    cooking time: " + meal["cooking_time"] + "\n" + "\n"
+        event["description"] = "calories: " + str(meal["calories"]) + "kcal" + \
+            "    cooking time: " + meal["cooking_time"] + "\n" + "\n"
         event["description"] += "ingredients: "
         for ingredient in meal["ingredients"]:
             event["description"] += "\n" + "      " + ingredient + ", "

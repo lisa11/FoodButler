@@ -5,7 +5,8 @@ class Day(object):
 
     def __init__(self, calories):
         '''
-        Create a class object containing the recipes and their basic information for a day.
+        Create a class object containing the recipes and their basic 
+        information for a day.
         Input:
             calories: lower and upper limits of calories for the day (a list)
         '''

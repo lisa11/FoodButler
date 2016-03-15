@@ -28,8 +28,8 @@ def find_recipes(client, param, recipe_db, course, max_time):
         max_time: an integer
 
     Returns:
-        a list of tuples each containing a recipe object and ingredients used in this recipe; 
-        updates the recipe_db dict in the process
+        a list of tuples each containing a recipe object and ingredients 
+        used in this recipe; updates the recipe_db dict in the process
     '''
     recipe_list = []
     param["requirePictures"] = True
@@ -56,12 +56,12 @@ def go(param):
         main_dish_alt_list, main_dish_list
 
     Inputs:
-        param: a dict of parameters. e.g:
-                                       {"allowedIngredient[]": ["onion", "tomato", "lamb"],
-                                        "excludedIngredient[]": ["pork", "potato"],
-                                        "allowedAllergy[]": ["397^Egg-Free"],
-                                        "allowedDiet[]": ["386^Vegan"],
-                                        "time": [20, 60]}
+        param: a dict of parameters. 
+        e.g:{"allowedIngredient[]": ["onion", "tomato", "lamb"],
+            "excludedIngredient[]": ["pork", "potato"],
+            "allowedAllergy[]": ["397^Egg-Free"],
+            "allowedDiet[]": ["386^Vegan"],
+            "time": [20, 60]}
 
     Returns:
         writes a json file containing a dict of the 4 lists 
@@ -82,8 +82,8 @@ def go(param):
     rv["main_dish_list"] = find_recipes(client, param, recipe_db, \
         ["course^course-Main Dishes"], main_dish_max_time)
     
-    # generates alternative lists that does not contain the ingredient user already has
-    # to avoid having the same ingredient for every meal in 7 days
+    # generates alternative lists that does not contain the ingredient user
+    # already has to avoid having the same ingredient for every meal in 7 days
     if param.has_key("allowedIngredient[]"):
         if param.has_key("excludedIngredient[]"):
             param["excludedIngredient[]"].extend(param["allowedIngredient[]"])

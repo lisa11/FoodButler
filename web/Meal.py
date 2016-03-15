@@ -7,16 +7,20 @@ MAJOR_INGREDIENTS = ['steak', 'mustard', 'coriander', 'sprout', 'honey', 'tomato
 
 class Meal(object):
 
-    def __init__(self, name, calories, time, ingredients, full_ingredients, pic_url, instruction_url):
+    def __init__(self, name, calories, time, ingredients, full_ingredients, \
+            pic_url, instruction_url):
         '''
         Generate a class object containing basic information of a meal.
+        
         Inputs:
             name: string, name of the dish
             calories: the amount of calories this meal contains
             time: a string, the cooking time required for this meal
-            ingredients: a brief list of ingredient without amount obtained from search recipe query,
-                used for summarizing the major ingredients this meal uses
-            full_ingredients: a list of full ingredient lines with amount associated with each ingredient,
+            ingredients: a brief list of ingredient without amount 
+                obtained from search recipe query, used for summarizing 
+                the major ingredients this meal uses
+            full_ingredients: a list of full ingredient lines with 
+                amount associated with each ingredient,
                 to be displayed in the final output to django
             pic_url: string, the url of the dish's picture
             instruction_url: string, the url to recipe webpage

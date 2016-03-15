@@ -1,5 +1,5 @@
-# functions to call when users specify the alternative dishes and the original
-# dishes they want to discard from front end
+# This file contains functions to switch alternative dishes and orginal dishes 
+# as specified by user
 # This file is entirely original
 import random
 import json
@@ -26,8 +26,10 @@ def update_menu(discard_list, selected_list):
         alternative_breakfast_list = result["alternative_breakfast_list"]
         alternative_lunch_list = result["alternative_lunch_list"]
         alternative_dinner_list = result["alternative_dinner_list"]
-    main_list = breakfast_final_list + lunch_list + dinner_list + alternative_breakfast_list + alternative_lunch_list + alternative_dinner_list
-    random.shuffle(selected_list) # to make it more exciting :D
+        
+    main_list = breakfast_final_list + lunch_list + dinner_list + \
+        alternative_breakfast_list + alternative_lunch_list + alternative_dinner_list
+    random.shuffle(selected_list) 
     random.shuffle(discard_list)
     for i in range(len(selected_list)):
         dish_to_discard = main_list[discard_list[i] - 1]
@@ -47,7 +49,8 @@ def update_menu(discard_list, selected_list):
     
     new_calories_list = []
     for i in range(7):
-    	new_calories_list.append(breakfast_final_list[i]["calories"] + lunch_list[i]["calories"] + dinner_list[i]["calories"])
+    	new_calories_list.append(breakfast_final_list[i]["calories"] + \
+            lunch_list[i]["calories"] + dinner_list[i]["calories"])
 
     with open("final_output.json", "w") as f:
         rv = {}
@@ -60,4 +63,5 @@ def update_menu(discard_list, selected_list):
         rv["alternative_dinner_list"] = alternative_dinner_list
         f.write(json.dumps(rv))
     
-    return breakfast_final_list, lunch_list, dinner_list, new_calories_list, alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
+    return breakfast_final_list, lunch_list, dinner_list, new_calories_list, \
+        alternative_breakfast_list, alternative_lunch_list, alternative_dinner_list
