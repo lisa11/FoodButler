@@ -2,6 +2,7 @@
 # It is mostly written by ourselves, with the exception of the technique of 
 # calling shell script within program which we learned from the following:
 # http://stackoverflow.com/questions/17665124/call-python3-code-from-python2-code
+
 import json
 import random
 from subprocess import call
@@ -11,16 +12,15 @@ from MyExceptions import MyError
 
 
 # The ingredients we care that should not be repeated within three days
-# MAJOR_INGREDIENTS = ['steak', 'mustard', 'coriander', 'sprout', 'honey', 'tomato', 'bell', 'chickpea', 'couscous', 'pita', 'companelle', 'leeks', 'beet', 'walnut', 'shrimp', 'sierra', 'meat', 'orange', 'spinach', 'carrot', 'phyllo dough', 'lobster', 'celery', 'noodle', 'frond', 'fettucine', 'cherry', 'lamb', 'chocolate', 'hummus', 'cilantro', 'brownie', 'cookie', 'kiwi', 'cayenne', 'chicken wings', 'nana', 'cumin', 'salad', 'rice', 'eggplant', 'onion', 'avocado', 'khoa', 'podded pea', 'garam masala', 'cabbage', 'ras-el-hanout', 'mint', 'mushroom', 'sausage', 'pancake', 'baguette', 'naan', 'polenta', 'pumpkin', 'lettuce', 'broccoli', 'tagliatelle', 'loaves', 'parsley', 'curry', 'pork', 'cacao', 'linguine', 'cardamom', 'beef', 'loaf', 'apple', 'dough', 'meatball', 'berr', 'pudding', 'lentil', 'fruit', 'peach', 'asparagus', 'arugula', 'marshmallow', 'egg', 'molasses', 'seed', 'popcorn', 'pine nut', 'shetbet', 'cornmeal', 'albacore', 'coconut', 'bulgur', 'sandwich', 'red chilli', 'hamburger', 'oreo', 'thyme', 'tomatoes', 'pistachio', 'spaghetti', 'salmon', 'cucumber', 'corn', 'chicken', 'ditalini', 'pineapple', 'tortilla', 'potato', 'herb', 'strawberr', 'bread', 'pizza', 'fish', 'sauerkraut', 'brioche', 'buns', 'pie', 'sirloin', 'hazelnut', 'cake', 'pecorino', 'mango', 'granola', 'mushroom', 'graviera', 'fettucine', 'wedge', 'macaroni', 'ham', 'almonds', 'soy', 'flax', 'wheat', 'mushrooms', 'korma', 'peanut', 'peas', 'strawberries', 'zucchini', 'cheddar', 'potatoes', 'prosciutto', 'pomegranate', 'nuts', 'tortillas', 'bacon', 'lemon', 'wedges', 'yoghurt', 'almond', 'jasmine', 'apples', 'onions', 'sockeye', 'nut', 'cutlet', 'pistachios', 'rutabaga', 'ribs', 'bananas', 'yogurt', 'vegetables', 'loin', 'noodles', 'scallions', 'breasts', 'mozzarella', 'milk', 'fillet', 'matcha', 'pasta', 'tenderloins', 'oranges', 'sesame', 'shoulder', 'cereal', 'cider', 'turnips', 'tenderloin', 'oyster', 'rib', 'carrots', 'kale', 'cauliflower', 'leg', 'yolks', 'cheese', 'seeds', 'vegetable', 'feta', 'taco', 'oats', 'fillets', 'sausages', 'walnuts', 'sheep', 'thighs', 'blueberries', 'turkey', 'coffee', 'steaks', 'breast', 'beans']
 MAX_TRIAL_BEFORE_GOING_TO_ALT = 2
 MAX_TRIAL_BEFORE_REPEATING_INGREDIENT = 3
 MAX_TRIAL_AFTER_REPEATING_INGREDIENT = 5
 MAX_TRIAL_BEFORE_IGNORE_CALORIES = 10
 #the number of days generated failed lower calories limit before discarding the lower limit
 BREAKFAST_CALORIES_WEIGHT = 0.4 # 40% of the total calories of the day 
-LUNCH_CALORIES_WEIGHT = 0.6
+LUNCH_CALORIES_WEIGHT = 0.6 
 DINNER_CALORIES_WEIGHT = 0.6
-# Default calories amount when there is no return of calories amount
+# Default calories amount when a recipe does not contain calories information
 DEFAULT_CAL_BREAKFAST = 100
 DEFAULT_CAL_MAIN_DISH = 500
 
@@ -79,10 +79,12 @@ def clean_one_recipe_list(recipe_list, major_ingredients, default_cal):
             if x["attribute"] == "ENERC_KCAL":
                 calories = x["value"]
                 break
+        # this part to clean the ingredient lines returned by API         
         if item["ingredientLines"][0][0:11] == "Ingredients": 
             ingredient_lines = [item["ingredientLines"][0][12:]] # to get rid of the word "Ingredients" at the start
         else:
             ingredient_lines = list(set(item["ingredientLines"])) # to remove repeated lines
+
         meal = Meal(item["name"], calories, item["totalTime"], recipe_list[i][1], ingredient_lines,\
                 item["images"][0]["hostedLargeUrl"], item["source"]["sourceRecipeUrl"])
         major_ingredients += recipe_list[i][1]
