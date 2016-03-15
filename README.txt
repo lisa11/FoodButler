@@ -51,7 +51,17 @@ found at /old_test_data/search_values.json or /old_test_data/search_values.txt
 Entering an ingredient that is not in that list will make that input invalid 
 and therefore be ignored.
 
-##################################################
+#####################################################
+LOCATION OF CODES
+
+All the files the program runs on is in ..FoodButler/web 
+FoodButler/web/menu is the Django app for our program. 
+FoodButler/web/menu/views.py contains the codes for Django webpage
+FoodButler/web/menu/templates/menu contains html templates for webpage layout
+FoodButler/web/trial/urls.py contains the url configuration for the webpage
+
+#####################################################
+
 
 INSTRUCTION ON HOW TO OPEN THE SEARCH PAGE:
 
@@ -66,12 +76,14 @@ Step 1. TO GENERATE A WEEKLY MENU:
     the criterias can be left empty or filled in. However, if maximum cooking 
     time is desired as a search criteria, please include the time for both 
     breakfast and lunch/dinner. The same is applied to calories per day, 
-    please enter both the min and max calories per day. Please press 'submit'
-    to submit the form.
+    please enter both the min and max calories per day. For 'Ingredients 
+    to Include' and 'Ingredients to Avoid', one can enter multiple keywords if 
+    desires (separated by a space, all lower cases, plural form whenever 
+    possible). Please press 'submit' to submit the form.
 
     Sample Inputs: 
 
-    'Ingredients to Include': 'Chicken'
+    'Ingredients to Include': 'chicken'
     'Allergy': Peanut
     'Cuisine': Chinese
     'Maximum Breakfast Cooking Time (min)': 45
@@ -133,6 +145,8 @@ Step 4. SYNCH TO GOOGLE CALENDAR
     'Breakfast Start Time': 7:00
     'Lunch Start Time': 14:00
     'Dinner Start Time': 16:00
+
+
 
 
 
