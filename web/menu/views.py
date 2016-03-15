@@ -1,10 +1,5 @@
 #The class 'SearchForm' and function 'search' are both modified
-#from pa3/ui/search/views.py. 
-#
-#
-#
-#
-#
+#from pa3/ui/search/views.py.
 
 
 from django.shortcuts import render
