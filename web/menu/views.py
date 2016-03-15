@@ -1,5 +1,12 @@
 #The class 'SearchForm' and function 'search' are both modified
 #from pa3/ui/search/views.py.
+#
+#Note: We tried to create a MultiWidget class that checks for 
+#       invalid inputs and to include several forms field
+#       on the same line like pa3 but for some reason it doesn't
+#       work. Professor Gustav and the tech staffs don't know
+#       why either. 
+#
 
 
 from django.shortcuts import render
