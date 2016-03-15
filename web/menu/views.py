@@ -59,12 +59,10 @@ DAYS = [(1, "Day1"),
 #Modified from pa3/ui/search/views.py
 class SearchForm(forms.Form):
     ingredients_avoid=forms.CharField(
-        label="Ingredients to Avoid", 
-        #help_text="(Ingredients to avoid)",
+        label="Ingredients to Avoid",
         required=False)
     ingredients_already_have=forms.CharField(
         label='Ingredients to Include', 
-        #help_text="(Ingredients to include in meal)",
         required=False)
     allergy=forms.MultipleChoiceField(
         label='Allergy',
@@ -83,18 +81,18 @@ class SearchForm(forms.Form):
         required=False)
     time_breakfast = forms.IntegerField(
         label="Maximum Breakfast Cooking Time (min)",
-        #help_text="(Maximun breakfast cooking time)",
+        help_text="Please enter both for breakfast and lunch if you want maximum cooking time as a search criteria",
         min_value=0,
         max_value=300,
         required=False)
     time_meal = forms.IntegerField(
         label="Maximum Lunch/Dinner Cooking Time (min)",
-        #help_text="(Maximun lunch or dinner cooking time)",
         min_value=0,
         max_value=300, 
         required=False)
     calories_lower=forms.IntegerField(
         label="Minimum Calories Per Day (kcal)", 
+        help_text="Please enter both min and max if you want calories as a search criteria",
         min_value=1,
         max_value=5000,
         required=False)
@@ -197,7 +195,6 @@ def search(request):
                     output = generate_final_output(args)
                 except MyError as e:
                     return render(request, "menu/search.html", {"form":form, 'e':"Menu cannot be generated due to {}, please change your search criteria.".format(e.message)})
-                    #return HttpResponse('<h1>Menu cannot be generated due to insufficient qualified recipes, please change your search criteria.</h1>')
                     
                 breakfast_list = output[0] 
                 lunch_list = output[1] 
@@ -216,8 +213,3 @@ def search(request):
         form = SearchForm()
 
     return render(request, "menu/search.html", {"form":form})
-
-
-def instruction(request):
-    m = [1, 2, 3]
-    return render(request, 'menu/instruction.html', {"the":m})
