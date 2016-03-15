@@ -1,0 +1,10 @@
+[("396^Dairy-Free", "Dairy"),
+("397^Egg-Free", "Egg"),
+("393^Gluten-Free", "Gluten"),
+("394^Peanut-Free","Peanut"),
+("398^Seafood-Free", "Seafood"),
+("399^Sesame-Free", "Sesame"),
+("400^Soy-Free", "Soy"),
+("401^Sulfite-Free", "Sulfite"),
+("395^Tree Nut-Free", "Tree Nut"),
+("392^Wheat-Free", "Wheat")]
