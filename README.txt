@@ -13,11 +13,15 @@ Before you try our application, please run:
    to pick up google API library
 
 
-Before runing generate_menu.py, please pull the updated recipe_db.json which is our database. Everytime the function generate_menu.py is run, please push the updated recipe_db.json as a courtesy to future users, as there might be new recipes not seen before updated in recipe_db.
+Before runing generate_menu.py, please pull the updated recipe_db.json which 
+is our database. Everytime the function generate_menu.py is run, please push the updated recipe_db.json as a courtesy to future users, as there might be 
+new recipes not seen before updated in recipe_db.
 
-Maximum time in the search form only refers to the preparation time. It might take a significant longer time in reality.
+Maximum time in the search form only refers to the preparation time. It 
+might take a significant longer time in reality.
 
-Some calories amount are unreasonable from the information the api returns. We have no way to deal with that.
+Some calories amount are unreasonable from the information the api returns. 
+We have no way to deal with that.
 
 The fewer the requirements entered in django, the faster our program runs and the greater the chance is to successfully generate the menu. If insufficient recipes are found for a given preference, an error message will appear at the bottom of the page explaining the reason.
 
