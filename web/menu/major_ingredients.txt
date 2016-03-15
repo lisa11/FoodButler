@@ -1,7 +1,0 @@
-['honey', 'onion', 'cabbage', 'beef']
-['broccoli', 'chicken', 'mustard', 'pineapple', 'mushroom', 'kiwi', 'mango', 'orange', 'coconut']
-['cayenne', 'chocolate', 'lamb', 'thyme', 'parsley']
-['corn', 'sirloin', 'tomatoes', 'beef', 'orange', 'apple']
-['bread', 'chicken']
-['pizza', 'bell', 'sirloin', 'salad', 'steak', 'beef', 'egg', 'parsley']
-['spinach', 'fruit', 'salmon']
